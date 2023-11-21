@@ -1,15 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 00:00:08 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 00:46:31 by hshimizu         ###   ########.fr       */
+/*   Created: 2023/11/22 01:39:49 by hshimizu          #+#    #+#             */
+/*   Updated: 2023/11/22 01:44:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int minishell(char *envp[])
-{
-}
+/*
+よくわかんえねぇけど字句解析したやつをいじくるんだと思う
+str: "cat"
+str: "-e"
+str: "文字列 mojiretu string"
+が
+cmd:	{"cat", "-e", "文字列 mojiretu string", NULL}
+
+str: "echo"
+str: "asd"
+？: PIPE
+str: "cat"
+が
+PIPE:	cmd:	{"echo", "asd", NULL}
+		cmd:	{cat}
+っていう感じなのにしたい？
+*/
