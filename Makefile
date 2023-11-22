@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2023/11/22 12:46:03 by hshimizu         ###   ########.fr        #
+#    Updated: 2023/11/22 13:10:07 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,15 +15,14 @@ NAME			= minishell
 DIR				= .
 FT				= $(DIR)/libft
 INCS_DIR		= $(DIR)/incs
+SRCS_DIR		= $(DIR)/srcs
 OBJS_DIR		= $(DIR)/objs
 
 MAIN			= $(DIR)/main.c
 
 SRCS			= \
-	$(addprefix $(DIR)/srcs/, \
-		$(addprefix $(DIR)/srcs/, \
-			lexer.c \
-		) \
+	$(addprefix $(SRCS_DIR)/, \
+		lexer.c \
 		minishell.c \
 	) \
 

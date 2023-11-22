@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 23:59:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 13:07:53 by hshimizu         ###   ########.fr       */
+/*   Created: 2023/11/22 12:59:33 by hshimizu          #+#    #+#             */
+/*   Updated: 2023/11/22 13:06:09 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "minishell.h"
-#include <libft.h>
-#include <stdio.h>
+#ifndef LEXER_H
+# define LEXER_H
 
-int	main(int argc, char *argv[], char *envp[])
+typedef struct s_lex
 {
-	char	*label;
-	t_lex	*lex;
+}			t_lex;
 
-	lex = lexer("cat -e <<EOF | grep \"a a\"");
-	// "cat", "-e", HERE_DOC, "EOF", PIPE, "grep", "a a"
-	printf("==lexer_test==\n");
-	for (int i = 0; lex[i]; i++)
-	{
-		label = "";
-		printf("%d: %s\n", i, label);
-	}
-	return (0);
-}
+t_lex		*lexer(char *str);
+
+#endif
