@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 23:59:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 13:07:53 by hshimizu         ###   ########.fr       */
+/*   Updated: 2023/11/22 13:17:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*label;
-	t_lex	*lex;
+	t_lex	**lex;
 
 	lex = lexer("cat -e <<EOF | grep \"a a\"");
 	// "cat", "-e", HERE_DOC, "EOF", PIPE, "grep", "a a"
