@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2023/11/21 23:57:47 by hshimizu         ###   ########.fr        #
+#    Updated: 2023/11/22 12:46:03 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,9 @@ MAIN			= $(DIR)/main.c
 
 SRCS			= \
 	$(addprefix $(DIR)/srcs/, \
+		$(addprefix $(DIR)/srcs/, \
+			lexer.c \
+		) \
 		minishell.c \
 	) \
 
