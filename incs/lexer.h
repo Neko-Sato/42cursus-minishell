@@ -6,14 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:59:33 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 14:38:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2023/11/22 14:44:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-typedef enum e_token
+typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_EOL,
@@ -26,19 +26,19 @@ typedef enum e_token
 	TOKEN_OR,
 	TOKEN_VAR,
 	TOKEN_LAST_EXIT_STATUS,
-}			t_token;
+}					t_token_type;
 
-typedef struct s_lex
+typedef struct s_token
 {
-	t_token	type;
-}			t_lex;
+	t_token_type	type;
+}					t_token;
 
-typedef struct s_lex_word
+typedef struct s_token_word
 {
-	t_token	type;
-	char	*str;
-}			t_lex_str;
+	t_token_type	type;
+	char			*str;
+}					t_token_word;
 
-t_lex		**lexer(char *str);
+t_token				**lexer(char *str);
 
 #endif

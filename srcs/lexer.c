@@ -6,11 +6,12 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 01:35:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 14:37:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2023/11/22 14:47:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include <libft.h>
 
 /*
 よくわかんえねぇけど字句解析したい
@@ -41,7 +42,7 @@ Redirectとかでくっついてるやつも引きはがしたい
 ってやつ
 */
 
-t_lex	**lexer(char *str)
+t_token	**lexer(char *str)
 {
 	return ((void *)0);
 }
