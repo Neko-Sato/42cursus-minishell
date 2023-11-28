@@ -27,12 +27,12 @@
 # 使用可能変数
 関数名|説明
 ----|----
-readline 
+readline |普通に改行まで読む
 rl_clear_history
-rl_on_new_line
+rl_on_new_line |Ctr+C用かな
 rl_replace_line
 rl_redisplay
-add_history
+add_history|履歴の追加
 printf
 malloc
 free
@@ -67,7 +67,7 @@ readdir
 closedir
 strerror
 perror
-isatty
+isatty|ttyか調べるこいつが0だったらプロンプトらを表示させないエラーは履いたほうが良いかも？こいつがFalseなら即終了かな？
 ttyname
 ttyslot
 ioctl
