@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:59:33 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/22 14:44:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:17:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_AND,
 	TOKEN_OR,
-	TOKEN_VAR,
-	TOKEN_LAST_EXIT_STATUS,
 }					t_token_type;
 
 typedef struct s_token
@@ -39,6 +37,15 @@ typedef struct s_token_word
 	char			*str;
 }					t_token_word;
 
-t_token				**lexer(char *str);
+typedef struct s_token_redirect
+{
+	t_token_type	type;
+	int				fileno;
+	char			*name;
+}					t_token_word;
+
+typedef char		*(*t_line_fn)(void);
+
+t_token				**lexer(t_line_fn line_fn);
 
 #endif

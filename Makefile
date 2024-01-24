@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2023/11/22 13:10:07 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/01/18 20:12:35 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,6 @@ MAIN			= $(DIR)/main.c
 
 SRCS			= \
 	$(addprefix $(SRCS_DIR)/, \
-		lexer.c \
-		minishell.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
@@ -31,7 +29,7 @@ OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 CFLAGS			= -Wall -Wextra -Werror
 LDFLAGS			+= -L$(FT)
 IDFLAGS			+= -I$(FT)
-LIBS			+= -lft
+LIBS			+= -lft -lreadline
 IDFLAGS			+= -I$(INCS_DIR)
 
 .PHONY: all clean fclean re bonus
@@ -58,7 +56,7 @@ re: fclean all
 
 .PHONY: test
 test: test.c $(OBJS)
-	$(CC) -g -fsanitize=address $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) -g  $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 .PHONY: norm
 norm: $(MAIN) $(SRCS) $(INCS_DIR)
