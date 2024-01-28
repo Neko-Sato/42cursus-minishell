@@ -6,53 +6,35 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 20:34:22 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/28 21:41:15 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "repl.h"
 #include <libft.h>
 #include <readline.h>
-#include <signal.h>
+#include <stdlib.h>
 
 static char	*add_line(char *line, char *new_line);
-static void	signal_handler(int n);
-static int	event_hook(void);
 
-/*
-    struct sigaction sa;
-
-    // ハンドラを設定
-    sa.sa_handler = sigint_handler;
-    // 他のフラグや設定を行う場合には必要に応じて以下を設定
-    // sa.sa_flags = ...;
-
-    // SIGINTに対するハンドラを設定
-    if (sigaction(SIGINT, &sa, NULL) == -1) {
-        perror("sigaction");
-        exit(EXIT_FAILURE);
-    }
-*/
-
-int	put_prompt(t_minishell *gvars)
+int	put_prompt(t_minishell *gvars, t_repl *vars)
 {
-	struct sigaction	sa;
-	char				*temp;
-	char				*next;
+	char	*temp;
+	char	*next;
 
-	if (gvars->isinteractive)
-		if (!gvars->line)
-			gvars->line = readline((char *[]){NULL, PS1}[gvars->isinteractive]);
-		else
-		{
-			temp = gvars->line;
-			next = readline((char *[]){NULL, PS2}[gvars->isinteractive]);
-			if (next)
-				gvars->line = add_line(temp, next);
-			free(temp);
-			free(next);
-		}
-	if (!gvars->line)
+	if (!vars->line)
+		vars->line = readline((char *[]){PS1, NULL}[!gvars->isinteractive]);
+	else
+	{
+		temp = vars->line;
+		next = readline((char *[]){PS2, NULL}[!gvars->isinteractive]);
+		if (next)
+			vars->line = add_line(temp, next);
+		free(temp);
+		free(next);
+	}
+	if (!vars->line)
 		return (-1);
 	return (0);
 }
@@ -72,17 +54,4 @@ static char	*add_line(char *line, char *new_line)
 	ft_strlcpy(ret, "\n", size);
 	ft_strlcpy(ret, new_line, size);
 	return (ret);
-}
-
-static void	signal_handler(int n)
-{
-	if (n == SIGINT)
-		interruption = 1;
-}
-
-static int	event_hook(void)
-{
-	if (interruption)
-		rl_done = 1;
-	return (0);
 }
