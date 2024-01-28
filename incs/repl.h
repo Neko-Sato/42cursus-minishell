@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   repl.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 20:34:14 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/28 20:36:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef REPL_H
+# define REPL_H
 
 # include "command.h"
 # include <stddef.h>
 
-# define PS1 "minishell> "
-# define PS2 "> "
+extern int	interruption;
 
-typedef struct s_minishell
+typedef struct s_heredoc
 {
-	char		**envp;
-	char		**vars;
-	int			isinteractive;
-}				t_minishell;
+	struct s_heredoc	*next;
+	char				*eof;
+	char				*contents;
+}						t_heredoc;
 
-
-
-int				minishell_init(t_minishell *args, char *envp[]);
-void			minishell_destroy(t_minishell *args);
-
-int				put_prompt(t_minishell *gvars);
 
 #endif

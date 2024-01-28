@@ -1,5 +1,4 @@
-
-
+bash の終了statusは直前のコマンドの結果
 まず、トークンに分ける,
 // AA=12
 echo -e aa"bb  ccc$AAc">>abc

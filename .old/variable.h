@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   variable.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 23:59:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/18 20:12:53 by hshimizu         ###   ########.fr       */
+/*   Created: 2023/11/28 23:35:37 by hshimizu          #+#    #+#             */
+/*   Updated: 2023/12/09 19:49:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <libft.h>
-#include <stdio.h>
+#ifndef VARIABLE_H
+# define VARIABLE_H
 
-int	main(int argc, char *argv[], char *envp[])
-{
-}
+char	*getvar(char **vars, char *key);
+int		putvar(char ***vars_ptr, char *name);
+int		setvar(char ***vars_ptr, char *key, char *value, int overwrite);
+int		unsetvar(char **vars, char *key);
+
+#endif

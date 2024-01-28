@@ -5,69 +5,37 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/22 00:00:08 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/24 22:48:05 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/01/27 09:19:31 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/01/28 20:55:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "command.h"
+#include "minishell.h"
+#include "repl.h"
 #include <libft.h>
-#include <minishell.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <readline.h>
+#include <signal.h>
 
-int	put_prompt(t_minishell *vars);
+static void	sigint_handler(int n);
+static int	event_hook_noop(void);
 
-reader_loop(vars)
+int			interruption = 0;
+
+int	reader_loop(t_minishell *gvars)
 {
+	if (gvars->isinteractive)
+		signal(SIGINT, sigint_handler);
 	while (1)
 	{
 	}
-}
-
-int	read_command(t_minishell *vars)
-{
-	vars->pos = 0;
-	vars->line = NULL;
-	put_prompt(vars);
-	while (vars->line[vars->pos] != '\n')
-	{
-		if (vars->line[vars->pos] == '\0')
-		{
-			put_prompt(vars);
-			continue ;
-		}
-		if (//ここで処理)
-			return (-1);
-		pos++;
-	}
-	free(line);
+	if (gvars->isinteractive)
+		ft_putendl_fd("exit", 2);
 	return (0);
 }
 
-/*
-lineがNULLならprimarypromptでreadline
-値があればセカンダリーpromptでreadlineしjoinする
-*/
-int	put_prompt(t_minishell *vars)
+static void	sigint_handler(int n)
 {
-	char	*temp;
-	char	*next;
-
-	if (!vars->line)
-		vars->line = readline(PS1);
-	else
-	{
-		temp = vars->line;
-		next = readline(PS2);
-		if (next)
-			vars->line = ft_strjoin(temp, next);
-		else
-			vars->line = NULL;
-		free(temp);
-		free(next);
-	}
-	if (!vars->line)
-		return (-1);
-	return (0);
+	interruption = 1;
+	rl_done = 1;
 }

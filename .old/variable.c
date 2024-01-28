@@ -6,13 +6,33 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 20:08:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2023/12/09 20:07:41 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "variable.h"
 #include <libft.h>
 #include <stdlib.h>
+
+/*
+	need use ft_vector
+	Initialize with the following code
+	```
+	char **vars;
+
+	vars = ft_vector(sizeof(char *), (char *[]){NULL}, 1);
+	```
+
+	And the deletion will be in the following code
+	```
+	size_t i;
+
+	i = 0;
+	while (vars[i])
+		free(vars[i++]);
+	ft_vector_del(vars);
+	```
+*/
 
 static size_t	getindex(char **vars, char *key);
 

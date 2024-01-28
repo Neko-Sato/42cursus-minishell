@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 20:34:14 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/01/26 21:55:29 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/01/26 22:02:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-
-# include "command.h"
-# include <stddef.h>
-
-# define PS1 "minishell> "
-# define PS2 "> "
-
-typedef struct s_minishell
+int	reader_loop(vars)
 {
-	char		**envp;
-	char		**vars;
-	int			isinteractive;
-}				t_minishell;
-
-
-
-int				minishell_init(t_minishell *args, char *envp[]);
-void			minishell_destroy(t_minishell *args);
-
-int				put_prompt(t_minishell *gvars);
-
-#endif
+	while (1)
+	{
+		if (read_command(vars))
+			return -1;
+		execute_command(vars);
+		dispose_command(vars);
+	}
+	return 0;
+}

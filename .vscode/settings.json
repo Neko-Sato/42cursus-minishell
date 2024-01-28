@@ -32,6 +32,13 @@
 		"vector": "cpp",
 		"algorithm": "c",
 		"ft_string.h": "c",
-		"ft_vector.h": "c"
+		"ft_vector.h": "c",
+		"history.h": "c",
+		"word.h": "c",
+		"command.h": "c",
+		"repl.h": "c",
+		"signal.h": "c",
+		"sig_atomic_t.h": "c",
+		"sigset_t.h": "c"
 	}
 }
