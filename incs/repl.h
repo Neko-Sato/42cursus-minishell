@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 21:39:56 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/31 00:16:11 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_repl
 }						t_repl;
 
 int						reader_loop(t_minishell *gvars);
-int						put_prompt(t_minishell *gvars, t_repl *vars);
+char					*put_prompt(t_minishell *gvars, char *line);
+int						pgetc(t_minishell *gvars, char **line, size_t pos);
 
 #endif

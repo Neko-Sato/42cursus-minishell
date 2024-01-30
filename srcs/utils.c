@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 23:59:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2023/11/30 17:37:51 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/01/30 08:37:17 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/01/31 00:26:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include <libft.h>
-#include <unistd.h>
+#include <stddef.h>
 
-int	main(int argc, char *argv[], char *envp[])
+char	*add_line(char *line, char *new_line)
 {
-	int			ret;
-	t_minishell	args;
+	char	*ret;
+	size_t	size;
 
-	(void)argc;
-	(void)argv;
-	ret = minishell_init(&args, envp);
+	size = ft_strlen(line) + ft_strlen(new_line) + 2;
+	ret = (char *)malloc(sizeof(char) * size);
 	if (!ret)
-	{
-		ret = repl(&args);
-		minishell_destroy(&args);
-	}
-	else
-		ft_putendl_fd("Error\n", STDERR_FILENO);
+		return (NULL);
+	ft_strlcpy(ret, line, size);
+	ft_strlcpy(ret, "\n", size);
+	ft_strlcpy(ret, new_line, size);
 	return (ret);
 }

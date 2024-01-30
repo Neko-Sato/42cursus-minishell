@@ -6,52 +6,43 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 21:41:15 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/31 00:26:31 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "repl.h"
-#include <libft.h>
-#include <readline.h>
+#include "utils.h"
+#include <readline/readline.h>
 #include <stdlib.h>
 
-static char	*add_line(char *line, char *new_line);
-
-int	put_prompt(t_minishell *gvars, t_repl *vars)
+char	*put_prompt(t_minishell *gvars, char *line)
 {
 	char	*temp;
 	char	*next;
 
-	if (!vars->line)
-		vars->line = readline((char *[]){PS1, NULL}[!gvars->isinteractive]);
+	if (!line)
+		line = readline((char *[]){PS1, NULL}[!gvars->isinteractive]);
 	else
 	{
-		temp = vars->line;
 		next = readline((char *[]){PS2, NULL}[!gvars->isinteractive]);
 		if (next)
-			vars->line = add_line(temp, next);
-		free(temp);
+			line = add_line(line, next);
 		free(next);
 	}
-	if (!vars->line)
-		return (-1);
-	return (0);
+	return (line);
 }
 
-static char	*add_line(char *line, char *new_line)
+int	pgetc(t_minishell *gvars, char **line, size_t pos)
 {
-	char	*ret;
-	size_t	size;
+	char	*temp;
 
-	if (!line || !new_line)
-		return (NULL);
-	size = ft_strlen(line) + ft_strlen(new_line) + 2;
-	ret = (char *)malloc(sizeof(char) * size);
-	if (!ret)
-		return (NULL);
-	ft_strlcpy(ret, line, size);
-	ft_strlcpy(ret, "\n", size);
-	ft_strlcpy(ret, new_line, size);
-	return (ret);
+	if (!*line || !(*line)[pos])
+	{
+		temp = put_prompt(gvars, *line);
+		free(*line);
+		*line = temp;
+		if (!*line)
+			return (-1);
+	}
+	return (line[pos]);
 }

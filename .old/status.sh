@@ -1,1 +1,0 @@
-./status.py 8
