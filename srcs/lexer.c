@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:03:34 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 14:30:46 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/02 18:30:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 #include <libft.h>
 #include <stddef.h>
 
+static int	skip_space(char **line, size_t *pos);
+static int	skip_word(char **line, size_t *pos);
 static int	skip_singlquote(char **line, size_t *pos);
 static int	skip_doublequote(char **line, size_t *pos);
 
-int	get_word(char **line, size_t *pos, char **word)
+int	get_word(char **line, size_t *pos, char **result)
 {
 	int		ret;
 	size_t	start;
@@ -31,19 +33,16 @@ int	get_word(char **line, size_t *pos, char **word)
 	ret = skip_word(line, pos);
 	if (ret)
 		return (ret);
-	if (start != *pos)
-	{
-		temp = ft_substr(*line, start, *pos - start);
-		if (!temp)
-			return (-1);
-	}
-	else
-		temp = NULL;
-	*word = temp;
+	if (start == *pos)
+		return (0);
+	temp = ft_substr(*line, start, *pos - start);
+	if (!temp)
+		return (-1);
+	*result = temp;
 	return (0);
 }
 
-int	skip_space(char **line, size_t *pos)
+static int	skip_space(char **line, size_t *pos)
 {
 	int	c;
 
@@ -56,7 +55,7 @@ int	skip_space(char **line, size_t *pos)
 	}
 }
 
-int	skip_word(char **line, size_t *pos)
+static int	skip_word(char **line, size_t *pos)
 {
 	int	ret;
 	int	c;

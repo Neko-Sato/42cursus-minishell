@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 03:12:06 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 14:28:18 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:56:01 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ typedef enum e_token
 }		t_token;
 
 t_token	str2token(char *str);
+int		is_redirect_token(t_token token);
+int		is_connection_token(t_token token);
 
 #endif
