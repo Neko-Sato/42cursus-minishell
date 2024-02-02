@@ -6,43 +6,62 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/31 00:26:31 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/02 12:59:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "utils.h"
+#include "prompt.h"
+#include <libft.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 
-char	*put_prompt(t_minishell *gvars, char *line)
-{
-	char	*temp;
-	char	*next;
+static char	*strjoin_at_newline(char *line, char *new_line);
 
-	if (!line)
-		line = readline((char *[]){PS1, NULL}[!gvars->isinteractive]);
+int			interrupt_state = 0;
+
+char	*put_primary_prompt(t_minishell *gvars)
+{
+	char	*line;
+
+	if (gvars->isinteractive)
+		line = readline(PS1);
 	else
-	{
-		next = readline((char *[]){PS2, NULL}[!gvars->isinteractive]);
-		if (next)
-			line = add_line(line, next);
-		free(next);
-	}
+		line = readline(NULL);
 	return (line);
 }
 
-int	pgetc(t_minishell *gvars, char **line, size_t pos)
+char	*put_secondary_prompt(t_minishell *gvars, char *line)
 {
-	char	*temp;
+	char	*old_line;
+	char	*new_line;
 
-	if (!*line || !(*line)[pos])
-	{
-		temp = put_prompt(gvars, *line);
-		free(*line);
-		*line = temp;
-		if (!*line)
-			return (-1);
-	}
-	return (line[pos]);
+	old_line = line;
+	if (gvars->isinteractive)
+		new_line = readline(PS2);
+	else
+		new_line = readline(NULL);
+	if (!old_line)
+		return (new_line);
+	if (!new_line)
+		return (old_line);
+	line = strjoin_at_newline(old_line, new_line);
+	free(old_line);
+	free(new_line);
+	return (line);
+}
+
+static char	*strjoin_at_newline(char *line, char *new_line)
+{
+	char	*ret;
+	size_t	size;
+
+	size = ft_strlen(line) + ft_strlen(new_line) + 2;
+	ret = (char *)malloc(sizeof(char) * size);
+	if (!ret)
+		return (NULL);
+	ft_strlcpy(ret, line, size);
+	ft_strlcat(ret, "\n", size);
+	ft_strlcat(ret, new_line, size);
+	return (ret);
 }

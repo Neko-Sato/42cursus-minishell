@@ -6,13 +6,11 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/31 00:23:03 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:50:56 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
-
-char	*add_line(char *line, char *new_line);
 
 #endif

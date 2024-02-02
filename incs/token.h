@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/31 19:52:08 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/01/31 03:12:06 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/02/02 14:28:18 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef TOKEN_H
+# define TOKEN_H
 
-# include "command.h"
 # include <stddef.h>
 
-typedef struct s_minishell
+typedef enum e_token
 {
-	char	**envp;
-	char	**vars;
-	int		isinteractive;
-}			t_minishell;
+	tk_none,
+	tk_redirect_input,
+	tk_here_doc,
+	tk_redirect_append,
+	tk_redirect_overwrite,
+	tk_pipe,
+	tk_or,
+	tk_and,
+}		t_token;
 
-int			minishell_init(t_minishell *args, char *envp[]);
-void		minishell_destroy(t_minishell *args);
+t_token	str2token(char *str);
 
 #endif

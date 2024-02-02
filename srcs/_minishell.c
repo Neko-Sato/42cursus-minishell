@@ -6,20 +6,21 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 19:43:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 21:04:35 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/01 02:49:40 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "prompt.h"
 #include "variable.h"
 #include <libft.h>
-#include <readline.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	event_hook_noop(void);
+static int	init(t_minishell *gvars, char *envp[]);
 
 int	minishell_init(t_minishell *gvars, char *envp[])
 {
@@ -52,4 +53,5 @@ static int	init(t_minishell *gvars, char *envp[])
 
 void	minishell_destroy(t_minishell *gvars)
 {
+	(void)gvars;
 }

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/27 09:19:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/28 21:16:25 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/01 07:31:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include "minishell.h"
 #include "repl.h"
 #include <libft.h>
-#include <readline.h>
+#include <readline/readline.h>
 #include <signal.h>
 
 static void	sigint_handler(int n);
 
-int			interruption = 0;
+int			interrupt_state = 0;
 
 int	reader_loop(t_minishell *gvars)
 {

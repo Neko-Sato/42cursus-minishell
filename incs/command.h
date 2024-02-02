@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 22:03:07 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/27 09:22:21 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/02 14:25:18 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef enum e_concomtype
 	cc_and,
 	cc_or,
 	cc_pipe,
-	cc_end,
 }						t_concomtype;
 
 typedef struct s_conncom
@@ -68,6 +67,6 @@ typedef struct s_command
 	} value;
 }						t_command;
 
-int						reader_command(t_minishell *gvars);
+// int						reader_command(t_minishell *gvars);
 
 #endif

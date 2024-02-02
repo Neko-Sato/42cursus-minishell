@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/01/18 20:12:35 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/02 08:39:08 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ MAIN			= $(DIR)/main.c
 
 SRCS			= \
 	$(addprefix $(SRCS_DIR)/, \
+		prompt.c \
+		lexer.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))

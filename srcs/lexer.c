@@ -5,116 +5,112 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/31 03:12:06 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/31 04:01:36 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/02/02 08:03:34 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/02/02 14:30:46 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexer.h"
+#include "token.h"
 #include <libft.h>
 #include <stddef.h>
-#include <stdio.h>
 
-int	get_lexical(t_minishell *gvars, char **line, size_t *pos, char **result)
+static int	skip_singlquote(char **line, size_t *pos);
+static int	skip_doublequote(char **line, size_t *pos);
+
+int	get_word(char **line, size_t *pos, char **word)
 {
-	size_t	start;
-	int		c;
 	int		ret;
+	size_t	start;
+	char	*temp;
 
-	if (skip_space(gvars, line, pos))
-		return (-1);
+	ret = skip_space(line, pos);
+	if (ret)
+		return (ret);
 	start = *pos;
+	ret = skip_word(line, pos);
+	if (ret)
+		return (ret);
+	if (start != *pos)
+	{
+		temp = ft_substr(*line, start, *pos - start);
+		if (!temp)
+			return (-1);
+	}
+	else
+		temp = NULL;
+	*word = temp;
+	return (0);
+}
+
+int	skip_space(char **line, size_t *pos)
+{
+	int	c;
+
 	while (1)
 	{
-		c = pgetc(gvars, line, pos);
-		if (ft_isspace(c) || ft_strchar("<>&|", c))
-			break ;
+		c = (*line)[*pos];
+		if (c == '\0' || !ft_isspace(c))
+			return (0);
+		(*pos)++;
+	}
+}
+
+int	skip_word(char **line, size_t *pos)
+{
+	int	ret;
+	int	c;
+
+	while (1)
+	{
+		if (str2token(&(*line)[*pos]))
+			return (0);
+		c = (*line)[*pos];
+		if (ft_isspace(c))
+			return (0);
+		(*pos)++;
 		ret = 0;
 		if (c == '\'')
-			ret = skip_singlquote(gvars, line, pos);
+			ret = skip_singlquote(line, pos);
 		else if (c == '"')
-			ret = skip_doublequote(gvars, line, pos);
-		else if (c == '\\')
-			ret = skip_backslash(gvars, line, pos);
+			ret = skip_doublequote(line, pos);
 		if (ret)
 			return (ret);
-		(*pos)++;
 	}
-	*result = ft_substr(*line, start, *pos - start);
-	return (0);
 }
 
-int	skip_space(t_minishell *gvars, char **line, size_t *pos)
+static int	skip_singlquote(char **line, size_t *pos)
 {
 	int	c;
 
 	while (1)
 	{
-		c = pgetc(gvars, line, *pos);
-		if (c == -1)
-			return (-1);
-		if (!c || ft_isspace(c))
-			break ;
+		c = (*line)[*pos];
+		if (c == '\0')
+		{
+			ft_putstr_fd("minishell: unmatched `'`\n", 2);
+			return (1);
+		}
 		(*pos)++;
-	}
-	return (0);
-}
-
-int	skip_backslash(t_minishell *gvars, char **line, size_t *pos)
-{
-	int	c;
-
-	c = pgetc(gvars, line, *pos);
-	if (c == -1)
-		return (-1);
-	(*pos)++;
-	return (0);
-}
-
-int	skip_singlquote(t_minishell *gvars, char **line, size_t *pos)
-{
-	int	c;
-
-	while (1)
-	{
-		c = pgetc(gvars, line, *pos);
-		if (c == -1)
-			return (-1);
 		if (c == '\'')
-			break ;
-		if (c == '\0')
-		{
-			ft_putendl_fd("minishell: unmatched `'`", STDERR_FILENO);
-			return (1);
-		}
-		(*pos)++;
+			return (0);
 	}
-	return (0);
 }
 
-int	skip_doublequote(t_minishell *gvars, char **line, size_t *pos)
+static int	skip_doublequote(char **line, size_t *pos)
 {
 	int	c;
 
 	while (1)
 	{
-		c = pgetc(gvars, line, *pos);
-		if (c == -1)
-			return (-1);
-		if (ft_strchr("\"", c))
-			break ;
+		c = (*line)[*pos];
 		if (c == '\0')
 		{
-			ft_putendl_fd("minishell: unmatched `\"`", STDERR_FILENO);
+			ft_putstr_fd("minishell: unmatched `\"`\n", 2);
 			return (1);
 		}
-		if (c == '\\')
-		{
-			(*pos)++;
-			if (skip_backslash(gvars, line, pos))
-				return (-1);
-		}
 		(*pos)++;
+		if (c == '"')
+			return (0);
 	}
-	return (0);
 }

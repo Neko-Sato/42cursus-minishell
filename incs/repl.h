@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 23:58:17 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/01/31 00:16:11 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/01/31 20:30:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "command.h"
 # include "minishell.h"
 # include <stddef.h>
-
-extern int				interruption;
 
 typedef struct s_heredoc
 {
@@ -36,7 +34,5 @@ typedef struct s_repl
 }						t_repl;
 
 int						reader_loop(t_minishell *gvars);
-char					*put_prompt(t_minishell *gvars, char *line);
-int						pgetc(t_minishell *gvars, char **line, size_t pos);
 
 #endif
