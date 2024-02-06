@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/02 08:39:08 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/07 02:54:02 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,9 @@ MAIN			= $(DIR)/main.c
 
 SRCS			= \
 	$(addprefix $(SRCS_DIR)/, \
-		prompt.c \
+		token.c \
 		lexer.c \
+		lexer_skip.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
@@ -58,7 +59,7 @@ re: fclean all
 
 .PHONY: test
 test: test.c $(OBJS)
-	$(CC) -g  $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) -g $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 .PHONY: norm
 norm: $(MAIN) $(SRCS) $(INCS_DIR)

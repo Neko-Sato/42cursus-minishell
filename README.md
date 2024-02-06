@@ -1,3 +1,23 @@
+shell.h
+シェルの変数の定義、reader_loop
+lexer.h
+字句解析
+paser.h
+構文解析
+subst.h
+文字列展開
+cmmand.h
+コマンドの生成や破棄
+eval.h
+コマンドの実行
+prompt.h
+プロンプト
+builtin.h
+ビルトイン定義
+variable.h
+変数の追加や削除 
+
+
 - プロンプト作る
 - 履歴作る
 - 環境変数PATH(コマンド)と相対パス、絶対パスを何とか

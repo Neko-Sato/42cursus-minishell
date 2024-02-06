@@ -5,111 +5,104 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/02 08:03:34 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 18:30:45 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/02/07 02:51:06 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "token.h"
 #include <libft.h>
-#include <stddef.h>
+#include <stdlib.h>
 
-static int	skip_space(char **line, size_t *pos);
-static int	skip_word(char **line, size_t *pos);
-static int	skip_singlquote(char **line, size_t *pos);
-static int	skip_doublequote(char **line, size_t *pos);
+static int	take_word(t_lexer *lexer);
+static int	take_token(t_lexer *lexer);
 
-int	get_word(char **line, size_t *pos, char **result)
+int	lexer(char *line, t_lexical **result)
 {
 	int		ret;
-	size_t	start;
-	char	*temp;
+	t_lexer	lexer;
 
-	ret = skip_space(line, pos);
+	*result = NULL;
+	lexer.line = line;
+	lexer.pos = 0;
+	lexer.next_lexical = result;
+	ret = 0;
+	while (!ret && lexer.line[lexer.pos])
+	{
+		skip_space(&lexer);
+		ret = take_word(&lexer);
+		if (ret)
+			break ;
+		ret = take_token(&lexer);
+		if (ret)
+			break ;
+	}
 	if (ret)
-		return (ret);
-	start = *pos;
-	ret = skip_word(line, pos);
-	if (ret)
-		return (ret);
-	if (start == *pos)
-		return (0);
-	temp = ft_substr(*line, start, *pos - start);
-	if (!temp)
-		return (-1);
-	*result = temp;
+	{
+		lexical_dispose(*result);
+		*result = NULL;
+	}
 	return (0);
 }
 
-static int	skip_space(char **line, size_t *pos)
+void	lexical_dispose(t_lexical *lexical)
 {
-	int	c;
+	t_lexical	*temp;
 
-	while (1)
+	while (lexical)
 	{
-		c = (*line)[*pos];
-		if (c == '\0' || !ft_isspace(c))
-			return (0);
-		(*pos)++;
+		temp = lexical->next;
+		free(lexical->value);
+		free(lexical);
+		lexical = temp;
 	}
 }
 
-static int	skip_word(char **line, size_t *pos)
+static int	take_word(t_lexer *lexer)
 {
-	int	ret;
-	int	c;
+	t_lexical	*temp;
+	char		*word;
+	size_t		start;
 
-	while (1)
+	start = lexer->pos;
+	if (skip_word(lexer))
+		return (1);
+	if (start == lexer->pos)
+		return (0);
+	word = ft_substr(lexer->line, start, lexer->pos - start);
+	if (!word)
+		return (-1);
+	temp = malloc(sizeof(*temp));
+	if (!temp)
 	{
-		if (str2token(&(*line)[*pos]))
-			return (0);
-		c = (*line)[*pos];
-		if (ft_isspace(c))
-			return (0);
-		(*pos)++;
-		ret = 0;
-		if (c == '\'')
-			ret = skip_singlquote(line, pos);
-		else if (c == '"')
-			ret = skip_doublequote(line, pos);
-		if (ret)
-			return (ret);
+		free(word);
+		return (-1);
 	}
+	temp->next = NULL;
+	temp->token = TK_WORD;
+	temp->value = word;
+	*lexer->next_lexical = temp;
+	lexer->next_lexical = &temp->next;
+	return (0);
 }
 
-static int	skip_singlquote(char **line, size_t *pos)
+static int	take_token(t_lexer *lexer)
 {
-	int	c;
+	t_lexical	*temp;
+	t_token		token;
 
-	while (1)
-	{
-		c = (*line)[*pos];
-		if (c == '\0')
-		{
-			ft_putstr_fd("minishell: unmatched `'`\n", 2);
-			return (1);
-		}
-		(*pos)++;
-		if (c == '\'')
-			return (0);
-	}
-}
-
-static int	skip_doublequote(char **line, size_t *pos)
-{
-	int	c;
-
-	while (1)
-	{
-		c = (*line)[*pos];
-		if (c == '\0')
-		{
-			ft_putstr_fd("minishell: unmatched `\"`\n", 2);
-			return (1);
-		}
-		(*pos)++;
-		if (c == '"')
-			return (0);
-	}
+	token = match_token(&lexer->line[lexer->pos]);
+	if (!token)
+		return (0);
+	lexer->pos += (int []){0, 0, 1, 2, 1, 2, 1, 2, 2, 1, 1}[token];
+	temp = malloc(sizeof(*temp));
+	if (!temp)
+		return (-1);
+	temp->next = NULL;
+	temp->token = token;
+	temp->value = NULL;
+	*lexer->next_lexical = temp;
+	lexer->next_lexical = &temp->next;
+	return (0);
 }

@@ -5,45 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/02 14:26:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 17:55:51 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/02/06 08:03:52 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/02/07 02:52:17 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include <libft.h>
 
-t_token	str2token(char *str)
+t_token	match_token(char *str)
 {
 	if (!ft_strncmp("<<", str, 2))
-		return (tk_here_doc);
+		return (TK_HEREDOC);
 	if (!ft_strncmp("<", str, 1))
-		return (tk_redirect_input);
-	if (!ft_strncmp(">", str, 1))
-		return (tk_redirect_overwrite);
+		return (TK_INPUT);
 	if (!ft_strncmp(">>", str, 2))
-		return (tk_redirect_append);
-	if (!ft_strncmp("|", str, 1))
-		return (tk_pipe);
+		return (TK_APPEND);
+	if (!ft_strncmp(">", str, 1))
+		return (TK_OVEREWRITE);
 	if (!ft_strncmp("||", str, 2))
-		return (tk_or);
+		return (TK_OR);
+	if (!ft_strncmp("|", str, 1))
+		return (TK_PIPE);
 	if (!ft_strncmp("&&", str, 2))
-		return (tk_and);
-	return (tk_none);
-}
-
-size_t	get_token_len(t_token token)
-{
-	return (((int[]){0, 1, 2, 1, 2, 1, 2, 2})[token]);
-}
-
-int	is_redirect_token(t_token token)
-{
-	return (token == tk_redirect_input || token == tk_here_doc
-		|| token == tk_redirect_overwrite || token == tk_redirect_append);
-}
-
-int	is_connection_token(t_token token)
-{
-	return (token == tk_pipe || token == tk_and || token == tk_or);
+		return (TK_AND);
+	if (!ft_strncmp("(", str, 1))
+		return (TK_OPEN_PAREN);
+	if (!ft_strncmp(")", str, 1))
+		return (TK_CLOSE_PAREN);
+	return (TK_NONE);
 }

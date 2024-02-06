@@ -5,30 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/31 03:12:06 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 17:56:01 by hshimizu         ###   ########.fr       */
+/*   Created: 2024/02/06 08:04:42 by hshimizu          #+#    #+#             */
+/*   Updated: 2024/02/06 21:43:00 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# include <stddef.h>
-
 typedef enum e_token
 {
-	tk_none,
-	tk_redirect_input,
-	tk_here_doc,
-	tk_redirect_append,
-	tk_redirect_overwrite,
-	tk_pipe,
-	tk_or,
-	tk_and,
+	TK_NONE,
+	TK_WORD,
+	TK_INPUT,
+	TK_HEREDOC,
+	TK_OVEREWRITE,
+	TK_APPEND,
+	TK_PIPE,
+	TK_OR,
+	TK_AND,
+	TK_OPEN_PAREN,
+	TK_CLOSE_PAREN,
 }		t_token;
 
-t_token	str2token(char *str);
-int		is_redirect_token(t_token token);
-int		is_connection_token(t_token token);
+t_token	match_token(char *str);
 
 #endif
