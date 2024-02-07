@@ -7,18 +7,25 @@ int	main(void)
 {
 	char		*line;
 	t_lexical	*lexical;
-	line = readline(">>> ");
-	if (lexer(line, &lexical))
-		return 1;
-	for (t_lexical	*temp = lexical; temp; temp = temp->next)
+
+	while (1)
 	{
-		if (temp->token == TK_WORD)
-			printf("%s ", temp->value);
-		else 
-			printf("%s ", (char *[]){
-			"","","<","<<",">",">>", "|", "||", "&&", "(", ")"
-			}[temp->token]);
+		line = readline(">>> ");
+		if (!line)
+			break ;
+		if (lexer(line, &lexical))
+			return (1);
+		free(line);
+		for (t_lexical *temp = lexical; temp; temp = temp->next)
+		{
+			if (temp->token == TK_WORD)
+				printf("%s ", temp->value);
+			else
+				printf("<token %s> ", (char *[]){"", "", "<", "<<", ">", ">>", "|",
+						"||", "&&", "(", ")"}[temp->token]);
+		}
+		printf("\n");
+		lexical_dispose(lexical);
 	}
-	lexical_dispose(lexical);
-	return 0;
+	return (0);
 }
