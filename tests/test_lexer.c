@@ -21,7 +21,7 @@ int	main(void)
 			if (temp->token == TK_WORD)
 				printf("%s ", temp->value);
 			else
-				printf("<token %s> ", (char *[]){"", "", "<", "<<", ">", ">>", "|",
+				printf("{token %s} ", (char *[]){"", "", "<", "<<", ">", ">>", "|",
 						"||", "&&", "(", ")"}[temp->token]);
 		}
 		printf("\n");
