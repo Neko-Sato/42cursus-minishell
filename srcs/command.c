@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_cmd.c                                         :+:      :+:    :+:   */
+/*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:45:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/10 12:39:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:47:13 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
+#include "element.h"
 #include <stdlib.h>
 
 t_command	*make_simplecom(t_wordlist *wordlist, t_redirect *redirect)
@@ -27,7 +28,7 @@ t_command	*make_simplecom(t_wordlist *wordlist, t_redirect *redirect)
 		free(ret);
 		return (NULL);
 	}
-	ret->type = (t_redirecttype []){CT_SIMPLE, CT_NONE}[!wordlist];
+	ret->type = (t_redirecttype[]){CT_SIMPLE, CT_NONE}[!wordlist];
 	ret->value.simplecom = simplecom;
 	simplecom->wordlist = wordlist;
 	simplecom->redirect = redirect;
@@ -75,4 +76,28 @@ t_command	*make_groupcom(t_command *command)
 	ret->value.groupcom = groupcom;
 	groupcom->command = command;
 	return (ret);
+}
+
+void	dispose_command(t_command *command)
+{
+	if (!command)
+		return ;
+	if (command->type == CT_SIMPLE)
+	{
+		dispose_wordlist(command->value.simplecom->wordlist);
+		dispose_redirect(command->value.simplecom->redirect);
+		free(command->value.simplecom);
+	}
+	else if (command->type == CT_GROUP)
+	{
+		dispose_command(command->value.groupcom->command);
+		free(command->value.groupcom);
+	}
+	else if (command->type == CT_CONNCOM)
+	{
+		dispose_command(command->value.conncom->command1);
+		dispose_command(command->value.conncom->command2);
+		free(command->value.conncom);
+	}
+	free(command);
 }

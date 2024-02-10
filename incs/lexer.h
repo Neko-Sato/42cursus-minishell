@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/07 02:26:15 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/10 15:28:56 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_lexer
 }						t_lexer;
 
 int						lexer(char *line, t_lexical **result);
-void					lexical_dispose(t_lexical *lexical);
+void					dispose_lexical(t_lexical *lexical);
 
 int						skip_space(t_lexer *lexer);
 int						skip_word(t_lexer *lexer);
