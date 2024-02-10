@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 02:38:48 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 03:24:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	take_command_internal(t_parser *parser, t_command **command)
 	if (is_connection_token(parser->lexical->token))
 		ret = take_concom(parser, command);
 	else if (!parser->brackets_level
-			|| parser->lexical->token != TK_CLOSE_PAREN)
+		|| parser->lexical->token != TK_CLOSE_PAREN)
 		ret = 1;
 	return (ret);
 }

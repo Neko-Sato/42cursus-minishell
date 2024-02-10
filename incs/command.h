@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/10 23:42:55 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 03:26:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,25 @@ typedef struct s_groupcom
 	t_command				*command;
 }							t_groupcom;
 
+typedef union u_comvalue
+{
+	t_simplecom				*simplecom;
+	t_conncom				*conncom;
+	t_groupcom				*groupcom;
+}							t_comvalue;
+
 typedef struct s_command
 {
 	t_commandtype			type;
-	union
-	{
-		t_simplecom			*simplecom;
-		t_conncom			*conncom;
-		t_groupcom			*groupcom;
-	} value;
+	t_comvalue				value;
 }							t_command;
 
 void						dispose_command(t_command *command);
 
-t_command	*make_simplecom(t_wordlist *wordlist,
-							t_redirect *redirect);
-t_command	*make_conncom(t_concomtype type,
-						t_command *command1,
-						t_command *command2);
+t_command					*make_simplecom(t_wordlist *wordlist,
+								t_redirect *redirect);
+t_command					*make_conncom(t_concomtype type,
+								t_command *command1, t_command *command2);
 t_command					*make_groupcom(t_command *command);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/02 14:27:05 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 03:24:44 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define PS1 "minishell> "
 # define PS2 "> "
 
-extern int	interrupt_state;
+extern int	g_interrupt_state;
 
 char		*put_primary_prompt(t_minishell *gvars);
 char		*put_secondary_prompt(t_minishell *gvars, char *line);
