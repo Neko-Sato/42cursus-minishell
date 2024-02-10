@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/07 02:51:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:54:59 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	lexer(char *line, t_lexical **result)
 		lexical_dispose(*result);
 		*result = NULL;
 	}
-	return (0);
+	return (ret);
 }
 
 void	lexical_dispose(t_lexical *lexical)

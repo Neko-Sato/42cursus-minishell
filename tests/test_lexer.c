@@ -5,6 +5,7 @@
 
 int	main(void)
 {
+	int			ret;
 	char		*line;
 	t_lexical	*lexical;
 
@@ -13,9 +14,12 @@ int	main(void)
 		line = readline(">>> ");
 		if (!line)
 			break ;
-		if (lexer(line, &lexical))
-			return (1);
+		ret = lexer(line, &lexical);
 		free(line);
+		if (ret == -1)
+			return (1);
+		if (ret)
+			continue;
 		for (t_lexical *temp = lexical; temp; temp = temp->next)
 		{
 			if (temp->token == TK_WORD)

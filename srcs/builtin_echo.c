@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/07 17:07:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/09 08:35:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define END "\n"
 #define SPACER " "
 
-int	main(int argc, char *argv[])
+int	builtin_echo(int argc, char *argv[])
 {
 	int	flag;
 
