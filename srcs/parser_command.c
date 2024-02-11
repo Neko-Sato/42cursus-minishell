@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 03:24:23 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:06:58 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "parser.h"
 
 static int	take_command_internal(t_parser *parser, t_command **command);
-static int	take_simplecom(t_parser *parser, t_command **command);
+static int	take_blockcom(t_parser *parser, t_command **command);
 static int	take_groupcom(t_parser *parser, t_command **command);
 static int	take_concom(t_parser *parser, t_command **command);
 
@@ -36,18 +36,17 @@ static int	take_command_internal(t_parser *parser, t_command **command)
 {
 	int	ret;
 
-	*command = NULL;
 	if (!parser->lexical)
 		return (0);
 	if (parser->lexical->token == TK_OPEN_PAREN)
 		ret = take_groupcom(parser, command);
 	else
-		ret = take_simplecom(parser, command);
+		ret = take_blockcom(parser, command);
 	if (ret)
 		return (ret);
 	if (!parser->lexical)
 		return (0);
-	if (is_connection_token(parser->lexical->token))
+	if (parser->lexical->token == TK_AND || parser->lexical->token == TK_OR)
 		ret = take_concom(parser, command);
 	else if (!parser->brackets_level
 		|| parser->lexical->token != TK_CLOSE_PAREN)
@@ -55,27 +54,33 @@ static int	take_command_internal(t_parser *parser, t_command **command)
 	return (ret);
 }
 
-static int	take_simplecom(t_parser *parser, t_command **command)
+static int	take_blockcom(t_parser *parser, t_command **command)
 {
 	int			ret;
 	t_command	*temp;
 	t_wordlist	*wordlist;
 	t_redirect	*redirect;
 
+	*command = NULL;
 	ret = take_element(parser, &wordlist, &redirect);
 	if (ret)
 		return (ret);
-	if (!wordlist && !redirect)
-		return (0);
-	temp = make_simplecom(wordlist, redirect);
-	if (!temp)
+	if (wordlist || redirect)
 	{
-		dispose_wordlist(wordlist);
-		dispose_redirect(redirect);
-		return (-1);
+		temp = make_simplecom(wordlist, redirect);
+		if (!temp)
+		{
+			dispose_wordlist(wordlist);
+			dispose_redirect(redirect);
+			return (-1);
+		}
+		*command = temp;
 	}
-	*command = temp;
-	return (0);
+	if (!parser->lexical)
+		return (0);
+	if (parser->lexical->token == TK_PIPE)
+		ret = take_concom(parser, command);
+	return (ret);
 }
 
 static int	take_groupcom(t_parser *parser, t_command **command)
@@ -83,6 +88,7 @@ static int	take_groupcom(t_parser *parser, t_command **command)
 	int			ret;
 	t_command	*subcommand;
 
+	*command = NULL;
 	parser->brackets_level++;
 	parser->lexical = parser->lexical->next;
 	ret = take_command(parser, &subcommand);
@@ -114,7 +120,10 @@ static int	take_concom(t_parser *parser, t_command **command)
 		return (1);
 	type = parser->lexical->token - 6;
 	parser->lexical = parser->lexical->next;
-	ret = take_command(parser, &next);
+	if (type == CCT_PIPE)
+		ret = take_blockcom(parser, &next);
+	else
+		ret = take_command(parser, &next);
 	if (ret)
 		return (ret);
 	if (!next)

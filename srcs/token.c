@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 08:03:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/09 09:06:18 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 03:38:46 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,4 @@ t_token	match_token(char *str)
 int	is_redirect_token(t_token token)
 {
 	return (2 <= token && token <= 5);
-}
-
-int	is_connection_token(t_token token)
-{
-	return (6 <= token && token <= 8);
 }
