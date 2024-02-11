@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 12:06:58 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:56:28 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static int	take_command_internal(t_parser *parser, t_command **command)
 {
 	int	ret;
 
+	*command = NULL;
 	if (!parser->lexical)
 		return (0);
 	if (parser->lexical->token == TK_OPEN_PAREN)
