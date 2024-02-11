@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 03:13:22 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:33:47 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ int	parser(t_lexical *lexical, t_command **command, t_heredoc **heredoc)
 	}
 	return (ret);
 }
+
+// int gather_heredoc(t_heredoc *heredoc)
+// {
+// }
 
 void	dispose_heredoc(t_heredoc *heredoc)
 {

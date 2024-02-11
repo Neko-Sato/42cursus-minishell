@@ -6,20 +6,45 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 03:26:43 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:30:16 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_H
 # define COMMAND_H
 
-# include "element.h"
+typedef struct s_wordlist
+{
+	struct s_wordlist		*next;
+	char					*word;
+}							t_wordlist;
+
+typedef struct s_heredoc
+{
+	struct s_heredoc		*next;
+	char					*eof;
+	char					*contents;
+}							t_heredoc;
+
+typedef enum s_redirecttype
+{
+	RT_INPUT,
+	RT_HEREDOC,
+	RT_OVERWRITE,
+	RT_APPEND,
+}							t_redirecttype;
+
+typedef struct s_redirect
+{
+	struct s_redirect		*next;
+	t_redirecttype			type;
+	char					*word;
+}							t_redirect;
 
 typedef struct s_command	t_command;
 
 typedef enum s_commandtype
 {
-	CT_NONE,
 	CT_SIMPLE,
 	CT_CONNCOM,
 	CT_GROUP,
@@ -64,6 +89,8 @@ typedef struct s_command
 }							t_command;
 
 void						dispose_command(t_command *command);
+void						dispose_wordlist(t_wordlist *wordlist);
+void						dispose_redirect(t_redirect *redirect);
 
 t_command					*make_simplecom(t_wordlist *wordlist,
 								t_redirect *redirect);
