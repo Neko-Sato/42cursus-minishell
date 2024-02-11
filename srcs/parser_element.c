@@ -6,12 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 03:05:53 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:46:27 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "token.h"
+#include <libft.h>
 #include <stdlib.h>
 
 static int	take_word(t_parser *parser, t_wordlist ***wordlist_last);
@@ -55,7 +56,12 @@ static int	take_word(t_parser *parser, t_wordlist ***wordlist_last)
 	if (!wordlist)
 		return (-1);
 	wordlist->next = NULL;
-	wordlist->word = parser->lexical->value;
+	wordlist->word = ft_strdup(parser->lexical->value);
+	if (!wordlist->word)
+	{
+		free(wordlist);
+		return (-1);
+	}
 	**wordlist_last = wordlist;
 	*wordlist_last = &wordlist->next;
 	parser->lexical = parser->lexical->next;
@@ -76,8 +82,9 @@ static int	take_redirect(t_parser *parser, t_redirect ***redirect_last)
 		return (-1);
 	redirect->next = NULL;
 	redirect->type = type;
-	redirect->word = parser->lexical->value;
-	if (type == RT_HEREDOC && take_heredoc(parser, redirect))
+	redirect->word = ft_strdup(parser->lexical->value);
+	if (!redirect->word
+		|| (type == RT_HEREDOC && take_heredoc(parser, redirect)))
 	{
 		free(redirect);
 		return (-1);

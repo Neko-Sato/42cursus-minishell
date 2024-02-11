@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 12:31:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 12:27:30 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:47:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	dispose_wordlist(t_wordlist *wordlist)
 	while (wordlist)
 	{
 		temp = wordlist;
+		free(wordlist->word);
 		wordlist = wordlist->next;
 		free(temp);
 	}
@@ -56,6 +57,7 @@ void	dispose_redirect(t_redirect *redirect)
 	while (redirect)
 	{
 		temp = redirect;
+		free(redirect->word);
 		redirect = redirect->next;
 		free(temp);
 	}

@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/11 00:41:14 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/11 12:33:32 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,13 +23,13 @@ MAIN			= $(DIR)/main.c
 SRCS			= \
 	$(addprefix $(SRCS_DIR)/, \
 		token.c \
-		command.c \
 		lexer_skip.c \
 		lexer.c \
-		element.c \
 		parser_element.c \
 		parser_command.c \
 		parser.c \
+		command_make.c \
+		command_dispose.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
