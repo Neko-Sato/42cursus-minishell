@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 12:30:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:12:52 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_command
 void						dispose_command(t_command *command);
 void						dispose_wordlist(t_wordlist *wordlist);
 void						dispose_redirect(t_redirect *redirect);
+void						dispose_heredoc(t_heredoc *heredoc);
 
 t_command					*make_simplecom(t_wordlist *wordlist,
 								t_redirect *redirect);

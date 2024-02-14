@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 12:31:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 13:47:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:12:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,19 @@ void	dispose_redirect(t_redirect *redirect)
 		temp = redirect;
 		free(redirect->word);
 		redirect = redirect->next;
+		free(temp);
+	}
+}
+
+void	dispose_heredoc(t_heredoc *heredoc)
+{
+	void	*temp;
+
+	while (heredoc)
+	{
+		free(heredoc->contents);
+		temp = heredoc;
+		heredoc = heredoc->next;
 		free(temp);
 	}
 }
