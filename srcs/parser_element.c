@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/17 19:46:41 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:07:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static int	take_heredoc(t_parser *parser, t_redirect *redirect)
 {
 	t_heredoc	*heredoc;
 
-	heredoc = malloc(sizeof(t_wordlist));
+	heredoc = malloc(sizeof(t_heredoc));
 	if (!heredoc)
 		return (-1);
 	heredoc->next = NULL;
