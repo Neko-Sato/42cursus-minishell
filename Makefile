@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/17 19:14:00 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/17 20:12:41 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 
 CFLAGS			= -Wall -Wextra -Werror
 LDFLAGS			+= -L$(FT) -L$(READLINE)
-IDFLAGS			+= -I$(FT) -I$(READLINE)
+IDFLAGS			+= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
 LIBS			+= -lft -lreadline -ltermcap
 IDFLAGS			+= -I$(INCS_DIR)
 
