@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/14 18:40:24 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/17 13:30:27 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME			= minishell
 
 DIR				= .
 FT				= $(DIR)/libft
+READLINE		= $(DIR)/readline
 INCS_DIR		= $(DIR)/incs
 SRCS_DIR		= $(DIR)/srcs
 OBJS_DIR		= $(DIR)/objs
@@ -37,9 +38,9 @@ SRCS			= \
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 
 CFLAGS			= -Wall -Wextra -Werror
-LDFLAGS			+= -L$(FT)
-IDFLAGS			+= -I$(FT)
-LIBS			+= -lft -lreadline
+LDFLAGS			+= -L$(FT) -L$(READLINE)
+IDFLAGS			+= -I$(FT) -I$(READLINE)
+LIBS			+= -lft -lreadline -ltinfo
 IDFLAGS			+= -I$(INCS_DIR)
 
 .PHONY: all clean fclean re bonus
@@ -57,9 +58,12 @@ $(OBJS_DIR)/%.o: %.c
 
 clean:
 	$(RM) -r $(OBJS_DIR)
+	@make -C $(FT) clean
+	@make -C $(READLINE) clean
 
 fclean: clean
 	@make -C $(FT) fclean
+	$(RM) $(READLINE)/Makefile
 	$(RM) $(NAME)
 
 re: fclean all
@@ -75,5 +79,13 @@ norm: $(MAIN) $(SRCS) $(INCS_DIR)
 
 .PHONY: $(FT)
 $(FT):
+	@git submodule update --init $@
+	@$(MAKE) -C $@
+
+$(READLINE)/Makefile: 
+	(cd $(READLINE); ./configure;)
+
+.PHONY: $(READLINE)
+$(READLINE): $(READLINE)/Makefile
 	@git submodule update --init $@
 	@$(MAKE) -C $@
