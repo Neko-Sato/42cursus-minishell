@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/17 13:30:27 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/17 14:36:29 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,6 @@ clean:
 
 fclean: clean
 	@make -C $(FT) fclean
-	$(RM) $(READLINE)/Makefile
 	$(RM) $(NAME)
 
 re: fclean all
