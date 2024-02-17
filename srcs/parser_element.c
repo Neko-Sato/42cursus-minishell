@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/14 17:28:38 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/17 19:46:41 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	take_redirect(t_parser *parser, t_redirect ***redirect_last)
 	parser->lexical = parser->lexical->next;
 	if (!parser->lexical || parser->lexical->token != TK_WORD)
 		return (1);
-	redirect = malloc(sizeof(t_wordlist));
+	redirect = malloc(sizeof(t_redirect));
 	if (!redirect)
 		return (-1);
 	redirect->next = NULL;
