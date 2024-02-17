@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/17 14:36:29 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/17 19:14:00 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 CFLAGS			= -Wall -Wextra -Werror
 LDFLAGS			+= -L$(FT) -L$(READLINE)
 IDFLAGS			+= -I$(FT) -I$(READLINE)
-LIBS			+= -lft -lreadline -ltinfo
+LIBS			+= -lft -lreadline -ltermcap
 IDFLAGS			+= -I$(INCS_DIR)
 
 .PHONY: all clean fclean re bonus

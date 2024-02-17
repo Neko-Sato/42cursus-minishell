@@ -1,8 +1,8 @@
 #include "lexer.h"
 #include "parser.h"
 #include "shell.h"
-#include <readline/readline.h>
 #include <stdio.h>
+#include <readline.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -35,12 +35,12 @@ int	main(void)
 		ret = gather_heredoc(heredoc, isatty(0) && isatty(2));
 		if (ret == -1)
 			break ;
-		if (ret)
 		print_command(command, 0);
 		print_heredoc(heredoc);
 		dispose_command(command);
 		dispose_heredoc(heredoc);
 	}
-	printf("exit\n");
+	if (isatty(0) && isatty(2))
+		printf("exit\n");
 	return (0);
 }
