@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/17 20:12:41 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/17 20:18:26 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,7 @@ $(FT):
 	@$(MAKE) -C $@
 
 $(READLINE)/Makefile: 
-	(cd $(READLINE); ./configure;)
+	(cd $(READLINE); ./configure CFLAGS=-w;)
 
 .PHONY: $(READLINE)
 $(READLINE): $(READLINE)/Makefile
