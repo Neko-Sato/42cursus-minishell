@@ -6,14 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 04:58:21 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 05:29:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
 #include "shell.h"
 #include <libft.h>
-#include <stdio.h>
 
 static int	read_heredoc(t_minishell *shell, t_heredoc *heredoc);
 static int	skip_eof(t_minishell *shell, t_heredoc *heredoc, size_t *zindex);
@@ -71,8 +70,10 @@ static int	skip_eof(t_minishell *shell, t_heredoc *heredoc, size_t *zindex)
 			put_warning(heredoc);
 			break ;
 		}
-		*zindex += ft_strlen(&shell->string[*zindex]) + 1;
+		*zindex += ft_strlen(&shell->string[*zindex]);
+		(*zindex)++;
 	}
+	(*zindex)++;
 	return (NOERR);
 }
 
