@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 00:45:27 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 03:26:16 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 	ft_bzero(element, sizeof(*element));
 	wordlist_last = &element->wordlist;
 	redirect_last = &element->redirect;
-	ret = 0;
+	ret = NOERR;
 	while (!ret)
 	{
 		if (parser->token.type == TK_WORD)
@@ -42,7 +42,7 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 			break ;
 	}
 	if (!ret)
-		return (0);
+		return (NOERR);
 	dispose_wordlist(element->wordlist);
 	dispose_redirect(element->redirect);
 	ft_bzero(&element, sizeof(*element));
@@ -56,7 +56,7 @@ static int	take_word(t_minishell *shell, t_parser *parser,
 
 	wordlist = malloc(sizeof(t_wordlist));
 	if (!wordlist)
-		return (-1);
+		return (SYSTEM_ERR);
 	wordlist->next = NULL;
 	wordlist->word = parser->token.value;
 	**wordlist_last = wordlist;
@@ -76,17 +76,17 @@ static int	take_redirect(t_minishell *shell, t_parser *parser,
 	if (ret)
 		return (ret);
 	if (parser->token.type != TK_WORD)
-		return (1);
+		return (SYNTAX_ERR);
 	redirect = malloc(sizeof(t_redirect));
 	if (!redirect)
-		return (-1);
+		return (SYSTEM_ERR);
 	redirect->next = NULL;
 	redirect->type = type;
 	redirect->word = parser->token.value;
 	if (type == RT_HEREDOC && take_heredoc(parser, redirect))
 	{
 		free(redirect);
-		return (-1);
+		return (SYSTEM_ERR);
 	}
 	**redirect_last = redirect;
 	*redirect_last = &redirect->next;
@@ -99,11 +99,11 @@ static int	take_heredoc(t_parser *parser, t_redirect *redirect)
 
 	heredoc = malloc(sizeof(t_heredoc));
 	if (!heredoc)
-		return (-1);
+		return (SYSTEM_ERR);
 	heredoc->next = NULL;
 	heredoc->contents = NULL;
 	heredoc->eof = redirect->word;
 	*parser->heredoc_last = heredoc;
 	parser->heredoc_last = &heredoc->next;
-	return (0);
+	return (NOERR);
 }

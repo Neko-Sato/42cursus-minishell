@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 01:42:02 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 03:21:32 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 
 # define PS1 "minishell> "
 # define PS2 "> "
+
+# define NOERR 0
+# define SYSTEM_ERR -1
+# define SYNTAX_ERR 1
+# define INTERRUPT 2
 
 typedef struct s_minishell
 {

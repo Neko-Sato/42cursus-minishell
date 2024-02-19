@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 01:42:31 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 03:22:55 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ char	*minishell_readline(t_minishell *shell, char *prompt)
 	}
 	else
 		line = readline(NULL);
+	if (g_interrupt_state)
+	{
+		free(line);
+		line = NULL;
+	}
 	return (line);
 }
 
@@ -52,21 +57,23 @@ int	put_prompt(t_minishell *shell, char *prompt)
 	char	*temp;
 
 	line = minishell_readline(shell, prompt);
+	if (g_interrupt_state)
+		return (INTERRUPT);
 	if (!line)
-		return (0);
+		return (NOERR);
 	shell->line++;
 	if (shell->string)
 	{
 		temp = strjoin_at_newline(shell->string, line);
 		free(line);
 		if (!temp)
-			return (-1);
+			return (SYSTEM_ERR);
 	}
 	else
 		temp = line;
 	free(shell->string);
 	shell->string = temp;
-	return (0);
+	return (NOERR);
 }
 
 static char	*strjoin_at_newline(char *line, char *new_line)

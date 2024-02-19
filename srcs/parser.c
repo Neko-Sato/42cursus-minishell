@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 01:18:20 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 03:25:16 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parser(t_minishell *shell)
 	ret = lexer(shell, &parser.token);
 	if (!ret)
 		ret = take_command(shell, &parser);
-	if (ret == 1)
+	if (ret == SYNTAX_ERR)
 		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 	if (ret)
 	{
@@ -40,7 +40,7 @@ int	parser(t_minishell *shell)
 	}
 	shell->command = parser.command;
 	shell->heredoc = parser.heredoc;
-	return (0);
+	return (NOERR);
 }
 
 int	take_command(t_minishell *shell, t_parser *parser)
@@ -59,11 +59,11 @@ int	take_command(t_minishell *shell, t_parser *parser)
 	if (ret)
 		return (ret);
 	if (parser->token.type == TK_EOL)
-		return (0);
+		return (NOERR);
 	if (parser->token.type == TK_AND || parser->token.type == TK_OR)
 		ret = take_concom(shell, parser);
 	else if (!parser->brackets_level || parser->token.type != TK_CLOSE_PAREN)
-		ret = 1;
+		ret = SYNTAX_ERR;
 	return (ret);
 }
 
@@ -75,7 +75,7 @@ int	take_blockcom(t_minishell *shell, t_parser *parser)
 	if (ret)
 		return (ret);
 	if (parser->token.type == TK_EOL)
-		return (0);
+		return (NOERR);
 	if (parser->token.type == TK_PIPE)
 		ret = take_concom(shell, parser);
 	return (ret);

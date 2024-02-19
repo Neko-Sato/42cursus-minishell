@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/19 23:12:41 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 02:06:56 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_parser
 }				t_parser;
 
 int				parser(t_minishell *shell);
+int				gather_heredoc(t_minishell *shell);
 
 int				take_command(t_minishell *shell, t_parser *parser);
 int				take_blockcom(t_minishell *shell, t_parser *parser);

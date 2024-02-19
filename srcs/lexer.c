@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 01:39:31 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 03:34:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	lexer(t_minishell *shell, t_token *token)
 	else
 		token->type = TK_EOL;
 	shell->sindex = zindex;
-	return (0);
+	return (NOERR);
 }
 
 int	skip_space(t_minishell *shell, size_t *zindex)
@@ -51,14 +51,14 @@ int	skip_space(t_minishell *shell, size_t *zindex)
 			break ;
 		(*zindex)++;
 	}
-	return (0);
+	return (NOERR);
 }
 
 int	get_word(t_minishell *shell, size_t *zindex, char **word)
 {
 	int	ret;
 
-	ret = 0;
+	ret = NOERR;
 	while (1)
 	{
 		if (shell->string[*zindex] == '\0')
@@ -75,12 +75,12 @@ int	get_word(t_minishell *shell, size_t *zindex, char **word)
 			return (ret);
 	}
 	if (*zindex == shell->sindex)
-		return (0);
+		return (NOERR);
 	*word = ft_substr(&shell->string[shell->sindex], 0, *zindex
 			- shell->sindex);
 	if (!*word)
-		return (-1);
-	return (0);
+		return (SYSTEM_ERR);
+	return (NOERR);
 }
 
 int	skip_singlquote(t_minishell *shell, size_t *zindex)
@@ -97,12 +97,12 @@ int	skip_singlquote(t_minishell *shell, size_t *zindex)
 			if (shell->string[*zindex] == '\0')
 			{
 				ft_putstr_fd("minishell: unmatched `'`\n", STDERR_FILENO);
-				return (1);
+				return (SYNTAX_ERR);
 			}
 		}
 		(*zindex)++;
 		if (shell->string[*zindex - 1] == '\'')
-			return (0);
+			return (NOERR);
 	}
 }
 
@@ -120,11 +120,11 @@ int	skip_doublequote(t_minishell *shell, size_t *zindex)
 			if (shell->string[*zindex] == '\0')
 			{
 				ft_putstr_fd("minishell: unmatched `\"`\n", STDERR_FILENO);
-				return (1);
+				return (SYNTAX_ERR);
 			}
 		}
 		(*zindex)++;
 		if (shell->string[*zindex - 1] == '"')
-			return (0);
+			return (NOERR);
 	}
 }
