@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/17 20:18:26 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/20 01:27:38 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ SRCS			= \
 		token.c \
 		command_make.c \
 		command_dispose.c \
-		lexer_skip.c \
 		lexer.c \
 		parser_element.c \
 		parser_command.c \
@@ -37,7 +36,7 @@ SRCS			= \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -g
 LDFLAGS			+= -L$(FT) -L$(READLINE)
 IDFLAGS			+= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
 LIBS			+= -lft -lreadline -ltermcap
@@ -69,7 +68,7 @@ re: fclean all
 
 .PHONY: test
 test: test.c $(OBJS)
-	$(CC) -g $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) -g -fsanitize=address  $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 .PHONY: norm
 norm: $(MAIN) $(SRCS) $(INCS_DIR)

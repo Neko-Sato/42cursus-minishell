@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/14 18:21:33 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:12:41 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,22 @@
 
 typedef struct s_parser
 {
-	t_lexical	*lexical;
-	t_heredoc	**heredoc;
+	t_token		token;
 	int			brackets_level;
+	t_command	*command;
+	t_heredoc	*heredoc;
+	t_heredoc	**heredoc_last;
 }				t_parser;
 
-int				take_element(t_parser *parser, t_wordlist **wordlist,
-					t_redirect **redirect);
-int				take_command(t_parser *parser, t_command **command);
+int				parser(t_minishell *shell);
 
-int				parser(t_lexical *lexical, t_command **command,
-					t_heredoc **heredoc);
-int				gather_heredoc(t_heredoc *heredoc, int interactive);
+int				take_command(t_minishell *shell, t_parser *parser);
+int				take_blockcom(t_minishell *shell, t_parser *parser);
+int				take_simplecom(t_minishell *shell, t_parser *parser);
+int				take_groupcom(t_minishell *shell, t_parser *parser);
+int				take_concom(t_minishell *shell, t_parser *parser);
+
+int				take_element(t_minishell *shell, t_parser *parser,
+					t_element *element);
 
 #endif

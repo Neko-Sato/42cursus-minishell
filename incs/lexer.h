@@ -6,34 +6,21 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/10 15:28:56 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:39:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
+# include "shell.h"
 # include "token.h"
 # include <stddef.h>
 
-typedef struct s_lexical
-{
-	struct s_lexical	*next;
-	t_token				token;
-	char				*value;
-}						t_lexical;
-
-typedef struct s_lexer
-{
-	char				*line;
-	size_t				pos;
-	t_lexical			**next_lexical;
-}						t_lexer;
-
-int						lexer(char *line, t_lexical **result);
-void					dispose_lexical(t_lexical *lexical);
-
-int						skip_space(t_lexer *lexer);
-int						skip_word(t_lexer *lexer);
+int	lexer(t_minishell *shell, t_token *token);
+int	skip_space(t_minishell *shell, size_t *zindex);
+int	get_word(t_minishell *shell, size_t *zindex, char **word);
+int	skip_singlquote(t_minishell *shell, size_t *zindex);
+int	skip_doublequote(t_minishell *shell, size_t *zindex);
 
 #endif

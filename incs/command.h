@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/14 16:12:52 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:17:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ typedef struct s_redirect
 	t_redirecttype			type;
 	char					*word;
 }							t_redirect;
+
+typedef struct s_element
+{
+	t_redirect				*redirect;
+	t_wordlist				*wordlist;
+}							t_element;
 
 typedef struct s_command	t_command;
 
@@ -93,8 +99,7 @@ void						dispose_wordlist(t_wordlist *wordlist);
 void						dispose_redirect(t_redirect *redirect);
 void						dispose_heredoc(t_heredoc *heredoc);
 
-t_command					*make_simplecom(t_wordlist *wordlist,
-								t_redirect *redirect);
+t_command					*make_simplecom(t_element *element);
 t_command					*make_conncom(t_concomtype type,
 								t_command *command1, t_command *command2);
 t_command					*make_groupcom(t_command *command);

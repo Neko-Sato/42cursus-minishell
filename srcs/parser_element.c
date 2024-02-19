@@ -6,49 +6,51 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/17 20:07:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 00:45:27 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "token.h"
 #include <libft.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-static int	take_word(t_parser *parser, t_wordlist ***wordlist_last);
-static int	take_redirect(t_parser *parser, t_redirect ***redirect_last);
+static int	take_word(t_minishell *shell, t_parser *parser,
+				t_wordlist ***wordlist_last);
+static int	take_redirect(t_minishell *shell, t_parser *parser,
+				t_redirect ***redirect_last);
 static int	take_heredoc(t_parser *parser, t_redirect *redirect);
 
-int	take_element(t_parser *parser, t_wordlist **wordlist, t_redirect **redirect)
+int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 {
 	int			ret;
 	t_wordlist	**wordlist_last;
 	t_redirect	**redirect_last;
 
-	*wordlist = NULL;
-	*redirect = NULL;
-	wordlist_last = wordlist;
-	redirect_last = redirect;
+	ft_bzero(element, sizeof(*element));
+	wordlist_last = &element->wordlist;
+	redirect_last = &element->redirect;
 	ret = 0;
-	while (!ret && parser->lexical)
+	while (!ret)
 	{
-		if (parser->lexical->token == TK_WORD)
-			ret = take_word(parser, &wordlist_last);
-		else if (is_redirect_token(parser->lexical->token))
-			ret = take_redirect(parser, &redirect_last);
+		if (parser->token.type == TK_WORD)
+			ret = take_word(shell, parser, &wordlist_last);
+		else if (is_redirect_token(parser->token.type))
+			ret = take_redirect(shell, parser, &redirect_last);
 		else
 			break ;
 	}
 	if (!ret)
 		return (0);
-	dispose_wordlist(*wordlist);
-	dispose_redirect(*redirect);
-	*wordlist = NULL;
-	*redirect = NULL;
+	dispose_wordlist(element->wordlist);
+	dispose_redirect(element->redirect);
+	ft_bzero(&element, sizeof(*element));
 	return (ret);
 }
 
-static int	take_word(t_parser *parser, t_wordlist ***wordlist_last)
+static int	take_word(t_minishell *shell, t_parser *parser,
+		t_wordlist ***wordlist_last)
 {
 	t_wordlist	*wordlist;
 
@@ -56,43 +58,39 @@ static int	take_word(t_parser *parser, t_wordlist ***wordlist_last)
 	if (!wordlist)
 		return (-1);
 	wordlist->next = NULL;
-	wordlist->word = ft_strdup(parser->lexical->value);
-	if (!wordlist->word)
-	{
-		free(wordlist);
-		return (-1);
-	}
+	wordlist->word = parser->token.value;
 	**wordlist_last = wordlist;
 	*wordlist_last = &wordlist->next;
-	parser->lexical = parser->lexical->next;
-	return (0);
+	return (lexer(shell, &parser->token));
 }
 
-static int	take_redirect(t_parser *parser, t_redirect ***redirect_last)
+static int	take_redirect(t_minishell *shell, t_parser *parser,
+		t_redirect ***redirect_last)
 {
+	int				ret;
 	t_redirecttype	type;
 	t_redirect		*redirect;
 
-	type = parser->lexical->token - 2;
-	parser->lexical = parser->lexical->next;
-	if (!parser->lexical || parser->lexical->token != TK_WORD)
+	type = parser->token.type - TK_INPUT;
+	ret = lexer(shell, &parser->token);
+	if (ret)
+		return (ret);
+	if (parser->token.type != TK_WORD)
 		return (1);
 	redirect = malloc(sizeof(t_redirect));
 	if (!redirect)
 		return (-1);
 	redirect->next = NULL;
 	redirect->type = type;
-	redirect->word = ft_strdup(parser->lexical->value);
-	if (!redirect->word
-		|| (type == RT_HEREDOC && take_heredoc(parser, redirect)))
+	redirect->word = parser->token.value;
+	if (type == RT_HEREDOC && take_heredoc(parser, redirect))
 	{
 		free(redirect);
 		return (-1);
 	}
 	**redirect_last = redirect;
 	*redirect_last = &redirect->next;
-	parser->lexical = parser->lexical->next;
-	return (0);
+	return (lexer(shell, &parser->token));
 }
 
 static int	take_heredoc(t_parser *parser, t_redirect *redirect)
@@ -105,7 +103,7 @@ static int	take_heredoc(t_parser *parser, t_redirect *redirect)
 	heredoc->next = NULL;
 	heredoc->contents = NULL;
 	heredoc->eof = redirect->word;
-	*parser->heredoc = heredoc;
-	parser->heredoc = &heredoc->next;
+	*parser->heredoc_last = heredoc;
+	parser->heredoc_last = &heredoc->next;
 	return (0);
 }

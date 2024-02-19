@@ -6,14 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:45:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 12:27:51 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/19 23:10:16 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
 #include <stdlib.h>
 
-t_command	*make_simplecom(t_wordlist *wordlist, t_redirect *redirect)
+t_command	*make_simplecom(t_element *element)
 {
 	t_command	*ret;
 	t_simplecom	*simplecom;
@@ -29,8 +29,8 @@ t_command	*make_simplecom(t_wordlist *wordlist, t_redirect *redirect)
 	}
 	ret->type = CT_SIMPLE;
 	ret->value.simplecom = simplecom;
-	simplecom->wordlist = wordlist;
-	simplecom->redirect = redirect;
+	simplecom->wordlist = element->wordlist;
+	simplecom->redirect = element->redirect;
 	return (ret);
 }
 

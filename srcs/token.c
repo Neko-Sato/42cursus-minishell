@@ -6,14 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 08:03:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/11 03:38:46 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 01:07:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 #include <libft.h>
 
-t_token	match_token(char *str)
+t_tokentype	match_token(char *str)
 {
 	if (!ft_strncmp("<<", str, 2))
 		return (TK_HEREDOC);
@@ -33,10 +33,12 @@ t_token	match_token(char *str)
 		return (TK_OPEN_PAREN);
 	if (!ft_strncmp(")", str, 1))
 		return (TK_CLOSE_PAREN);
-	return (TK_NONE);
+	if (!ft_strncmp("\n", str, 1))
+		return (TK_EOL);
+	return (TK_WORD);
 }
 
-int	is_redirect_token(t_token token)
+int	is_redirect_token(t_tokentype tokentype)
 {
-	return (2 <= token && token <= 5);
+	return (TK_INPUT <= tokentype && tokentype <= TK_APPEND);
 }
