@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:34:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:55:00 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,12 @@ int	lexer(t_minishell *shell, t_token *token)
 		return (ret);
 	shell->sindex = zindex;
 	token->value = NULL;
-	if (shell->string[zindex])
-	{
-		token->type = match_token(&shell->string[zindex]);
-		zindex += (int []){0, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1}[token->type];
-		if (token->type == TK_WORD)
-			ret = get_word(shell, &zindex, &token->value);
-		if (ret)
-			return (ret);
-	}
-	else
-		token->type = TK_EOL;
+	token->type = match_token(&shell->string[zindex]);
+	zindex += (int []){0, 0, 1, 2, 1, 2, 1, 2, 2, 1, 1}[token->type];
+	if (token->type == TK_WORD)
+		ret = get_word(shell, &zindex, &token->value);
+	if (ret)
+		return (ret);
 	shell->sindex = zindex;
 	return (NOERR);
 }
@@ -61,7 +56,7 @@ int	get_word(t_minishell *shell, size_t *zindex, char **word)
 	ret = NOERR;
 	while (1)
 	{
-		if (shell->string[*zindex] == '\0')
+		if (ft_strchr("\n", shell->string[*zindex]))
 			break ;
 		if (ft_isblank(shell->string[*zindex])
 			|| match_token(&shell->string[*zindex]))
@@ -85,20 +80,12 @@ int	get_word(t_minishell *shell, size_t *zindex, char **word)
 
 int	skip_singlquote(t_minishell *shell, size_t *zindex)
 {
-	int	ret;
-
 	while (1)
 	{
-		if (shell->string[*zindex] == '\0')
+		if (ft_strchr("\n", shell->string[*zindex]))
 		{
-			ret = put_prompt(shell, PS2);
-			if (ret)
-				return (ret);
-			if (shell->string[*zindex] == '\0')
-			{
-				ft_putstr_fd("minishell: unmatched `'`\n", STDERR_FILENO);
-				return (SYNTAX_ERR);
-			}
+			ft_putstr_fd("minishell: unmatched `'`\n", STDERR_FILENO);
+			return (SYNTAX_ERR);
 		}
 		(*zindex)++;
 		if (shell->string[*zindex - 1] == '\'')
@@ -108,20 +95,12 @@ int	skip_singlquote(t_minishell *shell, size_t *zindex)
 
 int	skip_doublequote(t_minishell *shell, size_t *zindex)
 {
-	int	ret;
-
 	while (1)
 	{
-		if (shell->string[*zindex] == '\0')
+		if (ft_strchr("\n", shell->string[*zindex]))
 		{
-			ret = put_prompt(shell, PS2);
-			if (ret)
-				return (ret);
-			if (shell->string[*zindex] == '\0')
-			{
-				ft_putstr_fd("minishell: unmatched `\"`\n", STDERR_FILENO);
-				return (SYNTAX_ERR);
-			}
+			ft_putstr_fd("minishell: unmatched `\"`\n", STDERR_FILENO);
+			return (SYNTAX_ERR);
 		}
 		(*zindex)++;
 		if (shell->string[*zindex - 1] == '"')

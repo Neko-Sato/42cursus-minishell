@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 08:03:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 01:07:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 08:32:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_tokentype	match_token(char *str)
 		return (TK_OPEN_PAREN);
 	if (!ft_strncmp(")", str, 1))
 		return (TK_CLOSE_PAREN);
-	if (!ft_strncmp("\n", str, 1))
+	if (ft_strchr("\n", *str))
 		return (TK_EOL);
 	return (TK_WORD);
 }
