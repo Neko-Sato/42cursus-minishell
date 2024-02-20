@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/20 01:27:38 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/20 05:04:50 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRCS			= \
 		parser_element.c \
 		parser_command.c \
 		parser.c \
+		heredoc.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
@@ -44,7 +45,7 @@ IDFLAGS			+= -I$(INCS_DIR)
 
 .PHONY: all clean fclean re bonus
 
-all: $(FT) $(NAME)
+all: $(FT) $(READLINE) $(NAME)
 
 $(NAME): $(MAIN) $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
@@ -55,10 +56,10 @@ $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) $(IDFLAGS) $< -o $@
 
-clean:
+clean: $(READLINE)/Makefile
 	$(RM) -r $(OBJS_DIR)
-	@make -C $(FT) clean
 	@make -C $(READLINE) clean
+	@make -C $(FT) clean
 
 fclean: clean
 	@make -C $(FT) fclean

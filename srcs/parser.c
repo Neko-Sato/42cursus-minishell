@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:25:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:48:01 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,19 @@ int	parser(t_minishell *shell)
 		return (ret);
 	ft_bzero(&parser, sizeof(parser));
 	parser.heredoc_last = &parser.heredoc;
-	ret = lexer(shell, &parser.token);
-	if (!ret)
-		ret = take_command(shell, &parser);
-	if (ret == SYNTAX_ERR)
-		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
-	if (ret)
+	if (shell->string)
 	{
-		dispose_command(parser.command);
-		dispose_heredoc(parser.heredoc);
-		return (ret);
+		ret = lexer(shell, &parser.token);
+		if (!ret)
+			ret = take_command(shell, &parser);
+		if (ret == SYNTAX_ERR)
+			ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
+		if (ret)
+		{
+			dispose_command(parser.command);
+			dispose_heredoc(parser.heredoc);
+			return (ret);
+		}
 	}
 	shell->command = parser.command;
 	shell->heredoc = parser.heredoc;
