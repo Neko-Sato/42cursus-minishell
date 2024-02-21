@@ -6,26 +6,20 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/21 00:22:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/22 00:34:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
 #include "shell.h"
 #include <libft.h>
-
-typedef struct s_read_contents
-{
-	size_t	eof_len;
-	size_t	start;
-	size_t	len;
-}			t_read_contents;
+#include <stdio.h>
 
 static int	read_heredoc(t_minishell *shell, t_heredoc *heredoc);
 static int	read_contents(t_minishell *shell, t_heredoc *heredoc,
 				size_t *zindex);
 static int	check_eof(t_minishell *shell, t_heredoc *heredoc, size_t *zindex,
-				t_read_contents *pram);
+				size_t pram[3]);
 static void	put_warning(t_heredoc *heredoc);
 
 int	gather_heredoc(t_minishell *shell)
@@ -50,7 +44,6 @@ static int	read_heredoc(t_minishell *shell, t_heredoc *heredoc)
 	size_t	zindex;
 
 	zindex = shell->sindex;
-	zindex++;
 	ret = read_contents(shell, heredoc, &zindex);
 	if (ret)
 		return (ret);
@@ -58,45 +51,49 @@ static int	read_heredoc(t_minishell *shell, t_heredoc *heredoc)
 	return (NOERR);
 }
 
+// parm
+// 0: eof_len
+// 1: start
+// 2: len
 static int	read_contents(t_minishell *shell, t_heredoc *heredoc,
 		size_t *zindex)
 {
-	int				ret;
-	t_read_contents	pram;
+	int		ret;
+	size_t	pram[3];
 
-	pram.eof_len = ft_strlen(heredoc->eof);
+	pram[0] = ft_strlen(heredoc->eof);
 	ret = NOERR;
-	pram.start = *zindex;
+	pram[1] = *zindex;
 	while (1)
 	{
 		if (!shell->string[*zindex])
-			ret = put_prompt(shell, PS2);
+			ret = put_prompt(shell);
 		if (ret)
 			return (ret);
-		if (check_eof(shell, heredoc, zindex, &pram))
+		if (check_eof(shell, heredoc, zindex, pram))
 			break ;
 		while (!ft_strchr("\n", shell->string[*zindex]))
 			(*zindex)++;
 	}
-	heredoc->contents = ft_substr(&shell->string[pram.start], 0, pram.len);
+	heredoc->contents = ft_substr(&shell->string[pram[1]], 1, pram[2]);
 	return (NOERR);
 }
 
 static int	check_eof(t_minishell *shell, t_heredoc *heredoc, size_t *zindex,
-		t_read_contents *pram)
+		size_t pram[3])
 {
 	if (!shell->string[*zindex])
 	{
 		put_warning(heredoc);
-		pram->len = *zindex - pram->start;
+		pram[2] = *zindex - pram[1];
 		return (1);
 	}
 	(*zindex)++;
-	if (!ft_strncmp(&shell->string[*zindex], heredoc->eof, pram->eof_len)
-		&& ft_strchr("\n", shell->string[*zindex + pram->eof_len]))
+	if (!ft_strncmp(&shell->string[*zindex], heredoc->eof, pram[0])
+		&& ft_strchr("\n", shell->string[*zindex + pram[0]]))
 	{
-		pram->len = *zindex - pram->start;
-		*zindex += pram->eof_len;
+		pram[2] = *zindex - pram[1];
+		*zindex += pram[0];
 		return (1);
 	}
 	return (0);

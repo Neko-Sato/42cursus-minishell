@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 15:48:01 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/22 00:35:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,21 @@ int	parser(t_minishell *shell)
 	int			ret;
 	t_parser	parser;
 
-	ret = put_prompt(shell, PS1);
-	if (ret)
-		return (ret);
-	ft_bzero(&parser, sizeof(parser));
-	parser.heredoc_last = &parser.heredoc;
-	if (shell->string)
+	while (1)
 	{
+		ft_bzero(&parser, sizeof(parser));
+		parser.heredoc_last = &parser.heredoc;
 		ret = lexer(shell, &parser.token);
-		if (!ret)
-			ret = take_command(shell, &parser);
-		if (ret == SYNTAX_ERR)
-			ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		if (ret)
-		{
-			dispose_command(parser.command);
-			dispose_heredoc(parser.heredoc);
-			return (ret);
-		}
+			break ;
+		ret = take_command(shell, &parser);
+		shell->command = parser.command;
+		shell->heredoc = parser.heredoc;
+		break ;
 	}
-	shell->command = parser.command;
-	shell->heredoc = parser.heredoc;
-	return (NOERR);
+	while (!ft_strchr("\n", shell->string[shell->sindex]))
+		shell->sindex++;
+	return (ret);
 }
 
 int	take_command(t_minishell *shell, t_parser *parser)

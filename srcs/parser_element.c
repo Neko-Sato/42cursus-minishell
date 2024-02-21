@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:26:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/22 00:24:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 		else
 			break ;
 	}
-	if (!ret)
-		return (NOERR);
-	dispose_wordlist(element->wordlist);
-	dispose_redirect(element->redirect);
-	ft_bzero(&element, sizeof(*element));
+	if (ret)
+	{
+		dispose_wordlist(element->wordlist);
+		dispose_redirect(element->redirect);
+		ft_bzero(&element, sizeof(*element));
+	}
 	return (ret);
 }
 

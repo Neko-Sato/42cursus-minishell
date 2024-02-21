@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:21:32 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/22 00:10:10 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,19 @@ typedef struct s_minishell
 	char		**envp;
 	int			last_status;
 	int			isinteractive;
+	int			eof_reached;
 }				t_minishell;
 
 extern int		g_interrupt_state;
 
-char			*minishell_readline(t_minishell *shell, char *prompt);
-int				put_prompt(t_minishell *shell, char *prompt);
+int				shell_init(t_minishell *shell, char *envp[]);
+int				reader_loop(t_minishell *shell);
+
+char			*minishell_readline(t_minishell *shell);
+int				put_prompt(t_minishell *shell);
+
+int				read_command(t_minishell *shell);
+int				parse_command(t_minishell *shell);
+int				execute_command(t_minishell *shell);
 
 #endif
