@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:10:10 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/22 01:13:46 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,5 @@ int				reader_loop(t_minishell *shell);
 
 char			*minishell_readline(t_minishell *shell);
 int				put_prompt(t_minishell *shell);
-
-int				read_command(t_minishell *shell);
-int				parse_command(t_minishell *shell);
-int				execute_command(t_minishell *shell);
 
 #endif
