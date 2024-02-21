@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/20 05:04:50 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/22 00:59:49 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,13 @@ MAIN			= $(DIR)/main.c
 SRCS			= \
 	$(addprefix $(SRCS_DIR)/, \
 		debug.c \
+		shell.c \
 		readline.c \
 		token.c \
 		command_make.c \
+		command_execute.c \
 		command_dispose.c \
+		command.c \
 		lexer.c \
 		parser_element.c \
 		parser_command.c \
@@ -38,7 +41,7 @@ SRCS			= \
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
 
 CFLAGS			= -Wall -Wextra -Werror -g
-LDFLAGS			+= -L$(FT) -L$(READLINE)
+LDFLAGS			+= -L$(FT) -L$(READLINE)/shlib
 IDFLAGS			+= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
 LIBS			+= -lft -lreadline -ltermcap
 IDFLAGS			+= -I$(INCS_DIR)
