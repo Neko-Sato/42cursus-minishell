@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:07:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/23 05:23:03 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ int	read_command(t_minishell *shell)
 	int		ret;
 
 	ret = parse_command(shell);
-	if (ret == SYNTAX_ERR)
-		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 	temp = NULL;
-	if (shell->string && ret != INTERRUPT)
+	if (shell->string && !(ret == SYSTEM_ERR || ret == INTERRUPT))
 	{
 		if (shell->string[shell->sindex])
 		{
@@ -47,26 +45,17 @@ int	read_command(t_minishell *shell)
 
 int	parse_command(t_minishell *shell)
 {
-	int	syntaxerr;
 	int	ret;
 
 	ret = NOERR;
 	if (!shell->string)
-		ret = put_prompt(shell);
-	if (ret)
-		return (ret);
-	if (shell->string)
 	{
-		ret = parser(shell);
-		syntaxerr = (ret == SYNTAX_ERR);
-		if (!syntaxerr && ret)
-			return (ret);
-		ret = gather_heredoc(shell);
+		ret = put_prompt(shell);
 		if (ret)
 			return (ret);
-		if (syntaxerr)
-			ret = SYNTAX_ERR;
 	}
+	if (shell->string)
+		ret = parser(shell);
 	else
 		shell->eof_reached = 1;
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:35:08 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/23 05:37:38 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,14 @@ int	parser(t_minishell *shell)
 		shell->heredoc = parser.heredoc;
 		break ;
 	}
+	if (ret == SYSTEM_ERR || ret == INTERRUPT)
+		return (ret);
 	while (!ft_strchr("\n", shell->string[shell->sindex]))
 		shell->sindex++;
+	if (gather_heredoc(shell))
+		ret = SYSTEM_ERR;
+	if (ret == SYNTAX_ERR)
+		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 	return (ret);
 }
 

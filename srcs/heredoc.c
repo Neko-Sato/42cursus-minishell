@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:34:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/23 04:02:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include "shell.h"
 #include <libft.h>
 #include <stdio.h>
+
+/*
+! heredocで取得した文字列の変数展開と
+! eofはクォートを外して解釈する
+*/
 
 static int	read_heredoc(t_minishell *shell, t_heredoc *heredoc);
 static int	read_contents(t_minishell *shell, t_heredoc *heredoc,

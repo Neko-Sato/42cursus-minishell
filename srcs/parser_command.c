@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 00:46:39 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/23 05:32:54 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	take_simplecom(t_minishell *shell, t_parser *parser)
 	t_element	element;
 
 	ret = take_element(shell, parser, &element);
-	if (ret)
+	if (ret == SYSTEM_ERR || ret == INTERRUPT)
 		return (ret);
 	parser->command = NULL;
 	if (element.wordlist || element.redirect)
@@ -33,10 +33,10 @@ int	take_simplecom(t_minishell *shell, t_parser *parser)
 		{
 			dispose_wordlist(element.wordlist);
 			dispose_redirect(element.redirect);
-			return (-1);
+			ret = SYSTEM_ERR;
 		}
 	}
-	return (0);
+	return (ret);
 }
 
 int	take_groupcom(t_minishell *shell, t_parser *parser)
@@ -49,15 +49,15 @@ int	take_groupcom(t_minishell *shell, t_parser *parser)
 	if (ret)
 		return (ret);
 	if (!temp)
-		return (1);
+		return (SYNTAX_ERR);
 	parser->command = make_groupcom(temp);
 	if (!parser->command)
 	{
 		dispose_command(parser->command);
-		return (-1);
+		return (SYSTEM_ERR);
 	}
 	if (parser->token.type != TK_CLOSE_PAREN)
-		return (1);
+		return (SYNTAX_ERR);
 	parser->brackets_level--;
 	return (lexer(shell, &parser->token));
 }
@@ -70,7 +70,7 @@ int	take_concom(t_minishell *shell, t_parser *parser)
 	t_command		*next;
 
 	if (!parser->command)
-		return (1);
+		return (SYNTAX_ERR);
 	type = parser->token.type - TK_PIPE;
 	ret = lexer(shell, &parser->token);
 	if (ret)
@@ -80,15 +80,15 @@ int	take_concom(t_minishell *shell, t_parser *parser)
 	if (ret)
 		return (ret);
 	if (!next)
-		return (1);
+		return (SYNTAX_ERR);
 	temp = make_conncom(type, parser->command, next);
 	if (!temp)
 	{
 		dispose_command(next);
-		return (-1);
+		return (SYSTEM_ERR);
 	}
 	parser->command = temp;
-	return (0);
+	return (NOERR);
 }
 
 static int	take_subcom(t_minishell *shell, t_parser *parser, int block,

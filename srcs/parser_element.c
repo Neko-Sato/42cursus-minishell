@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:24:23 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/23 05:24:54 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 		else
 			break ;
 	}
-	if (ret)
+	if (ret == SYSTEM_ERR || ret == INTERRUPT)
 	{
 		dispose_wordlist(element->wordlist);
 		dispose_redirect(element->redirect);
