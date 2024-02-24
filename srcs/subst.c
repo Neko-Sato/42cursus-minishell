@@ -6,73 +6,89 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:19:13 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/14 21:16:11 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/24 13:20:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command.h"
+#include "shell.h"
+#include "subst.h"
 #include <libft.h>
 #include <stddef.h>
 
 /*
-	シングルクォート展開
-	doubleクォート展開
-	環境変数展開 (クォートの中でなければリストを分ける)
-	最後にリスト全て、アスタリスクの展開をする
+	クォート展開とparam展開の二種あってフラグでどちらをするか示せるように
 */
-int	case_variable(t_wordlist **word, size_t *pos, char *variable[]);
 
-int	wordlist_expend(t_wordlist *word, char *variable[])
+int	expend_wordlist(t_minishell *shell, t_wordlist *wordlist, t_wordlist **result)
 {
-	int	ret;
+	int			ret;
+	t_wordlist	*new_wordlist;
 
-	ret = wordlist_expend(word, variable);
+	*result = NULL;
+	new_wordlist = NULL;
+	ret = shell_expend_wordlist(&wordlist, &new_wordlist, variable);
 	if (ret)
 		return (ret);
-	ret = wordlist_wildcard_expend(word);
+	wordlist = new_wordlist;
+	new_wordlist = NULL;
+	ret = glob_expend_wordlist(&wordlist, new_wordlist, variable);
+	dispose_wordlist(wordlist);
+	*result = new_wordlist;
 	return (ret);
 }
 
-int	wordlist_expend(t_wordlist *word)
+int	shell_expend_wordlist(t_wordlist *wordlist, t_wordlist **result,
+		char *variable[])
 {
-	size_t	pos;
-	int		c;
+	int			ret;
+	t_wordlist	**result_last;
+	t_wordlist	*expand;
 
-	pos = 0;
-	while (1)
+	*result = NULL;
+	result_last = result;
+	while (wordlist)
 	{
-		c = word->word[pos];
-		if (!c)
+		ret = shell_expend_word(wordlist->word, &expand, variable);
+		if (ret)
 			break ;
-		i++;
-		if (c == '"')
-			;
-		else if (c == '\'')
-			;
-		else if (c == '$')
-			;
+		*result_last = expand;
+		while (expand->next)
+			expand = expand->next;
+		result_last = &expand->next;
+		wordlist = wordlist->next;
 	}
-	//アスタリスクの展開
+	if (ret)
+	{
+		dispose_wordlist(*result);
+		*result = NULL;
+	}
+	return (ret);
 }
 
-int	case_variable(t_wordlist **word, size_t *pos, char *variable[])
+int	glob_expend_wordlist(t_wordlist *wordlist, t_wordlist **result,
+		char *variable[])
 {
-	int c;
-	size_t start;
-	char *temp;
+	int			ret;
+	t_wordlist	**result_last;
+	t_wordlist	*expand;
 
-	start = *pos;
-	while (1)
+	*result = NULL;
+	result_last = result;
+	while (wordlist)
 	{
-		c = (*word)->word[*pos];
-		if (c == '\0' || c == '"' || c == '\'' || c == '*')
+		ret = glob_expend_word(wordlist->word, &expand, variable);
+		if (ret)
 			break ;
-		*pos++;
+		*result_last = expand;
+		while (expand->next)
+			expand = expand->next;
+		result_last = &expand->next;
+		wordlist = wordlist->next;
 	}
-	temp = ft_substr(&(*word)->word[start], 0, *pos - start);
-	if (!temp)
-		return (-1);
-
-	free(temp);
-	return (0);
+	if (ret)
+	{
+		dispose_wordlist(*result);
+		*result = NULL;
+	}
+	return (ret);
 }

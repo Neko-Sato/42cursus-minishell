@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/21 23:15:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/24 04:11:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,12 @@ static int	reader_loop_internal(t_minishell *shell)
 	while (!shell->eof_reached)
 	{
 		ret = read_command(shell);
-		if (!ret)
+		if (ret == NOERR)
 			ret = execute_command(shell);
+		else if (ret == INTERRUPT)
+			shell->last_status = 128 | SIGINT;
+		else if (ret == SYSTEM_ERR)
+			shell->last_status = 2;
 		dispose_command(shell->command);
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
