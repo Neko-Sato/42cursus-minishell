@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:32:18 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/25 00:04:46 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/27 02:05:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,31 @@
 # define SUBST_H
 
 # include "command.h"
+# include <libft.h>
 
-int		shell_expend_wordlist(t_wordlist *wordlist, t_wordlist **result,
-			char *variable[]);
-int		glob_expend_wordlist(t_wordlist *wordlist, t_wordlist **result,
-			char *variable[]);
+t_wordlist	*shell_expand_word(t_minishell *shell, char *string);
+t_wordlist	*shell_expand_wordlist(t_minishell *shell, t_wordlist *wordlist);
+t_wordlist	*glob_expand_wordlist(t_minishell *shell, t_wordlist *wordlist);
 
-char	*quote_string(char *string);
-char	*dequote_string(char *string);
+char		*shell_expand_string(t_minishell *shell, char *string, int heredoc);
 
-char	*string_extract_double_quoted(t_minishell *shell, char *string,
-			size_t *sindex);
-char	*string_extract_single_quoted(t_minishell *shell, char *string,
-			size_t *sindex);
-char	*param_expand(t_minishell *shell, char *string, size_t *sindex);
+char		*string_extract_single_quoted(t_minishell *shell, char *string,
+				size_t *sindex);
+char		*string_extract_double_quoted(t_minishell *shell, char *string,
+				size_t *sindex);
+char		*param_expand(t_minishell *shell, char *string, size_t *sindex);
+
+int			case_singlequote(t_minishell *shell, t_strgen *strgen, char *string,
+				size_t *sindex);
+int			case_doublequote(t_minishell *shell, t_strgen *strgen, char *string,
+				size_t *sindex);
+int			case_tilde(t_minishell *shell, t_strgen *strgen, char *string,
+				size_t *sindex);
+int			case_dollar(t_minishell *shell, t_strgen *strgen, char *string,
+				size_t *sindex);
+
+char		*quote_string(char *string);
+char		*dequote_string(char *string);
+t_wordlist	*wordlist_split(char *string);
 
 #endif
