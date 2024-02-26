@@ -6,12 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 23:01:14 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/24 23:59:43 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/27 00:51:39 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "shell.h"
+#include "subst.h"
 #include <libft.h>
-#include <stddef.h>
+#include <stdlib.h>
 
 char	*quote_string(char *string)
 {
@@ -57,4 +59,82 @@ char	*dequote_string(char *string)
 	head = ft_strgencomp(strgen);
 	ft_strgendel(strgen);
 	return (head);
+}
+
+char	*string_extract_single_quoted(t_minishell *shell, char *string,
+		size_t *sindex)
+{
+	char	*temp;
+	int		c;
+	size_t	zindex;
+
+	(void)shell;
+	zindex = *sindex;
+	while (1)
+	{
+		c = string[zindex];
+		if (!c || c == '\'')
+			break ;
+		zindex++;
+	}
+	temp = ft_substr(&string[*sindex], 0, zindex - *sindex);
+	if (!temp)
+		return (NULL);
+	if (c)
+		zindex++;
+	*sindex = zindex;
+	return (temp);
+}
+
+static int	string_extract_double_quoted_internal(
+			t_minishell *shell, t_strgen *strgen, char *string, size_t *sindex);
+
+char	*string_extract_double_quoted(t_minishell *shell, char *string,
+		size_t *sindex)
+{
+	int			ret;
+	t_strgen	*strgen;
+	char		*temp;
+	size_t		zindex;
+
+	strgen = ft_strgennew(STRGEN_BUUFERSIZE);
+	if (!strgen)
+		return (NULL);
+	zindex = *sindex;
+	ret = string_extract_double_quoted_internal(shell, strgen, string, &zindex);
+	if (ret)
+		temp = NULL;
+	else
+		temp = ft_strgencomp(strgen);
+	ft_strgendel(strgen);
+	*sindex = zindex;
+	return (temp);
+}
+
+static int	string_extract_double_quoted_internal(
+	t_minishell *shell, t_strgen *strgen, char *string, size_t *sindex)
+{
+	int		c;
+	char	*temp;
+
+	while (1)
+	{
+		c = string[*sindex];
+		if (!c || c == '"')
+			break ;
+		(*sindex)++;
+		if (c == '$')
+		{
+			temp = param_expand(shell, string, sindex);
+			(void)(!temp || ft_strgenstr(strgen, temp));
+			free(temp);
+			if (!temp)
+				return (-1);
+		}
+		else if (ft_strgenchr(strgen, c))
+			return (-1);
+	}
+	if (c)
+		(*sindex)++;
+	return (0);
 }

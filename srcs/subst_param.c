@@ -6,15 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/24 03:50:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/26 21:19:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-#include "token.h"
 #include <libft.h>
-#include <stddef.h>
-#include <unistd.h>
+#include <stdlib.h>
 
 /*
 	変数を取得する関数を追加する必要がある
@@ -28,7 +26,7 @@ char	*param_expand(t_minishell *shell, char *string, size_t *sindex)
 	char	*result;
 	int		c;
 
-	c = string[++(*sindex)];
+	c = string[*sindex];
 	if (c == '$')
 	{
 		result = ft_itoa(getpid());
@@ -52,6 +50,7 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	int		c;
 	size_t	start;
 
+	(void)shell;
 	start = *sindex;
 	while (1)
 	{
@@ -62,7 +61,7 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	}
 	if (start == *sindex)
 		return (ft_strdup("$"));
-	key = ft_substr(string[*sindex], 0, *sindex - start);
+	key = ft_substr(&string[*sindex], 0, *sindex - start);
 	if (!key)
 		return (NULL);
 	value = ft_strdup("<pram>");
