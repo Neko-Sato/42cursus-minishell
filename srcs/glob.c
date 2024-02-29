@@ -6,10 +6,12 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 09:28:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/29 11:25:42 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/01 01:30:11 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <libft.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -83,4 +85,23 @@ int	glob_testdir(char *dir)
 	if (S_ISDIR(finfo.st_mode) == 0)
 		return (-1);
 	return (0);
+}
+
+char	**glob_dir_to_array(char *dir, char **arry)
+{
+	size_t	index;
+	char	*temp;
+
+	if (!arry)
+		return (NULL);
+	index = 0;
+	while (arry[index])
+	{
+		temp = ft_joinpath(dir, arry[index]);
+		if (!temp)
+			return (NULL);
+		free(arry[index]);
+		arry[index++] = temp;
+	}
+	return (arry);
 }

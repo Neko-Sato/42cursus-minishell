@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 04:35:15 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/29 09:30:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/01 00:46:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**glob_vector(char *filename, char *dirname)
 	result = NULL;
 	if (!ret)
 		result = ft_xlst2array(lst, sizeof(char *), NULL);
-	else
+	if (!result)
 		while (!ft_xlstpop(&lst, 0, &temp, sizeof(char *)))
 			free(temp);
 	ft_xlstclear(&lst);
