@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/22 00:59:49 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/02/29 09:29:26 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,14 @@ SRCS			= \
 		parser_command.c \
 		parser.c \
 		heredoc.c \
+		subst_param.c \
+		subst_quote.c \
+		subst_shell_case.c \
+		subst_shell.c \
+		subst_wordlist_split.c \
+		glob_vector.c \
+		glob_filename.c \
+		glob.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
@@ -72,7 +80,7 @@ re: fclean all
 
 .PHONY: test
 test: test.c $(OBJS)
-	$(CC) -g -fsanitize=address  $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
+	$(CC) -g -fsanitize=address $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 .PHONY: norm
 norm: $(MAIN) $(SRCS) $(INCS_DIR)
