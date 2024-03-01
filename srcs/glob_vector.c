@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 04:35:15 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/01 00:46:21 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:56:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <libft.h>
 #include <stdlib.h>
 
+static char	**case_null_filename(char *dirname);
 static int	glob_vector_internal(t_xlst **lst, DIR *dir, char *pattern);
 
 char	**glob_vector(char *filename, char *dirname)
@@ -25,9 +26,11 @@ char	**glob_vector(char *filename, char *dirname)
 	DIR		*dir;
 	char	*temp;
 
-	if (!dirname || !filename)
+	if (!dirname)
 		return (NULL);
 	lst = NULL;
+	if (!filename || !*filename)
+		return (case_null_filename(dirname));
 	dir = opendir(dirname);
 	if (!dir)
 		return (NULL);
@@ -40,6 +43,22 @@ char	**glob_vector(char *filename, char *dirname)
 		while (!ft_xlstpop(&lst, 0, &temp, sizeof(char *)))
 			free(temp);
 	ft_xlstclear(&lst);
+	return (result);
+}
+
+static char	**case_null_filename(char *dirname)
+{
+	char	**result;
+	char	*temp;
+
+	if (glob_testdir(dirname) < 0)
+		return (NULL);
+	temp = ft_strdup("");
+	if (!temp)
+		return (NULL);
+	result = ft_memdup((char *[]){temp, NULL}, sizeof(char *[2]));
+	if (!result)
+		free(temp);
 	return (result);
 }
 

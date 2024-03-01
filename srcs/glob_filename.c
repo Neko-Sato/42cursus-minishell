@@ -6,15 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 18:19:48 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/01 02:15:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:11:01 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "glob.h"
 #include <libft.h>
 #include <stdlib.h>
-
-/*汚いコードの可読性を上げなければ、、、*/
 
 static char	**globfilename_internal(char *dirname, char *filename);
 static char	**only_filename(char *dirname, char *filename);
@@ -92,7 +90,7 @@ static char	**only_filename(char *dirname, char *filename)
 	return (result);
 }
 
-int			__(t_xlst **lst_ptr, char **dirs, char *filename);
+static int	add_match_filename(t_xlst **lst_ptr, char **dirs, char *filename);
 
 static char	**globfilename_internal(char *dirname, char *filename)
 {
@@ -105,7 +103,7 @@ static char	**globfilename_internal(char *dirname, char *filename)
 	if (!temp)
 		return (NULL);
 	lst = NULL;
-	ret = __(&lst, temp, filename);
+	ret = add_match_filename(&lst, temp, filename);
 	ft_2darraydel(temp);
 	result = NULL;
 	if (!ret)
@@ -117,38 +115,26 @@ static char	**globfilename_internal(char *dirname, char *filename)
 	return (result);
 }
 
-int	__(t_xlst **lst_ptr, char **dirs, char *filename)
+static int	add_match_filename(t_xlst **lst_ptr, char **dirs, char *filename)
 {
-	void *temp;
-	char **result;
+	void	*temp;
+	char	**result;
 
 	while (*dirs)
 	{
 		if (glob_testdir(*dirs) == 0)
 		{
-			if (*filename)
+			temp = glob_vector(filename, *dirs);
+			result = glob_dir_to_array(*dirs, temp);
+			if (result && ft_xlstappendarry(lst_ptr, temp, ft_arrylen(temp),
+					sizeof(char *)))
 			{
-				temp = glob_vector(filename, *dirs);
-				result = glob_dir_to_array(*dirs, temp);
-				if (result && ft_xlstappendarry(lst_ptr, temp, ft_arrylen(temp),
-						sizeof(char *)))
-				{
-					ft_2darraydel(temp);
-					return (-1);
-				}
-				free(result);
+				ft_2darraydel(temp);
+				return (-1);
 			}
-			else
-			{
-				temp = ft_joinpath(*dirs, "");
-				if (temp && ft_xlstappend(lst_ptr, &temp, sizeof(char *)))
-				{
-					free(temp);
-					return (-1);
-				}
-			}
+			free(result);
 		}
 		dirs++;
 	}
-	return (0);
+	return (ft_xlstappend(lst_ptr, &(char *){NULL}, sizeof(char *)));
 }
