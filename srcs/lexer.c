@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 08:55:00 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:16:50 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <libft.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int	lexer(t_minishell *shell, t_token *token)
 {
