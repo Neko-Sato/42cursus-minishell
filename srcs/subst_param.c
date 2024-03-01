@@ -6,12 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/26 21:19:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:17:15 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include <libft.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 /*
