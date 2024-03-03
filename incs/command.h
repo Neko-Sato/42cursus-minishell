@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 01:14:41 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:34:16 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,8 @@ t_command					*make_simplecom(t_element *element);
 t_command					*make_conncom(t_concomtype type,
 								t_command *command1, t_command *command2);
 t_command					*make_groupcom(t_command *command);
+
+char						**wordlist2strarray(t_wordlist *wordlist);
+t_wordlist					*strarray2wordlist(char **array);
 
 #endif

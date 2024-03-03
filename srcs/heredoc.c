@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/25 00:06:35 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/02/27 00:50:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static int	check_eof(t_minishell *shell, t_heredoc *heredoc, size_t *zindex,
 static void	put_warning(t_heredoc *heredoc)
 {
 	ft_putstr_fd("minishell: warning: Finished reading the heredoc `",
-					STDERR_FILENO);
+		STDERR_FILENO);
 	ft_putstr_fd(heredoc->eof, STDERR_FILENO);
 	ft_putstr_fd("`\n", STDERR_FILENO);
 }

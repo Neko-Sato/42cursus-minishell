@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:32:18 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/27 02:05:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:46:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 # include "command.h"
 # include <libft.h>
 
+t_wordlist	*expand_wordlist(t_minishell *shell, t_wordlist *wordlist);
+
 t_wordlist	*shell_expand_word(t_minishell *shell, char *string);
 t_wordlist	*shell_expand_wordlist(t_minishell *shell, t_wordlist *wordlist);
+t_wordlist	*glob_expand_word(t_minishell *shell, char *string);
 t_wordlist	*glob_expand_wordlist(t_minishell *shell, t_wordlist *wordlist);
 
 char		*shell_expand_string(t_minishell *shell, char *string, int heredoc);
@@ -40,5 +43,8 @@ int			case_dollar(t_minishell *shell, t_strgen *strgen, char *string,
 char		*quote_string(char *string);
 char		*dequote_string(char *string);
 t_wordlist	*wordlist_split(char *string);
+
+int			unquoted_glob_pattern(char *string);
+char		*quote_string_for_globbing(char *string);
 
 #endif

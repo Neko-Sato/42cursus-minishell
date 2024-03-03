@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/02/29 09:29:26 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/04 01:44:25 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS			= \
 		shell.c \
 		readline.c \
 		token.c \
+		wordlist.c \
 		command_make.c \
 		command_execute.c \
 		command_dispose.c \
@@ -36,14 +37,16 @@ SRCS			= \
 		parser_command.c \
 		parser.c \
 		heredoc.c \
+		glob_vector.c \
+		glob_filename.c \
+		glob.c \
 		subst_param.c \
 		subst_quote.c \
 		subst_shell_case.c \
 		subst_shell.c \
 		subst_wordlist_split.c \
-		glob_vector.c \
-		glob_filename.c \
-		glob.c \
+		subst_glob.c \
+		subst.c \
 	) \
 
 OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))

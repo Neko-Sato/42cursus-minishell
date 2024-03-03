@@ -6,10 +6,11 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/01 18:27:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:54:58 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "command.h"
 #include "glob.h"
 #include "shell.h"
 #include "subst.h"
@@ -41,28 +42,19 @@ t_wordlist	*glob_expand_wordlist(t_minishell *shell, t_wordlist *wordlist)
 	return (result);
 }
 
-/*
-	ガチャガチャする
-*/
+static char	**glob_expand_word_internal(char *string);
+
 t_wordlist	*glob_expand_word(t_minishell *shell, char *string)
 {
-	char		*temp;
-	char		*arry;
 	t_wordlist	*result;
+	char		**arry;
 
-	if (unquoted_glob_pattern(string))
-	{
-		temp = quote_string_for_globbing(string);
-		if (!temp)
-			return (NULL);
-		arry = globfilename(temp);
-		free(temp);
-	}
-	else
-	{
-		arry = dequote_string(string);
-	}
-	result = strarry2wordlist(arry);
+	(void)shell;
+	arry = glob_expand_word_internal(string);
+	if (!arry)
+		return (NULL);
+	ft_sortstrarry(arry);
+	result = strarray2wordlist(arry);
 	if (result)
 		free(arry);
 	else
@@ -70,25 +62,31 @@ t_wordlist	*glob_expand_word(t_minishell *shell, char *string)
 	return (result);
 }
 
-/*
-	ガチャガチャする
-*/
-t_wordlist	*strarry2wordlist(char **arry)
+static char	**glob_expand_word_internal(char *string)
 {
-	t_wordlist	*temp;
-	t_wordlist	*result;
-	t_wordlist	**result_last;
+	char	**arry;
+	char	*temp;
 
-	while (*arry)
+	if (unquoted_glob_pattern(string))
 	{
-		temp = malloc(sizeof(t_wordlist *));
-		if (!temp)
-		{
-			dispose_wordlist(result);
+		temp = quote_string_for_globbing(string);
+		arry = globfilename(temp);
+		free(temp);
+		if (!arry)
 			return (NULL);
-		}
+		if (arry[0])
+			return (arry);
+		ft_2darraydel(arry);
 	}
-	return (result);
+	temp = dequote_string(string);
+	if (!temp)
+		return (NULL);
+	arry = malloc(sizeof(char *[2]));
+	if (!arry)
+		free(temp);
+	arry[0] = temp;
+	arry[1] = NULL;
+	return (arry);
 }
 
 int	unquoted_glob_pattern(char *string)
@@ -98,7 +96,7 @@ int	unquoted_glob_pattern(char *string)
 		if (*string == '\1')
 			if (*++string)
 				break ;
-		if (*string == '*')
+		if (*string++ == '*')
 			return (1);
 	}
 	return (0);
@@ -123,11 +121,11 @@ char	*quote_string_for_globbing(char *string)
 			if (ft_strnchr("\\*", *string, 2) && ft_strgenchr(strgen, '\\'))
 				ret = -1;
 		}
-		if (ft_strgenchr(strgen, *string))
+		if (ft_strgenchr(strgen, *string++))
 			ret = -1;
 	}
 	result = NULL;
-	if (ret)
+	if (!ret)
 		result = ft_strgencomp(strgen);
 	ft_strgendel(strgen);
 	return (result);
