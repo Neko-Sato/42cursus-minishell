@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:32:18 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/04 01:46:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/04 02:07:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ t_wordlist	*wordlist_split(char *string);
 
 int			unquoted_glob_pattern(char *string);
 char		*quote_string_for_globbing(char *string);
+
+char		*string_quote_removal(char *string);
 
 #endif
