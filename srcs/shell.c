@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/06 01:16:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/06 01:46:34 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,6 @@ static int	reader_loop_internal(t_minishell *shell)
 		ret = read_command(shell);
 		if (ret == NOERR)
 			ret = execute_command(shell);
-		else if (ret == INTERRUPT)
-			shell->last_status = 128 | SIGINT;
-		else if (ret == SYSTEM_ERR)
-			shell->last_status = 2;
 		dispose_command(shell->command);
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
@@ -72,7 +68,7 @@ static int	reader_loop_internal(t_minishell *shell)
 		if (ret == SYSTEM_ERR)
 			return (EXIT_FAILURE);
 		else if (!shell->isinteractive && ret == SYNTAX_ERR)
-			return (2);
+			break ;
 	}
 	return (shell->last_status);
 }
