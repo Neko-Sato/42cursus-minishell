@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 01:13:46 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/06 01:16:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SHELL_H
 
 # include "command.h"
+# include "token.h"
 # include <stddef.h>
 
 # define PS1 "minishell> "
@@ -29,6 +30,8 @@ typedef struct s_minishell
 	char		*string;
 	size_t		sindex;
 	size_t		line;
+	t_token		token;
+	int			brackets_level;
 	t_command	*command;
 	t_heredoc	*heredoc;
 	char		**envp;

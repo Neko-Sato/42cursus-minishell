@@ -6,23 +6,20 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/23 05:24:54 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/06 01:11:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "token.h"
 #include <libft.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-static int	take_word(t_minishell *shell, t_parser *parser,
-				t_wordlist ***wordlist_last);
-static int	take_redirect(t_minishell *shell, t_parser *parser,
-				t_redirect ***redirect_last);
-static int	take_heredoc(t_parser *parser, t_redirect *redirect);
+static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last);
+static int	take_redirect(t_minishell *shell, t_redirect ***redirect_last);
+static int	add_herdoc(t_minishell *shell, t_document *document);
 
-int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
+int	take_element(t_minishell *shell, t_element *element)
 {
 	int			ret;
 	t_wordlist	**wordlist_last;
@@ -34,10 +31,10 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 	ret = NOERR;
 	while (!ret)
 	{
-		if (parser->token.type == TK_WORD)
-			ret = take_word(shell, parser, &wordlist_last);
-		else if (is_redirect_token(parser->token.type))
-			ret = take_redirect(shell, parser, &redirect_last);
+		if (shell->token.type == TK_WORD)
+			ret = take_word(shell, &wordlist_last);
+		else if (is_redirect_token(shell->token.type))
+			ret = take_redirect(shell, &redirect_last);
 		else
 			break ;
 	}
@@ -50,61 +47,63 @@ int	take_element(t_minishell *shell, t_parser *parser, t_element *element)
 	return (ret);
 }
 
-static int	take_word(t_minishell *shell, t_parser *parser,
-		t_wordlist ***wordlist_last)
+static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last)
 {
 	t_wordlist	*wordlist;
 
 	wordlist = malloc(sizeof(t_wordlist));
 	if (!wordlist)
+	{
+		free(shell->token.value);
 		return (SYSTEM_ERR);
+	}
 	wordlist->next = NULL;
-	wordlist->word = parser->token.value;
+	wordlist->word = shell->token.value;
 	**wordlist_last = wordlist;
 	*wordlist_last = &wordlist->next;
-	return (lexer(shell, &parser->token));
+	return (lexer(shell));
 }
 
-static int	take_redirect(t_minishell *shell, t_parser *parser,
-		t_redirect ***redirect_last)
+static int	take_redirect(t_minishell *shell, t_redirect ***redirect_last)
 {
-	int				ret;
-	t_redirecttype	type;
-	t_redirect		*redirect;
+	int			ret;
+	t_redirtype	type;
+	t_redirect	*redirect;
 
-	type = parser->token.type - TK_INPUT;
-	ret = lexer(shell, &parser->token);
+	type = shell->token.type - TK_INPUT;
+	ret = lexer(shell);
 	if (ret)
 		return (ret);
-	if (parser->token.type != TK_WORD)
+	if (shell->token.type != TK_WORD)
 		return (SYNTAX_ERR);
-	redirect = malloc(sizeof(t_redirect));
+	redirect = make_redirect(type, shell->token.value);
 	if (!redirect)
-		return (SYSTEM_ERR);
-	redirect->next = NULL;
-	redirect->type = type;
-	redirect->word = parser->token.value;
-	if (type == RT_HEREDOC && take_heredoc(parser, redirect))
 	{
-		free(redirect);
+		free(shell->token.value);
 		return (SYSTEM_ERR);
 	}
 	**redirect_last = redirect;
 	*redirect_last = &redirect->next;
-	return (lexer(shell, &parser->token));
+	if (type == RT_HEREDOC)
+		ret = add_herdoc(shell, redirect->value.document);
+	if (ret)
+		return (ret);
+	return (lexer(shell));
 }
 
-static int	take_heredoc(t_parser *parser, t_redirect *redirect)
+static int	add_herdoc(t_minishell *shell, t_document *document)
 {
+	t_heredoc	**temp;
 	t_heredoc	*heredoc;
 
 	heredoc = malloc(sizeof(t_heredoc));
 	if (!heredoc)
 		return (SYSTEM_ERR);
+	heredoc->document = document;
 	heredoc->next = NULL;
-	heredoc->contents = NULL;
-	heredoc->eof = redirect->word;
-	*parser->heredoc_last = heredoc;
-	parser->heredoc_last = &heredoc->next;
+	temp = &shell->heredoc;
+	while (*temp)
+		temp = &(*temp)->next;
+	*temp = heredoc;
 	return (NOERR);
 }

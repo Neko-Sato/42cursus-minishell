@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:45:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/19 23:10:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:04:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,30 @@ t_command	*make_groupcom(t_command *command)
 	ret->value.groupcom = groupcom;
 	groupcom->command = command;
 	return (ret);
+}
+
+t_redirect	*make_redirect(t_redirtype type, char *filename)
+{
+	t_redirect	*redirect;
+
+	redirect = malloc(sizeof(t_redirect));
+	if (!redirect)
+		return (NULL);
+	redirect->type = type;
+	redirect->next = NULL;
+	if (type != RT_HEREDOC)
+		redirect->value.filename = filename;
+	else
+	{
+		redirect->value.document = malloc(sizeof(t_document));
+		if (!redirect->value.document)
+		{
+			free(redirect);
+			return (NULL);
+		}
+		redirect->value.document->eof = filename;
+		redirect->value.document->quoted = 0;
+		redirect->value.document->document = NULL;
+	}
+	return (redirect);
 }

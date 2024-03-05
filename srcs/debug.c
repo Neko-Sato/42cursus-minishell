@@ -6,11 +6,21 @@ void	print_command(t_command *command, int level);
 
 void	print_redirect(t_redirect *redirect, int level)
 {
+	char	*temp;
+
 	if (!redirect)
 		return ;
+	if (redirect->type != RT_HEREDOC)
+		temp = redirect->value.filename;
+	else
+		temp = redirect->value.document->eof;
 	printf("%*sRedirect Type: %s, Word: %s\n", level * 4, "",
 			(char *[]){"INPUT", "HEREDOC", "OVERWRITE",
-			"APPEND"}[redirect->type], redirect->word);
+			"APPEND"}[redirect->type], temp);
+	if (redirect->type == RT_HEREDOC)
+	{
+		printf("/////\n%s$\n/////\n", redirect->value.document->document);
+	}
 	print_redirect(redirect->next, level);
 }
 
@@ -68,12 +78,4 @@ void	print_command(t_command *command, int level)
 		print_groupcom(command->value.groupcom, level);
 		break ;
 	}
-}
-
-void	print_heredoc(t_heredoc *heredoc)
-{
-	if (!heredoc)
-		return ;
-	printf("heredoc : %s\n/////\n%s$\n/////\n", heredoc->eof, heredoc->contents);
-	print_heredoc(heredoc->next);
 }

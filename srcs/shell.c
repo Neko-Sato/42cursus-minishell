@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/24 04:11:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/06 01:16:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	shell_init(t_minishell *shell, char *envp[])
 	shell->sindex = 0;
 	shell->line = 0;
 	shell->eof_reached = 0;
+	shell->brackets_level = 0;
 	if (shell->isinteractive)
 		rl_event_hook = (void *)ft_noop;
 	rl_instream = stdin;

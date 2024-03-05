@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/21 22:54:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/06 01:24:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@
 // int	execute_concom(t_conncom *conncom, t_heredoc *heredoc);
 
 void	print_command(t_command *command, int level);
-void	print_heredoc(t_heredoc *heredoc);
 
 int	execute_command(t_minishell *shell)
 {
 	print_command(shell->command, 0);
-	print_heredoc(shell->heredoc);
 	return (0);
 }
 

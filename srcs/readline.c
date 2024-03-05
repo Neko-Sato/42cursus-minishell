@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/22 00:56:01 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/05 07:09:40 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <history.h>
 #include <libft.h>
 #include <readline.h>
+#include <signal.h>
 #include <stdlib.h>
 
 static char	*strjoin_at_newline(char *line, char *new_line);
@@ -34,7 +35,10 @@ char	*minishell_readline(t_minishell *shell)
 	}
 	line = readline(prompt);
 	if (g_interrupt_state)
+	{
 		free(line);
+		shell->last_status = 128 | SIGINT;
+	}
 	return (line);
 }
 

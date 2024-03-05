@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/28 20:16:50 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:43:34 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	lexer(t_minishell *shell, t_token *token)
+int	lexer(t_minishell *shell)
 {
 	int		ret;
 	size_t	zindex;
@@ -28,11 +28,11 @@ int	lexer(t_minishell *shell, t_token *token)
 	if (ret)
 		return (ret);
 	shell->sindex = zindex;
-	token->value = NULL;
-	token->type = match_token(&shell->string[zindex]);
-	zindex += (int []){0, 0, 1, 2, 1, 2, 1, 2, 2, 1, 1}[token->type];
-	if (token->type == TK_WORD)
-		ret = get_word(shell, &zindex, &token->value);
+	shell->token.value = NULL;
+	shell->token.type = match_token(&shell->string[zindex]);
+	zindex += (int []){0, 0, 1, 2, 1, 2, 1, 2, 2, 1, 1}[shell->token.type];
+	if (shell->token.type == TK_WORD)
+		ret = get_word(shell, &zindex, &shell->token.value);
 	if (ret)
 		return (ret);
 	shell->sindex = zindex;

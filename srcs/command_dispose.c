@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 12:31:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/23 04:28:09 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:15:33 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,14 @@ void	dispose_redirect(t_redirect *redirect)
 	while (redirect)
 	{
 		temp = redirect;
-		free(redirect->word);
+		if (redirect->type != RT_HEREDOC)
+			free(redirect->value.filename);
+		else
+		{
+			free(redirect->value.document->eof);
+			free(redirect->value.document->document);
+			free(redirect->value.document);
+		}
 		redirect = redirect->next;
 		free(temp);
 	}
@@ -69,7 +76,6 @@ void	dispose_heredoc(t_heredoc *heredoc)
 
 	while (heredoc)
 	{
-		free(heredoc->contents);
 		temp = heredoc;
 		heredoc = heredoc->next;
 		free(temp);

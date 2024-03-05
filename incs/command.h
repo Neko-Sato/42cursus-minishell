@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/04 01:34:16 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:04:48 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,39 @@ typedef struct s_wordlist
 	char					*word;
 }							t_wordlist;
 
-typedef struct s_heredoc
-{
-	struct s_heredoc		*next;
-	char					*eof;
-	char					*contents;
-}							t_heredoc;
-
-typedef enum s_redirecttype
+typedef enum s_redirtype
 {
 	RT_INPUT,
 	RT_HEREDOC,
 	RT_OVERWRITE,
 	RT_APPEND,
-}							t_redirecttype;
+}							t_redirtype;
+
+typedef struct s_document
+{
+	char					*eof;
+	int						quoted;
+	char					*document;
+}							t_document;
+
+typedef union s_redirvalue
+{
+	char					*filename;
+	t_document				*document;
+}							t_redirvalue;
 
 typedef struct s_redirect
 {
 	struct s_redirect		*next;
-	t_redirecttype			type;
-	char					*word;
+	t_redirtype				type;
+	t_redirvalue			value;
 }							t_redirect;
+
+typedef struct s_heredoc
+{
+	struct s_heredoc		*next;
+	t_document				*document;
+}							t_heredoc;
 
 typedef struct s_element
 {
@@ -109,6 +121,7 @@ t_command					*make_simplecom(t_element *element);
 t_command					*make_conncom(t_concomtype type,
 								t_command *command1, t_command *command2);
 t_command					*make_groupcom(t_command *command);
+t_redirect					*make_redirect(t_redirtype type, char *filename);
 
 char						**wordlist2strarray(t_wordlist *wordlist);
 t_wordlist					*strarray2wordlist(char **array);
