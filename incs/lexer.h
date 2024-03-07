@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/05 06:49:36 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:06:55 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	lexer(t_minishell *shell);
 int	skip_space(t_minishell *shell, size_t *zindex);
-int	get_word(t_minishell *shell, size_t *zindex, char **word);
+int	skip_word(t_minishell *shell, size_t *zindex);
 int	skip_singlquote(t_minishell *shell, size_t *zindex);
 int	skip_doublequote(t_minishell *shell, size_t *zindex);
 

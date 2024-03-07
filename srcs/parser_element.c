@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/06 01:11:23 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:13:12 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last);
 static int	take_redirect(t_minishell *shell, t_redirect ***redirect_last);
+static int	take_redirect_internal(t_minishell *shell, t_redirect **redirect);
 static int	add_herdoc(t_minishell *shell, t_document *document);
 
 int	take_element(t_minishell *shell, t_element *element)
@@ -49,16 +50,20 @@ int	take_element(t_minishell *shell, t_element *element)
 
 static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last)
 {
+	char		*word;
 	t_wordlist	*wordlist;
 
+	word = ft_substr(&shell->string[shell->token.start], 0, shell->token.len);
+	if (!word)
+		return (SYSTEM_ERR);
 	wordlist = malloc(sizeof(t_wordlist));
 	if (!wordlist)
 	{
-		free(shell->token.value);
+		free(word);
 		return (SYSTEM_ERR);
 	}
 	wordlist->next = NULL;
-	wordlist->word = shell->token.value;
+	wordlist->word = word;
 	**wordlist_last = wordlist;
 	*wordlist_last = &wordlist->next;
 	return (lexer(shell));
@@ -67,8 +72,25 @@ static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last)
 static int	take_redirect(t_minishell *shell, t_redirect ***redirect_last)
 {
 	int			ret;
-	t_redirtype	type;
 	t_redirect	*redirect;
+
+	ret = take_redirect_internal(shell, &redirect);
+	if (ret)
+		return (ret);
+	**redirect_last = redirect;
+	*redirect_last = &redirect->next;
+	if (redirect->type == RT_HEREDOC)
+		ret = add_herdoc(shell, redirect->value.document);
+	if (ret)
+		return (ret);
+	return (lexer(shell));
+}
+
+static int	take_redirect_internal(t_minishell *shell, t_redirect **redirect)
+{
+	int			ret;
+	char		*word;
+	t_redirtype	type;
 
 	type = shell->token.type - TK_INPUT;
 	ret = lexer(shell);
@@ -76,19 +98,16 @@ static int	take_redirect(t_minishell *shell, t_redirect ***redirect_last)
 		return (ret);
 	if (shell->token.type != TK_WORD)
 		return (SYNTAX_ERR);
-	redirect = make_redirect(type, shell->token.value);
+	word = ft_substr(&shell->string[shell->token.start], 0, shell->token.len);
+	if (!word)
+		return (SYSTEM_ERR);
+	*redirect = make_redirect(type, word);
 	if (!redirect)
 	{
-		free(shell->token.value);
+		free(word);
 		return (SYSTEM_ERR);
 	}
-	**redirect_last = redirect;
-	*redirect_last = &redirect->next;
-	if (type == RT_HEREDOC)
-		ret = add_herdoc(shell, redirect->value.document);
-	if (ret)
-		return (ret);
-	return (lexer(shell));
+	return (NOERR);
 }
 
 static int	add_herdoc(t_minishell *shell, t_document *document)

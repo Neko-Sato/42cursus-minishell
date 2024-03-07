@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 18:56:29 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/05 21:43:34 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:13:29 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,14 @@ int	lexer(t_minishell *shell)
 	if (ret)
 		return (ret);
 	shell->sindex = zindex;
-	shell->token.value = NULL;
+	shell->token.start = zindex;
 	shell->token.type = match_token(&shell->string[zindex]);
 	zindex += (int []){0, 0, 1, 2, 1, 2, 1, 2, 2, 1, 1}[shell->token.type];
 	if (shell->token.type == TK_WORD)
-		ret = get_word(shell, &zindex, &shell->token.value);
-	if (ret)
-		return (ret);
+		ret = skip_word(shell, &zindex);
+	shell->token.len = zindex - shell->token.start;
 	shell->sindex = zindex;
-	return (NOERR);
+	return (ret);
 }
 
 int	skip_space(t_minishell *shell, size_t *zindex)
@@ -50,7 +49,7 @@ int	skip_space(t_minishell *shell, size_t *zindex)
 	return (NOERR);
 }
 
-int	get_word(t_minishell *shell, size_t *zindex, char **word)
+int	skip_word(t_minishell *shell, size_t *zindex)
 {
 	int	ret;
 
@@ -70,12 +69,6 @@ int	get_word(t_minishell *shell, size_t *zindex, char **word)
 		if (ret)
 			return (ret);
 	}
-	if (*zindex == shell->sindex)
-		return (NOERR);
-	*word = ft_substr(&shell->string[shell->sindex], 0, *zindex
-			- shell->sindex);
-	if (!*word)
-		return (SYSTEM_ERR);
 	return (NOERR);
 }
 

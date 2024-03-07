@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/06 01:41:03 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 18:08:32 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,6 @@
 #include <libft.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-/*
-! 必須　：eofはクォートを外して解釈する
-heredocのリストからdocumentを持ってきて
-eofにクォートがあればフラグを建てて
-eofをunquoteしたものに上書きする
-documentを読んで代入して
-heredocリストから消す
-
-*/
 
 static int	read_heredoc(t_minishell *shell, t_document *document,
 				size_t *zindex);
@@ -95,7 +85,9 @@ static int	read_document(t_minishell *shell, t_document *document,
 		if (check_eof(shell, document, zindex, var))
 			break ;
 	}
-	document->document = ft_substr(&shell->string[var[RD_START]], 1,
+	var[RD_START]++;
+	var[RD_LEN]--;
+	document->document = ft_substr(&shell->string[var[RD_START]], 0,
 			var[RD_LEN]);
 	if (!document->document)
 		return (SYSTEM_ERR);
