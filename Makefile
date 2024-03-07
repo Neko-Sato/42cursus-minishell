@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/08 00:24:47 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/08 00:45:25 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,14 +97,13 @@ $(FT):
 	@git submodule update --init $@
 	@$(MAKE) -C $@
 
-$(READLINE)/Makefile: 
-	(cd $(READLINE); ./configure CFLAGS=-w;)
-
 .PHONY: $(READLINE)
-$(READLINE): $(READLINE)/Makefile
-	@git submodule update --init $@
-	@sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/readline.h
-	@sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/rltypedefs.h
-	@$(MAKE) -C $@
+$(READLINE):
+	git config http.sslVerify false
+	git submodule update --init $@
+	(cd $(READLINE); [ -f Makefile ] || ./configure CFLAGS=-w;)
+	sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/readline.h
+	sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/rltypedefs.h
+	$(MAKE) -C $@
 
 -include $(DEPS)
