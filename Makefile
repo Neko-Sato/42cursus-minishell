@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/08 02:17:14 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/08 02:19:35 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,6 @@ READLINE		:= $(DIR)/readline
 INCS_DIR		:= $(DIR)/incs
 SRCS_DIR		:= $(DIR)/srcs
 OUT_DIR			:= $(DIR)/out
-
-MAIN			:= $(DIR)/main.c
 
 SRCS			:= \
 	$(addprefix $(SRCS_DIR)/, \
@@ -63,7 +61,7 @@ IDFLAGS			+= -I$(INCS_DIR)
 
 all: $(FT) $(READLINE) $(NAME)
 
-$(NAME): $(MAIN) $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 bonus: all
