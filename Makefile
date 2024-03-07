@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/08 02:12:45 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/08 02:17:14 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,10 +72,10 @@ $(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) -MMD -MP $(IDFLAGS) $< -o $@
 
-clean: $(READLINE)/Makefile
+clean:
 	$(RM) -r $(OUT_DIR)
-	@make -C $(READLINE) clean
 	@make -C $(FT) clean
+	@make -C $(READLINE) clean
 
 fclean: clean
 	@make -C $(FT) fclean
