@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/08 01:14:50 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/08 01:42:38 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,10 +102,12 @@ $(READLINE):
 	@git config http.sslVerify false
 	@git submodule update --init $@
 	@(cd $(READLINE); [ -f Makefile ] || ./configure CFLAGS=-w;)
-	@sed -n '29p' $@/readline.h | grep -q '#include <stdio.h>' ||\
-		sed -i.old '29s/.*/#include <stdio.h>\n&/' readline/readline.h
-	@sed -n '29p' $@/rltypedefs.h | grep -q '#include <stdio.h>' ||\
-		sed -i.old '29s/.*/#include <stdio.h>\n&/' $@/rltypedefs.h
+	sed -n '29p' $@/readline.h | grep -q '#include <stdio.h>' ||\
+		sed -i.old '29i\
+#include <stdio.h>\n' $@/readline.h
+	sed -n '29p' $@/rltypedefs.h | grep -q '#include <stdio.h>' ||\
+		sed -i.old '29i\
+#include <stdio.h>' $@/rltypedefs.h
 	@$(MAKE) -C $@
 
 -include $(DEPS)
