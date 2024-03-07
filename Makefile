@@ -6,22 +6,22 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/04 01:44:25 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/07 17:51:46 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			= minishell
+NAME			:= minishell
 
-DIR				= .
-FT				= $(DIR)/libft
-READLINE		= $(DIR)/readline
-INCS_DIR		= $(DIR)/incs
-SRCS_DIR		= $(DIR)/srcs
-OBJS_DIR		= $(DIR)/objs
+DIR				:= .
+FT				:= $(DIR)/libft
+READLINE		:= $(DIR)/readline
+INCS_DIR		:= $(DIR)/incs
+SRCS_DIR		:= $(DIR)/srcs
+OUT_DIR			:= $(DIR)/out
 
-MAIN			= $(DIR)/main.c
+MAIN			:= $(DIR)/main.c
 
-SRCS			= \
+SRCS			:= \
 	$(addprefix $(SRCS_DIR)/, \
 		debug.c \
 		shell.c \
@@ -49,12 +49,13 @@ SRCS			= \
 		subst.c \
 	) \
 
-OBJS			= $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
+DEPS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
 
-CFLAGS			= -Wall -Wextra -Werror -g
-LDFLAGS			+= -L$(FT) -L$(READLINE)/shlib
-IDFLAGS			+= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
-LIBS			+= -lft -lreadline -ltermcap
+CFLAGS			:= -Wall -Wextra -Werror -g
+LDFLAGS			:= -L$(FT) -L$(READLINE)/shlib
+IDFLAGS			:= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
+LIBS			:= -lft -lreadline -ltermcap
 IDFLAGS			+= -I$(INCS_DIR)
 
 .PHONY: all clean fclean re bonus
@@ -66,12 +67,12 @@ $(NAME): $(MAIN) $(OBJS)
 
 bonus: all
 
-$(OBJS_DIR)/%.o: %.c
+$(OUT_DIR)/%.o: %.c
 	@mkdir -p $(@D)
-	$(CC) -c $(CFLAGS) $(IDFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) -MMD -MP $(IDFLAGS) $< -o $@
 
 clean: $(READLINE)/Makefile
-	$(RM) -r $(OBJS_DIR)
+	$(RM) -r $(OUT_DIR)
 	@make -C $(READLINE) clean
 	@make -C $(FT) clean
 
@@ -102,3 +103,5 @@ $(READLINE)/Makefile:
 $(READLINE): $(READLINE)/Makefile
 	@git submodule update --init $@
 	@$(MAKE) -C $@
+
+-include $(DEPS)
