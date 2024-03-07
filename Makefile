@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/07 17:51:46 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/08 00:24:47 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS			:= \
 		subst_wordlist_split.c \
 		subst_glob.c \
 		subst.c \
+		jobs.c \
 	) \
 
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
@@ -102,6 +103,8 @@ $(READLINE)/Makefile:
 .PHONY: $(READLINE)
 $(READLINE): $(READLINE)/Makefile
 	@git submodule update --init $@
+	@sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/readline.h
+	@sed -i '29{/#include <stdio.h>/!s/^/#include <stdio.h>\n/}' $@/rltypedefs.h
 	@$(MAKE) -C $@
 
 -include $(DEPS)
