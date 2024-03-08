@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/06 01:16:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:03:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 # define SHELL_H
 
 # include "command.h"
+# include "jobs.h"
 # include "token.h"
 # include <stddef.h>
+# include <sys/types.h>
 
 # define PS1 "minishell> "
 # define PS2 "> "
@@ -34,6 +36,8 @@ typedef struct s_minishell
 	int			brackets_level;
 	t_command	*command;
 	t_heredoc	*heredoc;
+	t_proc		*pidlist;
+	pid_t		last_pid;
 	char		**envp;
 	int			last_status;
 	int			isinteractive;
@@ -43,6 +47,7 @@ typedef struct s_minishell
 extern int		g_interrupt_state;
 
 int				shell_init(t_minishell *shell, char *envp[]);
+void			shell_deinit(t_minishell *shell);
 int				reader_loop(t_minishell *shell);
 
 char			*minishell_readline(t_minishell *shell);
