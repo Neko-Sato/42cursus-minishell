@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:58:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/04 01:36:34 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 23:46:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	**wordlist2strarray(t_wordlist *wordlist)
 	result = malloc(sizeof(char *) * (i + 1));
 	if (!result)
 		return (NULL);
+	i = 0;
 	temp = wordlist;
 	while (temp)
 	{
