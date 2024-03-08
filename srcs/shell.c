@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/06 01:46:34 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:03:29 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	reader_loop(t_minishell *shell)
 	act.sa_handler = signal_handler;
 	act.sa_flags = SA_RESTART;
 	sigemptyset(&act.sa_mask);
-	act.sa_restorer = NULL;
 	status = 0;
 	if (shell->isinteractive && sigaction(SIGINT, &act, &oact))
 		status = -1;
@@ -54,13 +53,20 @@ int	reader_loop(t_minishell *shell)
 
 static int	reader_loop_internal(t_minishell *shell)
 {
-	int	ret;
+	int			ret;
+	t_command	*command;
 
 	while (!shell->eof_reached)
 	{
 		ret = read_command(shell);
 		if (ret == NOERR)
-			ret = execute_command(shell);
+		{
+			command = shell->command;
+			shell->command = NULL;
+			if (execute_command(shell, command) < 0)
+				ret = SYSTEM_ERR;
+			dispose_command(command);
+		}
 		dispose_command(shell->command);
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
@@ -79,6 +85,8 @@ int	shell_init(t_minishell *shell, char *envp[])
 	shell->command = NULL;
 	shell->heredoc = NULL;
 	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
+	shell->pidlist = NULL;
+	shell->last_pid = -1;
 	shell->last_status = 0;
 	shell->string = NULL;
 	shell->sindex = 0;
@@ -98,5 +106,17 @@ static void	signal_handler(int signal)
 	{
 		g_interrupt_state = 1;
 		rl_done = 1;
+	}
+}
+
+void	shell_deinit(t_minishell *shell)
+{
+	t_proc *temp;
+
+	while (shell->pidlist)
+	{
+		temp = shell->pidlist;
+		shell->pidlist = shell->pidlist->next;
+		free(temp);
 	}
 }

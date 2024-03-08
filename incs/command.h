@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/05 22:04:48 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:45:52 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ typedef struct s_minishell	t_minishell;
 
 int							read_command(t_minishell *shell);
 int							parse_command(t_minishell *shell);
-int							execute_command(t_minishell *shell);
 
 void						dispose_command(t_command *command);
 void						dispose_wordlist(t_wordlist *wordlist);
@@ -125,5 +124,8 @@ t_redirect					*make_redirect(t_redirtype type, char *filename);
 
 char						**wordlist2strarray(t_wordlist *wordlist);
 t_wordlist					*strarray2wordlist(char **array);
+
+int							execute_command(t_minishell *shell,
+								t_command *command);
 
 #endif
