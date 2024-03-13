@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 16:24:40 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/14 00:26:25 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ static int	execute_pipeline_internal(t_minishell *shell, t_command *command,
 		int prev, int fildes[2])
 
 {
-	int status;
+	int	status;
 
 	if (pipe(fildes))
 		return (-1);
 	status = execute_command_internal(
-		shell, command->value.conncom->command1, prev, fildes[1]);
+			shell, command->value.conncom->command1, prev, fildes[1]);
 	close(fildes[1]);
 	if (status == -1)
 		close(fildes[0]);

@@ -6,17 +6,18 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/12 23:24:14 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:13:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command.h"
+#include "execute.h"
 #include "subst.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <libft.h>
-#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 static int	do_redirect_input(t_minishell *shell, t_redirect *redirect);
@@ -36,6 +37,7 @@ int	do_redirect(t_minishell *shell, t_redirect *redirect)
 			in = redirect;
 		else if (redirect->type == RT_OVERWRITE || redirect->type == RT_APPEND)
 			out = redirect;
+		redirect = redirect->next;
 	}
 	ret = do_redirect_in(shell, in);
 	if (!ret)
@@ -59,7 +61,7 @@ int	do_redirect_in(t_minishell *shell, t_redirect *redirect)
 		return (-1);
 	if (fd == -2)
 		return (1);
-	return (dup2(fd, STDIN_FILENO));
+	return (-(dup2(fd, STDIN_FILENO) == -1));
 }
 
 static int	do_redirect_input(t_minishell *shell, t_redirect *redirect)
@@ -89,7 +91,7 @@ static int	do_redirect_input(t_minishell *shell, t_redirect *redirect)
 static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect)
 {
 	int		fd;
-	char	filename[15];
+	char	filename[18];
 	char	*docment;
 
 	ft_strcpy(filename, "/tmp/shtmp.XXXXXX");
@@ -127,14 +129,14 @@ int	do_redirect_out(t_minishell *shell, t_redirect *redirect)
 		return (-2);
 	}
 	if (redirect->type == RT_OVERWRITE)
-		fd = open(word->word, O_WRONLY | O_CREAT | O_TRUNC, 660);
+		fd = open(word->word, O_WRONLY | O_CREAT | O_TRUNC, 420);
 	else
-		fd = open(word->word, O_WRONLY | O_CREAT | O_APPEND, 660);
+		fd = open(word->word, O_WRONLY | O_CREAT | O_APPEND, 420);
 	dispose_wordlist(word);
 	if (fd == -1)
 	{
 		perror("minishell");
 		return (-2);
 	}
-	return (dup2(fd, STDOUT_FILENO));
+	return (-(dup2(fd, STDOUT_FILENO) == -1));
 }

@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/13 16:24:18 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/13 18:35:35 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,9 +45,12 @@ SRCS			:= \
 		subst_glob.c \
 		subst.c \
 		jobs.c \
+		redirect.c \
 		execute_cmd.c \
 		execute_pipeline.c \
 		execute_simplecom.c \
+		execute_null_command.c \
+		execute_disk_command.c \
 	) \
 
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:13:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 17:55:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:06:31 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	execute_simplecom(t_minishell *shell, t_simplecom *simplecom, int pipe_in,
 }
 
 static int	execute_simplecom_finally(t_minishell *shell,
-										t_execute_simplecom *vars)
+		t_execute_simplecom *vars)
 {
 	int	status;
 
