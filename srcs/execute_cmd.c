@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 11:39:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:20:24 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,69 @@
 #include "execute.h"
 #include "shell.h"
 
+static int	execute_groupcom(t_minishell *shell, t_groupcom *groupcom,
+				int pipe_in, int pipe_out);
+static int	execute_conncom(t_minishell *shell, t_conncom *command, int pipe_in,
+				int pipe_out);
+
 int	execute_command(t_minishell *shell, t_command *command)
 {
-	return (execute_command_internal(shell, command, (int []){-1, -1}));
+	return (execute_command_internal(shell, command, -1, -1));
 }
 
 int	execute_command_internal(t_minishell *shell, t_command *command,
-		int pipe_fd[2])
+		int pipe_in, int pipe_out)
 {
 	int	status;
 
+	status = 0;
 	if (!command)
-		status = 0;
+		;
 	else if (command->type == CT_SIMPLE)
-		status = execute_simplecom(shell, command, pipe_fd);
+		status = execute_simplecom(shell, command->value.simplecom, pipe_in,
+				pipe_out);
 	else if (command->type == CT_GROUP)
-		status = execute_groupcom(shell, command, pipe_fd);
+		status = execute_groupcom(shell, command->value.groupcom, pipe_in,
+				pipe_out);
 	else if (command->type == CT_CONNCOM)
-		status = execute_conncom(shell, command, pipe_fd);
+	{
+		if (command->value.conncom->type == CCT_PIPE)
+			status = execute_pipeline(shell, command, pipe_in, pipe_out);
+		else
+			status = execute_conncom(shell, command->value.conncom, pipe_in,
+					pipe_out);
+	}
 	return (status);
 }
 
-int	execute_groupcom(t_minishell *shell, t_command *command, int pipe_fd[2])
+static int	execute_groupcom(t_minishell *shell, t_groupcom *groupcom,
+		int pipe_in, int pipe_out)
 {
-	return (execute_command_internal(shell, command->value.groupcom->command,
-			pipe_fd));
+	return (execute_command_internal(shell, groupcom->command, pipe_in,
+			pipe_out));
 }
 
-int	execute_conncom(t_minishell *shell, t_command *command, int pipe_fd[2])
+static int	execute_conncom(t_minishell *shell, t_conncom *conncom, int pipe_in,
+		int pipe_out)
 {
 	int	status;
 
-	if (command->value.conncom->type == CCT_PIPE)
-		status = execute_pipeline(shell, command, pipe_fd);
-	else if (command->value.conncom->type == CCT_AND)
+	status = 0;
+	if (conncom->type == CCT_AND)
 	{
 		status = execute_command_internal(
-				shell, command->value.conncom->command1, pipe_fd);
+			shell, conncom->command1, pipe_in, pipe_out);
 		if (status != -1 && !shell->last_status)
 			status = execute_command_internal(
-					shell, command->value.conncom->command2, pipe_fd);
+				shell, conncom->command2, pipe_in, pipe_out);
 	}
-	else if (command->value.conncom->type == CCT_OR)
+	else if (conncom->type == CCT_OR)
 	{
 		status = execute_command_internal(
-				shell, command->value.conncom->command1, pipe_fd);
+			shell, conncom->command1, pipe_in, pipe_out);
 		if (status != -1 && shell->last_status)
 			status = execute_command_internal(
-					shell, command->value.conncom->command2, pipe_fd);
+				shell, conncom->command2, pipe_in, pipe_out);
 	}
 	return (status);
 }
