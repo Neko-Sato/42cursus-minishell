@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:13:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 10:05:49 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:41:28 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	execute_simplecom_internal(t_minishell *shell, t_command *command,
 	else if (0 /*built-in*/)
 		status = 1; //
 	else
-		status = 0;//execute_disk_command(shell, command, pipe_fd, already_fork);
+		status = 0; //execute_disk_command(shell, command, pipe_fd, already_fork);
 	shell->last_status = status;
 	return (shell->last_status);
 }

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/12 18:59:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:39:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,18 @@ int	execute_conncom(t_minishell *shell, t_command *command, int pipe_fd[2])
 	else if (command->value.conncom->type == CCT_AND)
 	{
 		status = execute_command_internal(
-			shell, command->value.conncom->command1, pipe_fd);
+				shell, command->value.conncom->command1, pipe_fd);
 		if (status != -1 && !shell->last_status)
 			status = execute_command_internal(
-				shell, command->value.conncom->command2, pipe_fd);
+					shell, command->value.conncom->command2, pipe_fd);
 	}
 	else if (command->value.conncom->type == CCT_OR)
 	{
 		status = execute_command_internal(
-			shell, command->value.conncom->command1, pipe_fd);
+				shell, command->value.conncom->command1, pipe_fd);
 		if (status != -1 && shell->last_status)
 			status = execute_command_internal(
-				shell, command->value.conncom->command2, pipe_fd);
+					shell, command->value.conncom->command2, pipe_fd);
 	}
 	return (status);
 }

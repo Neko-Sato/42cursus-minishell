@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 10:33:36 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 11:37:46 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static void	signal_handler(int signal)
 
 void	shell_deinit(t_minishell *shell)
 {
-	t_proc *temp;
+	t_proc	*temp;
 
 	while (shell->pidlist)
 	{
