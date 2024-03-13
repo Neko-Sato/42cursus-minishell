@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/09 00:35:19 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/13 11:32:30 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,6 @@ SRCS			:= \
 		token.c \
 		wordlist.c \
 		command_make.c \
-		command_execute.c \
 		command_dispose.c \
 		command.c \
 		lexer.c \
@@ -46,13 +45,16 @@ SRCS			:= \
 		subst_glob.c \
 		subst.c \
 		jobs.c \
+		execute_cmd.c \
+		execute_pipeline.c \
+		execute_simplecom.c \
 	) \
 
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
 DEPS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
 
 CFLAGS			:= -Wall -Wextra -Werror -g
-LDFLAGS			:= -L$(FT) -L$(READLINE)
+LDFLAGS			:= -L$(FT) -Wl,--rpath=$(READLINE)/shlib -L$(READLINE)/shlib
 IDFLAGS			:= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
 LIBS			:= -lft -lreadline -ltermcap
 IDFLAGS			+= -I$(INCS_DIR)

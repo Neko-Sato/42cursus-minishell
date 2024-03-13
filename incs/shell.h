@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/08 10:03:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:25:33 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 typedef struct s_minishell
 {
+	pid_t		pid;
 	char		*string;
 	size_t		sindex;
 	size_t		line;
@@ -37,7 +38,6 @@ typedef struct s_minishell
 	t_command	*command;
 	t_heredoc	*heredoc;
 	t_proc		*pidlist;
-	pid_t		last_pid;
 	char		**envp;
 	int			last_status;
 	int			isinteractive;

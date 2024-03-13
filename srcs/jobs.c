@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/08 11:34:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/12 19:27:06 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ pid_t	make_child(t_minishell *shell)
 		while (*temp)
 			temp = &(*temp)->next;
 		*temp = proc;
-		shell->last_pid = pid;
 	}
 	return (pid);
 }

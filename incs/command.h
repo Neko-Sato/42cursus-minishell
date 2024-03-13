@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 02:55:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/07 17:45:52 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:42:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,5 @@ t_redirect					*make_redirect(t_redirtype type, char *filename);
 
 char						**wordlist2strarray(t_wordlist *wordlist);
 t_wordlist					*strarray2wordlist(char **array);
-
-int							execute_command(t_minishell *shell,
-								t_command *command);
 
 #endif

@@ -6,10 +6,11 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/08 10:03:29 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:33:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "execute.h"
 #include "parser.h"
 #include "shell.h"
 #include <errno.h>
@@ -81,12 +82,12 @@ static int	reader_loop_internal(t_minishell *shell)
 
 int	shell_init(t_minishell *shell, char *envp[])
 {
+	shell->pid = getpid();
 	shell->envp = envp;
 	shell->command = NULL;
 	shell->heredoc = NULL;
 	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
 	shell->pidlist = NULL;
-	shell->last_pid = -1;
 	shell->last_status = 0;
 	shell->string = NULL;
 	shell->sindex = 0;
