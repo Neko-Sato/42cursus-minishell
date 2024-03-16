@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:43:27 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 18:39:12 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/16 12:06:09 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ int				execute_null_command(t_minishell *shell, t_execute vars);
 int				execute_builtin(t_minishell *shell, t_execute vars);
 int				execute_disk_command(t_minishell *shell, t_execute vars);
 
+int				search_for_command(t_minishell *shell, char *pathname,
+					char **result);
+
+int				save_stdio(t_minishell *shell);
+int				adapt_stdio(t_minishell *shell);
+int				do_piping(t_minishell *shell, int pipe_in, int pipe_out);
 int				do_redirect_in(t_minishell *shell, t_redirect *redirect);
 int				do_redirect_out(t_minishell *shell, t_redirect *redirect);
 int				do_redirect(t_minishell *shell, t_redirect *redirect);
