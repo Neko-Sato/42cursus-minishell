@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/12 19:27:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/16 14:24:02 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ int	wait_for(t_minishell *shell, pid_t pid)
 		}
 	}
 	reap_zombie_children(shell);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		status = 128 + WTERMSIG(status);
 	shell->last_status = status;
 	cleanup_dead_jobs(shell);
 	return (status);
@@ -94,10 +98,6 @@ static void	set_pid_status(t_minishell *shell, pid_t pid, int status)
 	if (!*temp)
 		return ;
 	(*temp)->running = 0;
-	if (WIFEXITED(status))
-		status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		status = 128 + WTERMSIG(status);
 	(*temp)->status = status;
 }
 
