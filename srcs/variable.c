@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:28:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/16 13:27:17 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	setvar(char ***vars_ptr, char *key, char *value, int overwrite)
 		return (ft_vector_insert(vars_ptr, index, &new_var, 1));
 	free((*vars_ptr)[index]);
 	(*vars_ptr)[index] = new_var;
-	return (NOERR);
+	return (0);
 }
 
 int	unsetvar(char **vars, char *key)
@@ -76,7 +76,7 @@ int	unsetvar(char **vars, char *key)
 		return (1);
 	free(vars[index]);
 	ft_vector_erase(vars, index, 1);
-	return (NOERR);
+	return (0);
 }
 
 static size_t	getindex(char **vars, char *key)
