@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:13:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 18:06:31 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/16 13:11:31 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static int	execute_simplecom_finally(t_minishell *shell,
-				t_execute_simplecom *vars);
 static int	execute_simplecom_internal(t_minishell *shell,
 				t_execute_simplecom *vars);
 
@@ -27,6 +25,7 @@ int	execute_simplecom(t_minishell *shell, t_simplecom *simplecom, int pipe_in,
 {
 	pid_t	pid;
 	int		do_fork;
+	int		status;
 
 	do_fork = pipe_in != -1 || pipe_out != -1;
 	if (do_fork)
@@ -41,24 +40,13 @@ int	execute_simplecom(t_minishell *shell, t_simplecom *simplecom, int pipe_in,
 			return (EXIT_SUCCESS);
 		}
 	}
-	return (execute_simplecom_finally(shell, &(t_execute_simplecom){simplecom,
-			pipe_in, pipe_out, do_fork}));
-}
-
-static int	execute_simplecom_finally(t_minishell *shell,
-		t_execute_simplecom *vars)
-{
-	int	status;
-
-	status = execute_simplecom_internal(shell, vars);
-	if (!vars->already_fork)
+	status = execute_simplecom_internal(shell, &(t_execute_simplecom){simplecom,
+			pipe_in, pipe_out, do_fork});
+	if (!do_fork)
 		return (status);
 	if (status == -1)
-	{
 		perror("minishell");
-		status = EXIT_FAILURE;
-	}
-	exit(status);
+	exit(EXIT_FAILURE);
 }
 
 static int	execute_simplecom_internal(t_minishell *shell,
@@ -69,7 +57,8 @@ static int	execute_simplecom_internal(t_minishell *shell,
 
 	if (!vars->simplecom->wordlist)
 		return (execute_null_command(shell, (t_execute){NULL,
-				vars->simplecom->redirect, vars->pipe_in, vars->pipe_out, 0}));
+				vars->simplecom->redirect, vars->pipe_in, vars->pipe_out,
+				vars->already_fork}));
 	wordlist = expand_wordlist(shell, vars->simplecom->wordlist);
 	if (!wordlist)
 		return (-1);
