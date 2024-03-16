@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/05 07:41:00 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:52:41 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	parser(t_minishell *shell)
 	{
 		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		shell->last_status = 2;
+		return (SYNTAX_ERR);
 	}
 	return (ret);
 }
