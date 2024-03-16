@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 19:13:21 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:27:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,17 @@ static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect);
 
 int	do_redirect(t_minishell *shell, t_redirect *redirect)
 {
-	int			ret;
-	t_redirect	*in;
-	t_redirect	*out;
+	int	ret;
 
-	in = NULL;
-	out = NULL;
-	while (redirect)
+	ret = 0;
+	while (!ret && redirect)
 	{
 		if (redirect->type == RT_INPUT || redirect->type == RT_HEREDOC)
-			in = redirect;
+			ret = do_redirect_in(shell, redirect);
 		else if (redirect->type == RT_OVERWRITE || redirect->type == RT_APPEND)
-			out = redirect;
+			ret = do_redirect_out(shell, redirect);
 		redirect = redirect->next;
 	}
-	ret = do_redirect_in(shell, in);
-	if (!ret)
-		ret = do_redirect_out(shell, out);
 	return (ret);
 }
 
