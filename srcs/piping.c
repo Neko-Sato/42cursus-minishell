@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:44:47 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 02:08:54 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 05:35:51 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	adapt_stdio(t_minishell *shell)
 
 void	close_fds(size_t size, int *fds)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < size)
