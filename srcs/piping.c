@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_stdio.c                                       :+:      :+:    :+:   */
+/*   piping.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:44:47 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/16 14:08:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 02:08:54 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@ int	do_piping(t_minishell *shell, int pipe_in, int pipe_out)
 	(void)shell;
 	ret = 0;
 	if (!ret && pipe_in != -1)
+	{
 		ret = -(dup2(pipe_in, STDIN_FILENO) == -1);
+		close(pipe_in);
+	}
 	if (!ret && pipe_out != -1)
+	{
 		ret = -(dup2(pipe_out, STDOUT_FILENO) == -1);
+		close(pipe_out);
+	}
 	return (ret);
 }
 
@@ -54,4 +60,13 @@ int	adapt_stdio(t_minishell *shell)
 		shell->save_stdio[1] = -1;
 	}
 	return (0);
+}
+
+void	close_fds(size_t size, int *fds)
+{
+	size_t i;
+
+	i = 0;
+	while (i < size)
+		close(fds[i++]);
 }

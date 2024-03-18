@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 18:05:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 02:10:38 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 02:38:39 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int execute_null_command(t_minishell *shell, t_execute_simple vars)
+int	execute_null_command(t_minishell *shell, t_execute_simple vars)
 {
 	if (!vars.already_fork && save_stdio(shell))
 		return (-1);
