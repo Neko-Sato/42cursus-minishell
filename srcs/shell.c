@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 05:56:29 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 08:15:48 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include "shell.h"
 #include <errno.h>
 #include <libft.h>
+#include <stdio.h>
 #include <readline.h>
 #include <signal.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 

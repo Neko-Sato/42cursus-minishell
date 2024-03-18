@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 07:58:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 08:18:03 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	builtin_echo(int argc, char *argv[])
 {
 	int	flag;
 
+	(void)argc;
 	flag = 0;
 	argv++;
 	while (*argv)
