@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:43:27 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 02:13:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:23:20 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 
 # include "command.h"
 # include "shell.h"
+
+typedef struct s_execve_args
+{
+	char		*pathname;
+	char		**argv;
+	char		**envp;
+
+}				t_execve_args;
 
 typedef struct s_execute
 {

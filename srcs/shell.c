@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/13 11:37:46 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 05:56:29 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,16 @@ int	reader_loop(t_minishell *shell)
 {
 	int					status;
 	struct sigaction	act;
-	struct sigaction	oact;
 
 	act.sa_handler = signal_handler;
 	act.sa_flags = SA_RESTART;
 	sigemptyset(&act.sa_mask);
 	status = 0;
-	if (shell->isinteractive && sigaction(SIGINT, &act, &oact))
+	if (shell->isinteractive && sigaction(SIGINT, &act, NULL))
 		status = -1;
 	if (!status)
 		status = reader_loop_internal(shell);
-	if (shell->isinteractive && sigaction(SIGINT, &oact, NULL))
+	if (shell->isinteractive && sigaction(SIGINT, NULL, NULL))
 		status = -1;
 	if (status < 0)
 	{
@@ -80,27 +79,6 @@ static int	reader_loop_internal(t_minishell *shell)
 	return (shell->last_status);
 }
 
-int	shell_init(t_minishell *shell, char *envp[])
-{
-	shell->pid = getpid();
-	shell->envp = envp;
-	shell->command = NULL;
-	shell->heredoc = NULL;
-	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
-	shell->pidlist = NULL;
-	shell->last_status = 0;
-	shell->string = NULL;
-	shell->sindex = 0;
-	shell->line = 0;
-	shell->eof_reached = 0;
-	shell->brackets_level = 0;
-	if (shell->isinteractive)
-		rl_event_hook = (void *)ft_noop;
-	rl_instream = stdin;
-	rl_outstream = stderr;
-	return (0);
-}
-
 static void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -110,8 +88,35 @@ static void	signal_handler(int signal)
 	}
 }
 
+int	shell_init(t_minishell *shell, char *envp[])
+{
+	size_t	i;
+
+	ft_bzero(shell, sizeof(t_minishell));
+	shell->pid = getpid();
+	shell->envp = ft_vector(sizeof(char *), NULL, ft_arrylen((void *)envp) + 1);
+	if (!shell->envp)
+		return (-1);
+	i = 0;
+	while (envp[i])
+	{
+		shell->envp[i] = ft_strdup(envp[i]);
+		if (!shell->envp[i++])
+			return (-1);
+	}
+	shell->envp[i] = NULL;
+	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
+	ft_memset(shell->save_stdio, -1, sizeof(shell->save_stdio));
+	if (shell->isinteractive)
+		rl_event_hook = (void *)ft_noop;
+	rl_instream = stdin;
+	rl_outstream = stderr;
+	return (0);
+}
+
 void	shell_deinit(t_minishell *shell)
 {
+	size_t	i;
 	t_proc	*temp;
 
 	while (shell->pidlist)
@@ -120,4 +125,8 @@ void	shell_deinit(t_minishell *shell)
 		shell->pidlist = shell->pidlist->next;
 		free(temp);
 	}
+	i = 0;
+	while (shell->envp[i])
+		free(shell->envp[i++]);
+	ft_vector_del(shell->envp);
 }

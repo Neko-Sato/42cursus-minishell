@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 05:18:14 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:36:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 static int	execute_disk_command_internal(
 				t_minishell *shell, t_execute_simple *vars);
-static char	*get_pathname(t_minishell *shell, char **argv);
+static int	init_execve_args(t_minishell *shell,
+				t_execute_simple *vars, t_execve_args *args);
 
 int	execute_disk_command(t_minishell *shell, t_execute_simple vars)
 {
@@ -44,45 +45,50 @@ int	execute_disk_command(t_minishell *shell, t_execute_simple vars)
 static int	execute_disk_command_internal(
 	t_minishell *shell, t_execute_simple *vars)
 {
-	char	*pathname;
-	char	**argv;
-	char	**envp;
+	int				ret;
+	t_execve_args	args;
 
-	argv = wordlist2strarray(vars->wordlist);
-	if (!argv)
-		return (-1);
-	pathname = get_pathname(shell, argv);
-	if (!pathname)
-		return (-1);
-	envp = shell->envp;
-	if (do_piping(shell, vars->vars->pipe_in, vars->vars->pipe_out))
-		return (-1);
-	if (do_redirect(shell, vars->redirect))
-		return (-1);
-	close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
-	execve(pathname, argv, envp);
-	free(pathname);
-	free(argv);
-	return (-1);
+	while (1)
+	{
+		ret = init_execve_args(shell, vars, &args);
+		if (!ret)
+			ret = do_piping(shell, vars->vars->pipe_in, vars->vars->pipe_out);
+		if (!ret)
+			ret = do_redirect(shell, vars->redirect);
+		if (ret)
+			return (ret);
+		close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
+		ret = execve(args.pathname, args.argv, args.envp);
+		break ;
+	}
+	free(args.pathname);
+	free(args.argv);
+	if (ret != -1)
+		exit(ret);
+	return (ret);
 }
 
-static char	*get_pathname(t_minishell *shell, char **argv)
+static int	init_execve_args(t_minishell *shell,
+				t_execute_simple *vars, t_execve_args *args)
 {
-	char	*pathname;
-
-	if (!ft_strchr(argv[0], '/'))
+	args->argv = wordlist2strarray(vars->wordlist);
+	if (!args->argv)
+		return (-1);
+	if (!ft_strchr(args->argv[0], '/'))
 	{
-		if (search_for_command(shell, argv[0], &pathname))
-			return (NULL);
-		if (!pathname)
+		if (search_for_command(shell, args->argv[0], &args->pathname))
+			return (-1);
+		if (!args->pathname)
 		{
 			ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
-			ft_putendl_fd(argv[0], STDERR_FILENO);
-			free(argv);
-			exit(127);
+			ft_putendl_fd(args->argv[0], STDERR_FILENO);
+			return (127);
 		}
 	}
 	else
-		pathname = ft_strdup(argv[0]);
-	return (pathname);
+		args->pathname = ft_strdup(args->argv[0]);
+	if (!args->pathname)
+		return (-1);
+	args->envp = shell->envp;
+	return (0);
 }
