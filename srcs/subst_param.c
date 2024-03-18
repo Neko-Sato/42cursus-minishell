@@ -6,18 +6,15 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/12 18:25:24 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 03:06:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+#include "variable.h"
 #include <libft.h>
 #include <unistd.h>
 #include <stdlib.h>
-
-/*
-	変数を取得する関数を追加する必要がある
-*/
 
 static char	*param_expand_variable(t_minishell *shell, char *string,
 				size_t *sindex);
@@ -65,7 +62,7 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	key = ft_substr(&string[*sindex], 0, *sindex - start);
 	if (!key)
 		return (NULL);
-	value = ft_strdup("<pram>");
+	value = getvar(shell->envp, key);
 	free(key);
 	return (value);
 }

@@ -6,12 +6,13 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/27 00:48:29 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 03:09:39 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "subst.h"
+#include "variable.h"
 #include <libft.h>
 #include <stdlib.h>
 
@@ -58,20 +59,17 @@ int	case_tilde(t_minishell *shell, t_strgen *strgen, char *string,
 {
 	int		ret;
 	char	*temp;
-	char	*temp1;
 
-	(void)shell;
 	if (*sindex - 1 != 0 || !ft_strchr("/", string[*sindex]))
 		return (ft_strgenchr(strgen, '~'));
-	temp = ft_strdup("<HOME>");
+	temp = getvar(shell->envp, "HOME");
+	if (!temp)
+		temp = "";
+	temp = quote_string(temp);
 	if (!temp)
 		return (-1);
-	temp1 = quote_string(temp);
+	ret = ft_strgenstr(strgen, temp);
 	free(temp);
-	if (!temp1)
-		return (-1);
-	ret = ft_strgenstr(strgen, temp1);
-	free(temp1);
 	return (ret);
 }
 
