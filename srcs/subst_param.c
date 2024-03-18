@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 03:06:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 03:27:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	}
 	if (start == *sindex)
 		return (ft_strdup("$"));
-	key = ft_substr(&string[*sindex], 0, *sindex - start);
+	key = ft_substr(&string[start], 0, *sindex - start);
 	if (!key)
 		return (NULL);
 	value = getvar(shell->envp, key);
 	free(key);
-	return (value);
+	return (ft_strdup(value));
 }
