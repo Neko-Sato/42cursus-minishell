@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/19 07:59:12 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/19 08:30:21 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,7 @@ SRCS			:= \
 		execute_simplecom.c \
 		execute_null_command.c \
 		execute_disk_command.c \
+		execute_builtin.c \
 		builtin_echo.c \
 	) \
 

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:43:27 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 07:23:20 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 08:29:25 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int				execute_disk_command(t_minishell *shell, t_execute_simple vars);
 int				search_for_command(t_minishell *shell,
 					char *pathname, char **result);
 
+int				isbuiltin(char *cmd);
 int				save_stdio(t_minishell *shell);
 int				adapt_stdio(t_minishell *shell);
 void			close_fds(size_t size, int *fds);

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:13:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 02:04:22 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 08:29:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	execute_simplecom_internal(t_minishell *shell,
 	wordlist = expand_wordlist(shell, simplecom->wordlist);
 	if (!wordlist)
 		return (-1);
-	if (0)
+	if (isbuiltin(wordlist->word))
 		status = execute_builtin(shell, (t_execute_simple){
 				wordlist, simplecom->redirect, vars, already_fork});
 	else
