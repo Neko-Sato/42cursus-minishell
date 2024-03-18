@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 03:27:08 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 03:28:07 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	int		c;
 	size_t	start;
 
-	(void)shell;
 	start = *sindex;
 	while (1)
 	{
