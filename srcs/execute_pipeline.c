@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/14 00:26:25 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 02:02:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,45 +15,44 @@
 #include "shell.h"
 #include <unistd.h>
 
-static int	execute_pipeline_internal(t_minishell *shell, t_command *command,
-				int prev, int fildes[2]);
+static int	execute_pipeline_internal(t_minishell *shell,
+				t_command *command, int fildes[3]);
 
-int	execute_pipeline(t_minishell *shell, t_command *command, int pipe_in,
-		int pipe_out)
+int	execute_pipeline(t_minishell *shell, t_command *command, t_execute vars)
 {
 	int	status;
-	int	prev;
-	int	fildes[2];
+	int	fildes[3];
 
-	prev = pipe_in;
+	fildes[0] = vars.pipe_in;
 	while (command->type == CT_CONNCOM
 		&& command->value.conncom->type == CCT_PIPE)
 	{
-		status = execute_pipeline_internal(shell, command, prev, fildes);
-		if (prev != pipe_in)
-			close(prev);
+		status = execute_pipeline_internal(shell, command, fildes);
+		if (fildes[0] != vars.pipe_in)
+			close(fildes[0]);
 		if (status == -1)
 			return (-1);
-		prev = fildes[0];
+		fildes[0] = fildes[1];
 		command = command->value.conncom->command2;
 	}
-	status = execute_command_internal(shell, command, prev, pipe_out);
-	close(prev);
+	status = execute_command_internal(shell, command, (t_execute){
+			fildes[0], vars.pipe_out,
+			vars.fds_to_close_size, vars.fds_to_close});
+	close(fildes[0]);
 	return (status);
 }
 
-static int	execute_pipeline_internal(t_minishell *shell, t_command *command,
-		int prev, int fildes[2])
-
+static int	execute_pipeline_internal(t_minishell *shell,
+				t_command *command, int fildes[3])
 {
 	int	status;
 
-	if (pipe(fildes))
+	if (pipe(&fildes[1]))
 		return (-1);
-	status = execute_command_internal(
-			shell, command->value.conncom->command1, prev, fildes[1]);
-	close(fildes[1]);
+	status = execute_command_internal(shell, command->value.conncom->command1,
+			(t_execute){fildes[0], fildes[2], 1, (int []){fildes[1]}});
+	close(fildes[2]);
 	if (status == -1)
-		close(fildes[0]);
+		close(fildes[1]);
 	return (status);
 }
