@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/13 18:35:35 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/19 02:53:52 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,9 @@ SRCS			:= \
 		subst_glob.c \
 		subst.c \
 		jobs.c \
+		variable.c \
+		findcmd.c \
+		piping.c \
 		redirect.c \
 		execute_cmd.c \
 		execute_pipeline.c \
@@ -104,7 +107,14 @@ $(FT):
 $(READLINE):
 	@git config http.sslVerify false
 	@git submodule update --init $@
-	@(cd $(READLINE); [ -f Makefile ] || ./configure CFLAGS=-w;)
+	@(cd $@; [ -f Makefile ] || ./configure CFLAGS=-w;)
+	@$(MAKE) -C $@
+
+.PHONY: bash
+bash:
+	@git config http.sslVerify false
+	@-git clone https://git.savannah.gnu.org/git/bash.git $@
+	@(cd $@; [ -f Makefile ] || ./configure --disable-job-control CFLAGS=-w;)
 	@$(MAKE) -C $@
 
 -include $(DEPS)
