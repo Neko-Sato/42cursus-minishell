@@ -6,16 +6,19 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/20 03:37:09 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:58:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define END "\n"
 #define SPACER " "
+
+static int	just_echo(char *arry[], int flag);
 
 int	builtin_echo(int argc, char *argv[])
 {
@@ -31,14 +34,27 @@ int	builtin_echo(int argc, char *argv[])
 			break ;
 		argv++;
 	}
-	while (*argv)
+	if (just_echo(argv, flag))
 	{
-		ft_putstr_fd(*argv++, STDOUT_FILENO);
-		if (!*argv)
+		perror("minishell: echo:");
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
+static int	just_echo(char *arry[], int flag)
+{
+	while (*arry)
+	{
+		if (write(STDOUT_FILENO, *arry, ft_strlen(*arry)) == -1)
+			return (-1);
+		if (!*++arry)
 			break ;
-		ft_putstr_fd(SPACER, STDOUT_FILENO);
+		if (write(STDOUT_FILENO, SPACER, 1) == -1)
+			return (-1);
 	}
 	if (!(flag & 0b1))
-		ft_putstr_fd(END, STDOUT_FILENO);
-	return (EXIT_SUCCESS);
+		if (write(STDOUT_FILENO, END, 1) == -1)
+			return (-1);
+	return (0);
 }

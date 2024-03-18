@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/19 05:57:47 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/19 07:59:12 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ OUT_DIR			:= $(DIR)/out
 
 SRCS			:= \
 	$(addprefix $(SRCS_DIR)/, \
+		main.c \
 		shell.c \
 		readline.c \
 		token.c \
@@ -53,7 +54,7 @@ SRCS			:= \
 		execute_simplecom.c \
 		execute_null_command.c \
 		execute_disk_command.c \
-		main.c \
+		builtin_echo.c \
 	) \
 
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
