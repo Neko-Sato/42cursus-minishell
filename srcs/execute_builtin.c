@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:26:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 18:41:38 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 22:33:31 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,19 @@ static int	execute_builtin_internal(t_minishell *shell, t_wordlist *wordlist)
 
 	status = EXIT_FAILURE;
 	if (!ft_strcmp(wordlist->word, "echo"))
-		status = builtin_echo(shell, wordlist);
+		status = builtin_echo(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "env"))
-		status = builtin_env(shell, wordlist);
+		status = builtin_env(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "cd"))
-		status = builtin_cd(shell, wordlist);
+		status = builtin_cd(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "pwd"))
-		status = builtin_pwd(shell, wordlist);
+		status = builtin_pwd(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "export"))
-		status = builtin_export(shell, wordlist);
+		status = builtin_export(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "unset"))
-		status = builtin_unset(shell, wordlist);
+		status = builtin_unset(shell, wordlist->next);
 	else if (!ft_strcmp(wordlist->word, "exit"))
-		status = builtin_exit(shell, wordlist);
+		status = builtin_exit(shell, wordlist->next);
 	return (status);
 }
 

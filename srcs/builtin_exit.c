@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 18:43:25 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 22:33:52 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	builtin_exit(t_minishell *shell, t_wordlist *wordlist)
 	(void)shell;
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	status = EXIT_SUCCESS;
-	wordlist = wordlist->next;
 	if (wordlist)
 	{
 		if (ft_isnumber(wordlist->word, 1))

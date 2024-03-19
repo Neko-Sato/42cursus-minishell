@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 18:28:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 22:33:40 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static void	pretreatment(t_wordlist **wordlist, int *flag)
 	char	*temp;
 
 	*flag = 0;
-	*wordlist = (*wordlist)->next;
 	while (*wordlist && '-' == *(*wordlist)->word)
 	{
 		temp = (*wordlist)->word + 1;
