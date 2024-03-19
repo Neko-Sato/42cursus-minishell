@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/19 18:19:40 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/19 18:25:55 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,9 +58,10 @@ SRCS			:= \
 		execute_builtin.c \
 		builtin_echo.c \
 		builtin_env.c \
-		builtin_export.c \
 		builtin_cd.c \
 		builtin_pwd.c \
+		builtin_export.c \
+		builtin_unset.c \
 		builtin_exit.c \
 	) \
 

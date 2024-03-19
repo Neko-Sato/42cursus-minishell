@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:08:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 15:58:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 18:25:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int			builtin_env(t_minishell *shell, t_wordlist *wordlist);
 int			builtin_cd(t_minishell *shell, t_wordlist *wordlist);
 int			builtin_pwd(t_minishell *shell, t_wordlist *wordlist);
 int			builtin_export(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_unset(t_minishell *shell, t_wordlist *wordlist);
 int			builtin_exit(t_minishell *shell, t_wordlist *wordlist);
 
 #endif

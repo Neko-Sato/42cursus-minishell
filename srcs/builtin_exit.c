@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 18:20:42 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 18:43:25 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	builtin_exit(t_minishell *shell, t_wordlist *wordlist)
 		else
 		{
 			ft_putstr_fd("minishell: exit: numeric argument required: ",
-							STDERR_FILENO);
+				STDERR_FILENO);
 			ft_putendl_fd(wordlist->word, STDERR_FILENO);
 			status = 2;
 		}
