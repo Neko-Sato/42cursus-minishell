@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:08:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 08:32:34 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:58:28 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 # include "command.h"
 # include "shell.h"
 
-int	builtin_echo(int argc, char *argv[]);
-int	builtin_env(int argc, char *argv[], char *envp[]);
-int	builtin_cd(t_minishell *shell, t_wordlist *list);
-int	builtin_pwd(t_minishell *shell, t_wordlist *list);
-int	builtin_export(t_minishell *shell, t_wordlist *list);
-int	builtin_exit(t_minishell *shell, t_wordlist *list);
+typedef int	(*t_builtin_fun)(t_minishell *shell, t_wordlist *wordlist);
+
+int			builtin_echo(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_env(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_cd(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_pwd(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_export(t_minishell *shell, t_wordlist *wordlist);
+int			builtin_exit(t_minishell *shell, t_wordlist *wordlist);
 
 #endif

@@ -6,36 +6,32 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 08:18:03 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 16:48:53 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "shell.h"
 #include <libft.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#define OPTIONS "n"
 #define END "\n"
 #define SPACER " "
 
-static int	just_echo(char *arry[], int flag);
+#define DISPLAY_RETURN 0b01
 
-int	builtin_echo(int argc, char *argv[])
+static void	pretreatment(t_wordlist **wordlist, int *flag);
+static int	just_echo(t_wordlist **wordlist, int *flag);
+
+int	builtin_echo(t_minishell *shell, t_wordlist *wordlist)
 {
 	int	flag;
 
-	(void)argc;
-	flag = 0;
-	argv++;
-	while (*argv)
-	{
-		if (!ft_strcmp("-n", *argv))
-			flag |= 0b1;
-		else
-			break ;
-		argv++;
-	}
-	if (just_echo(argv, flag))
+	(void)shell;
+	pretreatment(&wordlist, &flag);
+	if (just_echo(&wordlist, &flag))
 	{
 		perror("minishell: echo:");
 		return (EXIT_FAILURE);
@@ -43,18 +39,44 @@ int	builtin_echo(int argc, char *argv[])
 	return (EXIT_SUCCESS);
 }
 
-static int	just_echo(char *arry[], int flag)
+static void	pretreatment(t_wordlist **wordlist, int *flag)
 {
-	while (*arry)
+	size_t	i;
+	char	*temp;
+
+	*flag = 0;
+	*wordlist = (*wordlist)->next;
+	while (*wordlist && '-' == *(*wordlist)->word)
 	{
-		if (write(STDOUT_FILENO, *arry, ft_strlen(*arry)) == -1)
+		temp = (*wordlist)->word + 1;
+		i = ft_strspn(temp, OPTIONS);
+		if (!*temp || temp[i])
+			break ;
+		i = 0;
+		while (temp[i])
+		{
+			if (temp[i] == 'n')
+				*flag |= DISPLAY_RETURN;
+			i++;
+		}
+		*wordlist = (*wordlist)->next;
+	}
+}
+
+static int	just_echo(t_wordlist **wordlist, int *flag)
+{
+	while (*wordlist)
+	{
+		if (write(STDOUT_FILENO, (*wordlist)->word,
+				ft_strlen((*wordlist)->word)) == -1)
 			return (-1);
-		if (!*++arry)
+		*wordlist = (*wordlist)->next;
+		if (!*wordlist)
 			break ;
 		if (write(STDOUT_FILENO, SPACER, 1) == -1)
 			return (-1);
 	}
-	if (!(flag & 0b1))
+	if (!(*flag & DISPLAY_RETURN))
 		if (write(STDOUT_FILENO, END, 1) == -1)
 			return (-1);
 	return (0);
