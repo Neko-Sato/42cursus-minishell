@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/19 08:30:21 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/19 18:19:40 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS			:= \
 	$(addprefix $(SRCS_DIR)/, \
 		main.c \
 		shell.c \
+		signal.c \
 		readline.c \
 		token.c \
 		wordlist.c \
@@ -56,6 +57,11 @@ SRCS			:= \
 		execute_disk_command.c \
 		execute_builtin.c \
 		builtin_echo.c \
+		builtin_env.c \
+		builtin_export.c \
+		builtin_cd.c \
+		builtin_pwd.c \
+		builtin_exit.c \
 	) \
 
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
