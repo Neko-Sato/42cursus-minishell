@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/04 01:54:58 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 20:55:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,23 @@
 #include <libft.h>
 #include <stdlib.h>
 
-t_wordlist	*glob_expand_wordlist(t_minishell *shell, t_wordlist *wordlist)
+int	glob_expand_wordlist(t_minishell *shell,
+		t_wordlist *wordlist, t_wordlist **result)
 {
-	t_wordlist	*result;
+	int			ret;
 	t_wordlist	**result_last;
 	t_wordlist	*temp;
 
-	result = NULL;
-	result_last = &result;
+	ret = 0;
+	*result = NULL;
+	result_last = result;
 	while (wordlist)
 	{
-		temp = glob_expand_word(shell, wordlist->word);
-		if (!temp)
+		ret = glob_expand_word(shell, wordlist->word, &temp);
+		if (ret)
 		{
-			dispose_wordlist(result);
-			return (NULL);
+			dispose_wordlist(*result);
+			return (ret);
 		}
 		*result_last = temp;
 		while (temp->next)
@@ -39,27 +41,27 @@ t_wordlist	*glob_expand_wordlist(t_minishell *shell, t_wordlist *wordlist)
 		result_last = &temp->next;
 		wordlist = wordlist->next;
 	}
-	return (result);
+	return (ret);
 }
 
 static char	**glob_expand_word_internal(char *string);
 
-t_wordlist	*glob_expand_word(t_minishell *shell, char *string)
+int	glob_expand_word(t_minishell *shell, char *string, t_wordlist **result)
 {
-	t_wordlist	*result;
+	int			ret;
 	char		**arry;
 
 	(void)shell;
 	arry = glob_expand_word_internal(string);
 	if (!arry)
-		return (NULL);
+		return (-1);
 	ft_sortstrarry(arry);
-	result = strarray2wordlist(arry);
-	if (result)
-		free(arry);
-	else
+	ret = strarray2wordlist(arry, result);
+	if (ret)
 		ft_2darraydel(arry);
-	return (result);
+	else
+		free(arry);
+	return (ret);
 }
 
 static char	**glob_expand_word_internal(char *string)

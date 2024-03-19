@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 07:36:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 20:52:28 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ static int	execute_disk_command_internal(
 			ret = do_piping(shell, vars->vars->pipe_in, vars->vars->pipe_out);
 		if (!ret)
 			ret = do_redirect(shell, vars->redirect);
-		if (ret)
-			return (ret);
 		close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
+		if (ret)
+			break ;
 		ret = execve(args.pathname, args.argv, args.envp);
 		break ;
 	}

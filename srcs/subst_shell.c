@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 00:45:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/27 02:00:52 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 20:54:07 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,48 +15,49 @@
 #include <libft.h>
 #include <stdlib.h>
 
-t_wordlist	*shell_expand_wordlist(t_minishell *shell, t_wordlist *wordlist)
+int	shell_expand_wordlist(t_minishell *shell, t_wordlist *wordlist,
+		t_wordlist **result)
 {
-	t_wordlist	*result;
+	int			ret;
 	t_wordlist	**result_last;
 	t_wordlist	*temp;
 
-	result = NULL;
-	result_last = &result;
+	ret = 0;
+	*result = NULL;
+	result_last = result;
 	while (wordlist)
 	{
-		temp = shell_expand_word(shell, wordlist->word);
-		if (!temp)
+		ret = shell_expand_word(shell, wordlist->word, &temp);
+		if (ret)
 		{
-			dispose_wordlist(result);
-			return (NULL);
+			dispose_wordlist(*result);
+			return (ret);
 		}
 		*result_last = temp;
-		while (temp->next)
+		while (temp && temp->next)
 			temp = temp->next;
-		result_last = &temp->next;
+		if (temp)
+			result_last = &temp->next;
 		wordlist = wordlist->next;
 	}
-	return (result);
+	return (ret);
 }
 
-t_wordlist	*shell_expand_word(t_minishell *shell, char *string)
+int	shell_expand_word(t_minishell *shell, char *string, t_wordlist **result)
 {
-	t_wordlist	*wordlist;
-	char		*temp;
+	int		ret;
+	char	*temp;
 
 	temp = shell_expand_string(shell, string, 0);
 	if (!temp)
-		return (NULL);
-	wordlist = wordlist_split(temp);
+		return (-1);
+	ret = wordlist_split(temp, result);
 	free(temp);
-	if (!wordlist)
-		return (NULL);
-	return (wordlist);
+	return (ret);
 }
 
 static int	shell_expand_string_internal(t_minishell *shell, t_strgen *strgen,
-				char *string, int heredoc);
+		char *string, int heredoc);
 
 char	*shell_expand_string(t_minishell *shell, char *string, int heredoc)
 {

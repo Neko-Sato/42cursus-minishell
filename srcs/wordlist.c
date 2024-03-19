@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:58:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/07 23:46:36 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 20:21:06 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,29 @@ char	**wordlist2strarray(t_wordlist *wordlist)
 	return (result);
 }
 
-t_wordlist	*strarray2wordlist(char **array)
+int	strarray2wordlist(char **array, t_wordlist **result)
 {
-	t_wordlist	*result;
 	t_wordlist	**result_last;
 	t_wordlist	*temp;
 
-	result_last = &result;
+	result_last = result;
 	while (*array)
 	{
 		temp = malloc(sizeof(t_wordlist));
 		if (!temp)
 		{
-			while (result)
+			while (*result)
 			{
-				temp = result;
-				result = result->next;
+				temp = *result;
+				*result = (*result)->next;
 				free(temp);
 			}
-			return (NULL);
+			return (-1);
 		}
 		temp->next = NULL;
 		temp->word = *array++;
 		*result_last = temp;
 		result_last = &temp->next;
 	}
-	return (result);
+	return (0);
 }

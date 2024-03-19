@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 01:20:02 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/27 02:09:30 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 20:14:47 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,15 @@
 static int	wordlist_split_internal(char *string, t_wordlist **wordlist_last);
 static int	next_word(char *string, size_t *start, size_t *index);
 
-t_wordlist	*wordlist_split(char *string)
+int	wordlist_split(char *string, t_wordlist **result)
 {
-	t_wordlist	*wordlist;
+	int	ret;
 
-	wordlist = NULL;
-	if (wordlist_split_internal(string, &wordlist))
-	{
-		dispose_wordlist(wordlist);
-		return (NULL);
-	}
-	return (wordlist);
+	*result = NULL;
+	ret = wordlist_split_internal(string, result);
+	if (ret)
+		dispose_wordlist(*result);
+	return (ret);
 }
 
 static int	wordlist_split_internal(char *string, t_wordlist **wordlist_last)

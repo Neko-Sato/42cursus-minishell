@@ -6,15 +6,15 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 03:28:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/19 18:48:05 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "variable.h"
 #include <libft.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static char	*param_expand_variable(t_minishell *shell, char *string,
 				size_t *sindex);
@@ -62,6 +62,8 @@ static char	*param_expand_variable(t_minishell *shell, char *string,
 	if (!key)
 		return (NULL);
 	value = getvar(shell->envp, key);
+	if (!value)
+		value = "";
 	free(key);
 	return (ft_strdup(value));
 }
