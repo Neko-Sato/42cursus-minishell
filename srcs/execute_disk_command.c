@@ -6,21 +6,24 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:52:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:15:58 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include "shell.h"
+#include <errno.h>
 #include <libft.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
-static int	execute_disk_command_internal(
-				t_minishell *shell, t_execute_simple *vars);
+static int	execute_disk_command_internal(t_minishell *shell,
+				t_execute_simple *vars);
 static int	init_execve_args(t_minishell *shell,
 				t_execute_simple *vars, t_execve_args *args);
+static int	do_err(char *pathname);
 
 int	execute_disk_command(t_minishell *shell, t_execute_simple vars)
 {
@@ -48,19 +51,16 @@ static int	execute_disk_command_internal(
 	int				ret;
 	t_execve_args	args;
 
-	while (1)
-	{
-		ret = init_execve_args(shell, vars, &args);
-		if (!ret)
-			ret = do_piping(shell, vars->vars->pipe_in, vars->vars->pipe_out);
-		if (!ret)
-			ret = do_redirect(shell, vars->redirect);
-		close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
-		if (ret)
-			break ;
+	ret = init_execve_args(shell, vars, &args);
+	if (!ret)
+		ret = do_piping(shell, vars->vars->pipe_in, vars->vars->pipe_out);
+	if (!ret)
+		ret = do_redirect(shell, vars->redirect);
+	close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
+	if (!ret)
 		ret = execve(args.pathname, args.argv, args.envp);
-		break ;
-	}
+	if (ret == -1)
+		ret = do_err(args.pathname);
 	free(args.pathname);
 	free(args.argv);
 	if (ret != -1)
@@ -69,7 +69,7 @@ static int	execute_disk_command_internal(
 }
 
 static int	init_execve_args(t_minishell *shell,
-				t_execute_simple *vars, t_execve_args *args)
+	t_execute_simple *vars, t_execve_args *args)
 {
 	args->argv = wordlist2strarray(vars->wordlist);
 	if (!args->argv)
@@ -91,4 +91,18 @@ static int	init_execve_args(t_minishell *shell,
 		return (-1);
 	args->envp = shell->envp;
 	return (0);
+}
+
+static int	do_err(char *pathname)
+{
+	int	status;
+
+	if (errno == ENOEXEC)
+		return (-1);
+	status = (int []){127, 126}[!(errno == ENOENT)];
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(pathname, STDERR_FILENO);
+	return (status);
 }
