@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:33 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 22:29:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:18:50 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	builtin_pwd(t_minishell *shell, t_wordlist *wordlist)
 {
-	char *current_path;
+	char	*current_path;
 
 	(void)shell;
 	(void)wordlist;
