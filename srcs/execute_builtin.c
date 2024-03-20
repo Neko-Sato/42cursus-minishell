@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:26:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 22:33:31 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 14:25:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	execute_builtin(t_minishell *shell, t_execute_simple vars)
 	close_fds(vars.vars->fds_to_close_size, vars.vars->fds_to_close);
 	if (!status)
 		status = execute_builtin_internal(shell, vars.wordlist);
+	if (status == -1)
+		return (-1);
 	if (vars.already_fork)
 		exit(status);
 	if (adapt_stdio(shell))

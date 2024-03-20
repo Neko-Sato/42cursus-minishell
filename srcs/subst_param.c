@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:36:16 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 00:08:32 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:58:37 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char	*param_expand(t_minishell *shell, char *string, size_t *sindex)
 static char	*param_expand_variable(t_minishell *shell, char *string,
 		size_t *sindex)
 {
-	char	*key;
-	char	*value;
-	int		c;
-	size_t	start;
+	char		*key;
+	const char	*value;
+	int			c;
+	size_t		start;
 
 	start = *sindex;
 	while (1)

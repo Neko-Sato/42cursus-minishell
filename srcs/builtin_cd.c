@@ -6,58 +6,100 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:01:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 22:34:18 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:52:44 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "variable.h"
 #include <libft.h>
+#include <string.h>
+#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-// bash: cd: HOME not set
-// bash: cd: OLDPWD not set
-// bash: cd: too many arguments
+#define PRINTPATH 0b01
+
+static char	*getpath(t_minishell *shell, t_wordlist *wordlist, int *flag);
+static int	printpath(char *path);
+static int	set_environment(t_minishell *shell);
+
 int	builtin_cd(t_minishell *shell, t_wordlist *wordlist)
 {
+	int		flag;
 	char	*path;
-	char	*current_dir;
 
-	current_dir = getcwd(NULL, 0);
-	if (!current_dir)
+	flag = 0;
+	path = getpath(shell, wordlist, &flag);
+	if (!path)
+		return (EXIT_FAILURE);
+	if (chdir(path))
 	{
-		perror("minishell: cd: ");
-		return (1);
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(path, STDERR_FILENO);
+		return (EXIT_FAILURE);
 	}
-	wordlist = wordlist->next;
+	if ((flag & PRINTPATH) && printpath(path))
+		return (EXIT_FAILURE);
+	if (set_environment(shell))
+		return (-1);
+	return (EXIT_SUCCESS);
+}
+
+static char	*getpath(t_minishell *shell, t_wordlist *wordlist, int *flag)
+{
+	char	*result;
+
+	result = NULL;
 	if (!wordlist)
 	{
-		path = getvar(shell->envp, "HOME");
-		if (!path)
-		{
-			ft_putendl_fd("minishell: cd: HOME not set", 2);
-			return (1);
-		}
-	}
-	else if (!ft_strcmp("-", wordlist->word))
-	{
-		path = getvar(shell->envp, "OLDPWD");
-		if (!path)
-		{
-			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
-			return (1);
-		}
+		result = (char *)getvar(shell->envp, "HOME");
+		if (!*result)
+			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 	}
 	else if (wordlist->next)
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+	else if (!ft_strcmp(wordlist->word, "-"))
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
+		*flag |= PRINTPATH;
+		result = (char *)getvar(shell->envp, "OLDPWD");
+		if (!*result)
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
 	}
 	else
-		path = wordlist->word;
-	if (setvar(&shell->envp, "OLDPWD", current_dir, 1))
-		return (1);
-	ft_putendl_fd(wordlist->word, 1);
+		result = wordlist->word;
+	return (result);
+}
+
+static int	printpath(char *path)
+{
+	int	err;
+
+	err = write(STDOUT_FILENO, path, ft_strlen(path)) == -1;
+	if (!err)
+		err = write(STDOUT_FILENO, "\n", 1) == -1;
+	if (err)
+		perror("minishell: cd");
+	return (err);
+}
+
+static int	set_environment(t_minishell *shell)
+{
+	char	*pwd;
+
+	if (setvar(&shell->envp, "OLDPWD", getvar(shell->envp, "PWD"), 1))
+		return (-1);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (-1);
+	if (setvar(&shell->envp, "PWD", pwd, 1))
+	{
+		free(pwd);
+		return (-1);
+	}
+	free(pwd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 03:09:39 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:56:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ int	case_tilde(t_minishell *shell, t_strgen *strgen, char *string,
 
 	if (*sindex - 1 != 0 || !ft_strchr("/", string[*sindex]))
 		return (ft_strgenchr(strgen, '~'));
-	temp = getvar(shell->envp, "HOME");
-	if (!temp)
-		temp = "";
-	temp = quote_string(temp);
+	temp = quote_string((char *)getvar(shell->envp, "HOME"));
 	if (!temp)
 		return (-1);
 	ret = ft_strgenstr(strgen, temp);

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 00:07:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:49:14 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <libft.h>
 #include <stdlib.h>
 
-static size_t	getindex(char **vars, char *key);
+static size_t	getindex(char **vars, const char *key);
 
-char	*getvar(char **vars, char *key)
+const char	*getvar(char **vars, const char *key)
 {
 	size_t	index;
 
@@ -26,7 +26,7 @@ char	*getvar(char **vars, char *key)
 	return ("");
 }
 
-int	putvar(char ***vars_ptr, char *string)
+int	putvar(char ***vars_ptr, const char *string)
 {
 	int		result;
 	char	*name_end;
@@ -43,7 +43,7 @@ int	putvar(char ***vars_ptr, char *string)
 	return (result);
 }
 
-int	setvar(char ***vars_ptr, char *key, char *value, int overwrite)
+int	setvar(char ***vars_ptr, const char *key, const char *value, int overwrite)
 {
 	size_t	index;
 	size_t	size;
@@ -67,7 +67,7 @@ int	setvar(char ***vars_ptr, char *key, char *value, int overwrite)
 	return (0);
 }
 
-int	unsetvar(char **vars, char *key)
+int	unsetvar(char **vars, const char *key)
 {
 	size_t	index;
 
@@ -79,7 +79,7 @@ int	unsetvar(char **vars, char *key)
 	return (0);
 }
 
-static size_t	getindex(char **vars, char *key)
+static size_t	getindex(char **vars, const char *key)
 {
 	size_t	i;
 	size_t	keylen;

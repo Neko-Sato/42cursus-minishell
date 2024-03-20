@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 19:26:35 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/16 12:03:35 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 15:59:05 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ int	search_for_command(t_minishell *shell, char *pathname, char **result)
 	char	*path;
 
 	*result = NULL;
-	path = getvar(shell->envp, "PATH");
-	if (!path)
-		return (0);
-	path = ft_strdup(path);
+	path = ft_strdup(getvar(shell->envp, "PATH"));
 	if (!path)
 		return (-1);
 	ret = search_for_command_internal(path, pathname, result);
