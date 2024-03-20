@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 23:01:14 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/02/27 00:51:39 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 00:49:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*dequote_string(char *string)
 	{
 		if (*string == '\1')
 		{
-			if (!++*string)
+			if (!*++string)
 				break ;
 		}
 		if (ft_strgenchr(strgen, *string++))

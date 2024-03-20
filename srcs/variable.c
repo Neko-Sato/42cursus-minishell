@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/16 13:27:17 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 00:07:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*getvar(char **vars, char *key)
 	index = getindex(vars, key);
 	if (vars[index])
 		return (&vars[index][ft_strlen(key) + 1]);
-	return (NULL);
+	return ("");
 }
 
 int	putvar(char ***vars_ptr, char *string)
