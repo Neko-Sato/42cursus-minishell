@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 15:49:14 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/20 19:06:21 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	putvar(char ***vars_ptr, const char *string)
 
 	name_end = ft_strchr(string, '=');
 	if (!name_end)
-		return (1);
+		return (setvar(vars_ptr, string, "", 0));
 	name = ft_substr(string, 0, name_end - string);
 	if (!name)
 		return (-1);
