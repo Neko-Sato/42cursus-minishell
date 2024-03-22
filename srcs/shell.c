@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 23:48:58 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 03:11:07 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,5 +123,5 @@ int	init_variable(t_minishell *shell, char *envp[])
 		}
 		i++;
 	}
-	return (0);
+	return (set_var_attribute(shell, "OLDPWD", V_EXPORTED, 0));
 }

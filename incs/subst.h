@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:32:18 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:56:22 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 02:08:03 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,7 @@ int		unquoted_glob_pattern(char *string);
 char	*quote_string_for_globbing(char *string);
 
 char	*string_quote_removal(char *string);
+
+char	*ansic_quote(char *str);
 
 #endif
