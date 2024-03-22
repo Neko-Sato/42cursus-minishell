@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 12:47:39 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:25:11 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,21 @@ static char		*variable_string(char *key, char *value);
 char	**get_envp(t_minishell *shell)
 {
 	size_t	i;
+	size_t	j;
 	char	**envp;
 
 	envp = malloc(sizeof(char *) * (get_exported_len(shell) + 1));
 	if (!envp)
 		return (NULL);
 	i = 0;
+	j = 0;
 	while (i < shell->vars_len)
 	{
 		if (shell->vars[i]->attr & V_EXPORTED && shell->vars[i]->value)
 		{
-			envp[i] = variable_string(shell->vars[i]->key,
+			envp[j++] = variable_string(shell->vars[i]->key,
 					shell->vars[i]->value);
-			if (!envp[i])
+			if (!envp[j - 1])
 			{
 				ft_2darraydel(envp);
 				return (NULL);
@@ -41,7 +43,7 @@ char	**get_envp(t_minishell *shell)
 		}
 		i++;
 	}
-	envp[i] = NULL;
+	envp[j] = NULL;
 	return (envp);
 }
 

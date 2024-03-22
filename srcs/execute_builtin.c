@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:26:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 14:25:49 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:13:10 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ int	execute_builtin(t_minishell *shell, t_execute_simple vars)
 
 	if (!vars.already_fork && save_stdio(shell))
 		return (-1);
+	status = do_piping(shell, vars.vars->pipe_in, vars.vars->pipe_out);
+	if (status == -1)
+		return (-1);
 	status = do_redirect(shell, vars.redirect);
 	if (status == -1)
 		return (-1);
@@ -34,7 +37,7 @@ int	execute_builtin(t_minishell *shell, t_execute_simple vars)
 		return (-1);
 	if (vars.already_fork)
 		exit(status);
-	if (adapt_stdio(shell))
+	if (restore_stdio(shell))
 		return (-1);
 	shell->last_status = status;
 	return (status);

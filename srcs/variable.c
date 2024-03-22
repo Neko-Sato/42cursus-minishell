@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 17:08:50 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 23:44:09 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,6 @@
 #include "variable.h"
 #include <libft.h>
 #include <stdlib.h>
-
-int	init_variable(t_minishell *shell, char *envp[])
-{
-	size_t	i;
-	char	*temp;
-	size_t	key_len;
-	t_var	*var;
-
-	i = 0;
-	while (envp[i])
-	{
-		key_len = ft_strcspn(envp[i], "=");
-		if (envp[i][key_len] == '=')
-		{
-			temp = ft_strdup(envp[i]);
-			if (!temp)
-				return (-1);
-			temp[key_len] = '\0';
-			var = bind_variable(shell, temp, &temp[key_len + 1], 0);
-			free(temp);
-			if (!var)
-				return (-1);
-			var->attr |= V_EXPORTED;
-		}
-		i++;
-	}
-	return (0);
-}
 
 t_var	*find_variable(t_minishell *shell, char *key)
 {
@@ -91,5 +63,32 @@ int	do_assignment(t_minishell *shell, char *word)
 		return (-1);
 	}
 	free(temp);
+	return (0);
+}
+
+int	legal_identifier(char *name)
+{
+	while (*name)
+	{
+		if (!ft_isalnum(*name) && *name != '_')
+			return (1);
+		name++;
+	}
+	return (0);
+}
+
+int	set_var_attribute(t_minishell *shell, char *name, int attr, int undo)
+{
+	t_var	*var;
+
+	var = find_variable(shell, name);
+	if (!var)
+		var = bind_variable(shell, name, NULL, 0);
+	if (!var)
+		return (-1);
+	if (undo)
+		var->attr &= ~attr;
+	else
+		var->attr |= attr;
 	return (0);
 }

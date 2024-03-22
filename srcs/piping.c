@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:44:47 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 05:35:51 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:13:10 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	save_stdio(t_minishell *shell)
 	return (0);
 }
 
-int	adapt_stdio(t_minishell *shell)
+int	restore_stdio(t_minishell *shell)
 {
 	if (shell->save_stdio[0] != -1)
 	{

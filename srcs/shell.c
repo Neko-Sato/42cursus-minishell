@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 17:16:57 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 23:48:58 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	reader_loop(t_minishell *shell)
 
 static int	reader_loop_internal(t_minishell *shell)
 {
-	int			ret;
+	int	ret;
 
 	while (!shell->eof_reached)
 	{
@@ -96,4 +96,32 @@ void	shell_deinit(t_minishell *shell)
 	while (i < shell->vars_len)
 		dispose_variable(shell->vars[i++]);
 	ft_vector_del(shell->vars);
+}
+
+int	init_variable(t_minishell *shell, char *envp[])
+{
+	size_t	i;
+	char	*temp;
+	size_t	key_len;
+	t_var	*var;
+
+	i = 0;
+	while (envp[i])
+	{
+		key_len = ft_strcspn(envp[i], "=");
+		if (envp[i][key_len] == '=')
+		{
+			temp = ft_strdup(envp[i]);
+			if (!temp)
+				return (-1);
+			temp[key_len] = '\0';
+			var = bind_variable(shell, temp, &temp[key_len + 1], 0);
+			free(temp);
+			if (!var)
+				return (-1);
+			var->attr |= V_EXPORTED;
+		}
+		i++;
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 10:18:40 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:14:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static int	execute_disk_command_internal(
 static int	init_execve_args(t_minishell *shell,
 	t_execute_simple *vars, t_execve_args *args)
 {
+	ft_bzero(args, sizeof(t_execve_args));
 	args->argv = wordlist2strarray(vars->wordlist);
 	if (!args->argv)
 		return (-1);

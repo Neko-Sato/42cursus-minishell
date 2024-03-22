@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 16:26:59 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 23:43:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ extern int		g_interrupt_state;
 
 int				shell_init(t_minishell *shell, char *envp[]);
 void			shell_deinit(t_minishell *shell);
+int				init_variable(t_minishell *shell, char *envp[]);
 int				reader_loop(t_minishell *shell);
 
 char			*minishell_readline(t_minishell *shell);

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:43:27 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 08:29:25 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 18:13:10 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int				search_for_command(t_minishell *shell,
 
 int				isbuiltin(char *cmd);
 int				save_stdio(t_minishell *shell);
-int				adapt_stdio(t_minishell *shell);
+int				restore_stdio(t_minishell *shell);
 void			close_fds(size_t size, int *fds);
 int				do_piping(t_minishell *shell, int pipe_in, int pipe_out);
 int				do_redirect_in(t_minishell *shell, t_redirect *redirect);
