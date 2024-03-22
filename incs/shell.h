@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 17:57:10 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:26:59 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "command.h"
 # include "jobs.h"
 # include "token.h"
+# include "variable.h"
 # include <stddef.h>
 # include <sys/types.h>
 
@@ -39,7 +40,8 @@ typedef struct s_minishell
 	t_heredoc	*heredoc;
 	t_proc		*pidlist;
 	int			save_stdio[2];
-	char		**envp;
+	t_var		**vars;
+	size_t		vars_len;
 	int			last_status;
 	int			isinteractive;
 	int			eof_reached;

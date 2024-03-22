@@ -6,17 +6,17 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:01:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 15:52:44 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:56:22 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "variable.h"
-#include <libft.h>
-#include <string.h>
 #include <errno.h>
+#include <libft.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #define PRINTPATH 0b01
@@ -56,8 +56,8 @@ static char	*getpath(t_minishell *shell, t_wordlist *wordlist, int *flag)
 	result = NULL;
 	if (!wordlist)
 	{
-		result = (char *)getvar(shell->envp, "HOME");
-		if (!*result)
+		result = get_string_value(shell, "HOME");
+		if (!result)
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 	}
 	else if (wordlist->next)
@@ -65,8 +65,8 @@ static char	*getpath(t_minishell *shell, t_wordlist *wordlist, int *flag)
 	else if (!ft_strcmp(wordlist->word, "-"))
 	{
 		*flag |= PRINTPATH;
-		result = (char *)getvar(shell->envp, "OLDPWD");
-		if (!*result)
+		result = get_string_value(shell, "OLDPWD");
+		if (!result)
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
 	}
 	else
@@ -90,12 +90,12 @@ static int	set_environment(t_minishell *shell)
 {
 	char	*pwd;
 
-	if (setvar(&shell->envp, "OLDPWD", getvar(shell->envp, "PWD"), 1))
+	if (!bind_variable(shell, "OLDPWD", get_string_value(shell, "PWD"), 0))
 		return (-1);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (-1);
-	if (setvar(&shell->envp, "PWD", pwd, 1))
+	if (!bind_variable(shell, "PWD", pwd, 0))
 	{
 		free(pwd);
 		return (-1);

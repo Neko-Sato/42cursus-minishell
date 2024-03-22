@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 17:57:50 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:16:57 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,22 @@ int	reader_loop(t_minishell *shell)
 static int	reader_loop_internal(t_minishell *shell)
 {
 	int			ret;
-	t_command	*command;
 
 	while (!shell->eof_reached)
 	{
 		ret = read_command(shell);
 		if (ret == NOERR)
-		{
-			command = shell->command;
-			shell->command = NULL;
-			if (execute_command(shell, command) < 0)
+			if (execute_command(shell, shell->command) < 0)
 				ret = SYSTEM_ERR;
-			dispose_command(command);
-		}
 		dispose_command(shell->command);
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
 		shell->heredoc = NULL;
 		if (ret == SYSTEM_ERR)
+		{
+			perror("minishell: ");
 			return (EXIT_FAILURE);
+		}
 		else if (!shell->isinteractive && ret == SYNTAX_ERR)
 			break ;
 	}
@@ -70,21 +67,11 @@ static int	reader_loop_internal(t_minishell *shell)
 
 int	shell_init(t_minishell *shell, char *envp[])
 {
-	size_t	i;
-
 	ft_bzero(shell, sizeof(t_minishell));
 	shell->pid = getpid();
-	shell->envp = ft_vector(sizeof(char *), NULL, ft_arrylen((void *)envp) + 1);
-	if (!shell->envp)
+	shell->vars = ft_vector(sizeof(t_var *), NULL, 0);
+	if (!shell->vars || init_variable(shell, envp))
 		return (-1);
-	i = 0;
-	while (envp[i])
-	{
-		shell->envp[i] = ft_strdup(envp[i]);
-		if (!shell->envp[i++])
-			return (-1);
-	}
-	shell->envp[i] = NULL;
 	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
 	ft_memset(shell->save_stdio, -1, sizeof(shell->save_stdio));
 	if (shell->isinteractive)
@@ -106,7 +93,7 @@ void	shell_deinit(t_minishell *shell)
 		free(temp);
 	}
 	i = 0;
-	while (shell->envp[i])
-		free(shell->envp[i++]);
-	ft_vector_del(shell->envp);
+	while (i < shell->vars_len)
+		dispose_variable(shell->vars[i++]);
+	ft_vector_del(shell->vars);
 }

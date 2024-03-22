@@ -6,91 +6,90 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 19:06:21 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:08:50 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "shell.h"
 #include "variable.h"
 #include <libft.h>
 #include <stdlib.h>
 
-static size_t	getindex(char **vars, const char *key);
-
-const char	*getvar(char **vars, const char *key)
-{
-	size_t	index;
-
-	index = getindex(vars, key);
-	if (vars[index])
-		return (&vars[index][ft_strlen(key) + 1]);
-	return ("");
-}
-
-int	putvar(char ***vars_ptr, const char *string)
-{
-	int		result;
-	char	*name_end;
-	char	*name;
-
-	name_end = ft_strchr(string, '=');
-	if (!name_end)
-		return (setvar(vars_ptr, string, "", 0));
-	name = ft_substr(string, 0, name_end - string);
-	if (!name)
-		return (-1);
-	result = setvar(vars_ptr, name, name_end + 1, 1);
-	free(name);
-	return (result);
-}
-
-int	setvar(char ***vars_ptr, const char *key, const char *value, int overwrite)
-{
-	size_t	index;
-	size_t	size;
-	char	*new_var;
-
-	index = getindex(*vars_ptr, key);
-	if ((*vars_ptr)[index] && !overwrite)
-		return (1);
-	size = ft_strlen(key) + ft_strlen(value) + 2;
-	new_var = malloc(size);
-	if (!new_var)
-		return (-1);
-	*new_var = '\0';
-	ft_strlcat(new_var, key, size);
-	ft_strlcat(new_var, "=", size);
-	ft_strlcat(new_var, value, size);
-	if (!(*vars_ptr)[index])
-		return (ft_vector_insert(vars_ptr, index, &new_var, 1));
-	free((*vars_ptr)[index]);
-	(*vars_ptr)[index] = new_var;
-	return (0);
-}
-
-int	unsetvar(char **vars, const char *key)
-{
-	size_t	index;
-
-	index = getindex(vars, key);
-	if (!vars[index])
-		return (1);
-	free(vars[index]);
-	ft_vector_erase(vars, index, 1);
-	return (0);
-}
-
-static size_t	getindex(char **vars, const char *key)
+int	init_variable(t_minishell *shell, char *envp[])
 {
 	size_t	i;
-	size_t	keylen;
+	char	*temp;
+	size_t	key_len;
+	t_var	*var;
 
-	keylen = ft_strlen(key);
 	i = 0;
-	while (vars[i])
+	while (envp[i])
 	{
-		if (!ft_strncmp(vars[i], key, keylen) && vars[i][keylen] == '=')
-			break ;
+		key_len = ft_strcspn(envp[i], "=");
+		if (envp[i][key_len] == '=')
+		{
+			temp = ft_strdup(envp[i]);
+			if (!temp)
+				return (-1);
+			temp[key_len] = '\0';
+			var = bind_variable(shell, temp, &temp[key_len + 1], 0);
+			free(temp);
+			if (!var)
+				return (-1);
+			var->attr |= V_EXPORTED;
+		}
 		i++;
 	}
-	return (i);
+	return (0);
+}
+
+t_var	*find_variable(t_minishell *shell, char *key)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < shell->vars_len)
+	{
+		if (!ft_strcmp(shell->vars[i]->key, key))
+			return (shell->vars[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*get_string_value(t_minishell *shell, char *key)
+{
+	t_var	*var;
+
+	var = find_variable(shell, key);
+	if (!var)
+		return (NULL);
+	return (var->value);
+}
+
+int	do_assignment(t_minishell *shell, char *word)
+{
+	char	*temp;
+	size_t	key_len;
+	int		flag;
+	int		append;
+
+	flag = 0;
+	key_len = ft_strcspn(word, "=");
+	if (word[key_len] != '=')
+		return (0);
+	temp = ft_strdup(word);
+	if (!temp)
+		return (-1);
+	append = temp[key_len - 1] == '+';
+	temp[key_len - append] = '\0';
+	if (append)
+		flag |= ASS_APPEND;
+	if (!bind_variable(shell, temp, &temp[key_len + 1], flag))
+	{
+		free(temp);
+		return (-1);
+	}
+	free(temp);
+	return (0);
 }

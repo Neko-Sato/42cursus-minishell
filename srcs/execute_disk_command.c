@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 14:15:58 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 10:18:40 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static int	execute_disk_command_internal(
 		ret = do_err(args.pathname);
 	free(args.pathname);
 	free(args.argv);
+	ft_2darraydel(args.envp);
 	if (ret != -1)
 		exit(ret);
 	return (ret);
@@ -89,7 +90,9 @@ static int	init_execve_args(t_minishell *shell,
 		args->pathname = ft_strdup(args->argv[0]);
 	if (!args->pathname)
 		return (-1);
-	args->envp = shell->envp;
+	args->envp = get_envp(shell);
+	if (!args->envp)
+		return (-1);
 	return (0);
 }
 

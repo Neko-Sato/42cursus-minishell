@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:37 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 17:18:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 10:29:47 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	builtin_unset(t_minishell *shell, t_wordlist *wordlist)
 			status = 1;
 		}
 		else
-			unsetvar(shell->envp, temp);
+			unbind_variable(shell, temp);
 		wordlist = wordlist->next;
 	}
 	return (status);
