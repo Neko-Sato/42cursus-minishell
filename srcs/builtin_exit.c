@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 19:26:37 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:35:52 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	builtin_exit(t_minishell *shell, t_wordlist *wordlist)
 			status = 2;
 		}
 	}
-	if (wordlist->next)
+	if (wordlist && wordlist->next)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 		status = EXIT_FAILURE;
