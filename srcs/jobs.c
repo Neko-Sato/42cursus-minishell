@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 16:15:05 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 23:41:39 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ pid_t	make_child(t_minishell *shell)
 	pid = fork();
 	if (pid <= 0)
 		free(proc);
-	else if (pid)
+	if (!pid)
+		shell->isinteractive = 0;
+	else if (0 < pid)
 	{
 		proc->next = NULL;
 		proc->pid = pid;
