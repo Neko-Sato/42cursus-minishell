@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:48:13 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 20:53:29 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect)
 	if (fd == -1)
 		return (-1);
 	docment = redirect->value.document->document;
-	if (redirect->value.document->quoted)
+	if (!redirect->value.document->quoted)
 		docment = shell_expand_string(shell, docment, 1);
 	ft_putstr_fd(docment, fd);
-	if (redirect->value.document->quoted)
+	if (!redirect->value.document->quoted)
 		free(docment);
 	close(fd);
 	fd = open(filename, O_RDONLY);
