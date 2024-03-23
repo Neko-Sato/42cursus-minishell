@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 15:52:43 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:14:37 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	reader_loop_internal(t_minishell *shell)
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
 		shell->heredoc = NULL;
+		cleanup_dead_jobs(shell);
 		if (ret == SYSTEM_ERR)
 		{
 			perror("minishell: ");

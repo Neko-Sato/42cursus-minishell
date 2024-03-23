@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:42:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/08 11:33:11 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:09:27 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ typedef struct s_minishell	t_minishell;
 
 pid_t						make_child(t_minishell *shell);
 int							wait_for(t_minishell *shell, pid_t pid);
+void						cleanup_dead_jobs(t_minishell *shell);
 
 #endif

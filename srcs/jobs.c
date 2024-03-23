@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/16 14:24:02 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:15:05 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 static void	set_pid_status(t_minishell *shell, pid_t pid, int status);
 static void	reap_zombie_children(t_minishell *shell);
-static void	cleanup_dead_jobs(t_minishell *shell);
 
 pid_t	make_child(t_minishell *shell)
 {
@@ -101,11 +100,12 @@ static void	set_pid_status(t_minishell *shell, pid_t pid, int status)
 	(*temp)->status = status;
 }
 
-static void	cleanup_dead_jobs(t_minishell *shell)
+void	cleanup_dead_jobs(t_minishell *shell)
 {
 	t_proc	**temp;
 	t_proc	*proc;
 
+	reap_zombie_children(shell);
 	temp = &shell->pidlist;
 	while (*temp)
 	{
