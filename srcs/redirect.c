@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 20:53:29 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 21:00:54 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ static int	do_redirect_input(t_minishell *shell, t_redirect *redirect)
 		return (-1);
 	if (!word || word->next)
 	{
-		ft_putstr_fd("minishell: ambiguous redirect", STDERR_FILENO);
+		ft_putstr_fd("minishell: ambiguous redirect: ", STDERR_FILENO);
+		ft_putendl_fd(redirect->value.filename, STDERR_FILENO);
 		dispose_wordlist(word);
 		return (-2);
 	}
@@ -116,7 +117,8 @@ int	do_redirect_out(t_minishell *shell, t_redirect *redirect)
 		return (-1);
 	if (!word || word->next)
 	{
-		ft_putstr_fd("minishell: ambiguous redirect\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: ambiguous redirect: ", STDERR_FILENO);
+		ft_putendl_fd(redirect->value.filename, STDERR_FILENO);
 		dispose_wordlist(word);
 		return (1);
 	}
