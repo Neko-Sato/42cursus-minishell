@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 03:11:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 15:52:43 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static int	reader_loop_internal(t_minishell *shell)
 int	shell_init(t_minishell *shell, char *envp[])
 {
 	ft_bzero(shell, sizeof(t_minishell));
-	shell->pid = getpid();
 	shell->vars = ft_vector(sizeof(t_var *), NULL, 0);
 	if (!shell->vars || init_variable(shell, envp))
 		return (-1);
