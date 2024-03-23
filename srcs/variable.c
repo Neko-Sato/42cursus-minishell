@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 23:44:09 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:24:01 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	do_assignment(t_minishell *shell, char *word)
 
 int	legal_identifier(char *name)
 {
+	if (!*name)
+		return (1);
 	while (*name)
 	{
 		if (!ft_isalnum(*name) && *name != '_')

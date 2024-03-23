@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:37 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 03:05:50 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/23 16:22:52 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	internal(t_minishell *shell, char *word, int *status)
 	size_t	key_len;
 
 	key_len = ft_strcspn(word, "=");
-	if (word[key_len] == '=')
+	if (key_len && word[key_len] == '=')
 		key_len -= word[key_len - 1] == '+';
 	temp = ft_strndup(word, key_len);
 	if (legal_identifier(temp))
