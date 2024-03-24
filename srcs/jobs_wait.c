@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 21:46:27 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 21:48:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,10 @@ void	cleanup_dead_jobs(t_minishell *shell)
 
 static char	*str_signal(int n)
 {
-	if (65 < n || n < 1 || n == 32 || n == 33 || n == SIGINT)
+	if (65 < n || n < 1 || n == 2 || n == 32 || n == 33)
 		return ("");
 	return ((char *[]){
-		NULL, "Hangup", "Interrupt", "Quit", "Illegal instruction",
+		NULL, "Hangup", NULL, "Quit", "Illegal instruction",
 		"Trace/breakpoint trap", "Aborted", "Bus error",
 		"Floating point exception", "Killed", "User defined signal 1",
 		"Segmentation fault", "User defined signal 2", "Broken pipe",
