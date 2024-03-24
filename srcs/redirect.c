@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 14:02:08 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 21:06:24 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int	do_redirect_internal(t_minishell *shell, t_redirect *redirect)
 {
 	int	fd;
 
+	fd = -1;
 	if (redirect->type == RT_INPUT || redirect->type == RT_OVERWRITE
 		|| redirect->type == RT_APPEND)
 		fd = do_redirect_file(shell, redirect);
