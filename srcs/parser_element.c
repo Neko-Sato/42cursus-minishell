@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 22:01:19 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/07 17:13:12 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	take_element(t_minishell *shell, t_element *element)
 		else
 			break ;
 	}
-	if (ret == SYSTEM_ERR || ret == INTERRUPT)
+	if (ret == FATAL_ERR || ret == INTERRUPT)
 	{
 		dispose_wordlist(element->wordlist);
 		dispose_redirect(element->redirect);
@@ -55,12 +55,12 @@ static int	take_word(t_minishell *shell, t_wordlist ***wordlist_last)
 
 	word = ft_substr(&shell->string[shell->token.start], 0, shell->token.len);
 	if (!word)
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	wordlist = malloc(sizeof(t_wordlist));
 	if (!wordlist)
 	{
 		free(word);
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	}
 	wordlist->next = NULL;
 	wordlist->word = word;
@@ -100,12 +100,12 @@ static int	take_redirect_internal(t_minishell *shell, t_redirect **redirect)
 		return (SYNTAX_ERR);
 	word = ft_substr(&shell->string[shell->token.start], 0, shell->token.len);
 	if (!word)
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	*redirect = make_redirect(type, word);
 	if (!redirect)
 	{
 		free(word);
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	}
 	return (NOERR);
 }
@@ -117,7 +117,7 @@ static int	add_herdoc(t_minishell *shell, t_document *document)
 
 	heredoc = malloc(sizeof(t_heredoc));
 	if (!heredoc)
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	heredoc->document = document;
 	heredoc->next = NULL;
 	temp = &shell->heredoc;

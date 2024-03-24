@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 23:17:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 08:15:39 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	put_prompt(t_minishell *shell)
 		temp = strjoin_at_newline(shell->string, line);
 		free(line);
 		if (!temp)
-			return (SYSTEM_ERR);
+			return (FATAL_ERR);
 		shell->line++;
 	}
 	else

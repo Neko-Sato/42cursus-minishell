@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 10:21:30 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 15:43:18 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	builtin_env(t_minishell *shell, t_wordlist *wordlist)
 	i = 0;
 	envp = get_envp(shell);
 	if (!envp)
-		return (-1);
+		return (FATAL_ERR);
 	while (envp[i])
 	{
 		err = write(STDOUT_FILENO, envp[i], ft_strlen(envp[i])) == -1;

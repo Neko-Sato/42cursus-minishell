@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 16:54:02 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ static int	set_value(t_var *var, char *value, int flag)
 		else
 			value = ft_strdup(value);
 		if (!value)
-			return (-1);
+			return (FATAL_ERR);
 	}
 	free(var->value);
 	var->value = value;
-	return (0);
+	return (NOERR);
 }
 
 void	unbind_variable(t_minishell *shell, char *key)

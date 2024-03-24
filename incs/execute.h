@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:43:27 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 18:13:10 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:30:41 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ int				save_stdio(t_minishell *shell);
 int				restore_stdio(t_minishell *shell);
 void			close_fds(size_t size, int *fds);
 int				do_piping(t_minishell *shell, int pipe_in, int pipe_out);
-int				do_redirect_in(t_minishell *shell, t_redirect *redirect);
-int				do_redirect_out(t_minishell *shell, t_redirect *redirect);
 int				do_redirect(t_minishell *shell, t_redirect *redirect);
 
 #endif

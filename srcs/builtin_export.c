@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:37 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 16:22:52 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 15:48:36 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	builtin_export(t_minishell *shell, t_wordlist *wordlist)
 	while (wordlist)
 	{
 		if (internal(shell, wordlist->word, &status))
-			return (-1);
+			return (FATAL_ERR);
 		wordlist = wordlist->next;
 	}
 	return (status);
@@ -57,10 +57,10 @@ static int	internal(t_minishell *shell, char *word, int *status)
 	{
 		if (do_assignment(shell, word) || set_var_attribute(shell, temp,
 				V_EXPORTED, 0))
-			*status = -1;
+			return (FATAL_ERR);
 	}
 	free(temp);
-	return (-(*status == -1));
+	return (NOERR);
 }
 
 static int	show_variable_internal(t_var *var, int *err);
@@ -75,7 +75,7 @@ static int	show_variable(t_minishell *shell)
 	{
 		if (shell->vars[i]->attr & V_EXPORTED)
 			if (show_variable_internal(shell->vars[i], &err))
-				return (-1);
+				return (FATAL_ERR);
 		if (err)
 			break ;
 		i++;
@@ -99,10 +99,10 @@ static int	show_variable_internal(t_var *var, int *err)
 		*err = *err || write(1, "=", 1) == -1;
 		temp = ansic_quote(var->value);
 		if (!temp)
-			return (-1);
+			return (FATAL_ERR);
 		*err = *err || write(1, temp, ft_strlen(temp)) == -1;
 		free(temp);
 	}
 	*err = *err || write(1, "\n", 1) == -1;
-	return (0);
+	return (NOERR);
 }

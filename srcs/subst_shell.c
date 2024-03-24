@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 00:45:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:54:07 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	shell_expand_wordlist(t_minishell *shell, t_wordlist *wordlist,
 	t_wordlist	**result_last;
 	t_wordlist	*temp;
 
-	ret = 0;
+	ret = NOERR;
 	*result = NULL;
 	result_last = result;
 	while (wordlist)
@@ -50,7 +50,7 @@ int	shell_expand_word(t_minishell *shell, char *string, t_wordlist **result)
 
 	temp = shell_expand_string(shell, string, 0);
 	if (!temp)
-		return (-1);
+		return (FATAL_ERR);
 	ret = wordlist_split(temp, result);
 	free(temp);
 	return (ret);

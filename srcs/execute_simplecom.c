@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:13:45 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:44:25 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:14:44 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	execute_simplecom(t_minishell *shell, t_simplecom *simplecom,
 	if (do_fork)
 	{
 		pid = make_child(shell);
-		if (pid == -1)
-			return (-1);
+		if (pid < 0)
+			return (pid);
 		else if (pid)
 		{
 			if (vars.pipe_out == -1)
@@ -43,7 +43,7 @@ int	execute_simplecom(t_minishell *shell, t_simplecom *simplecom,
 	status = execute_simplecom_internal(shell, simplecom, &vars, do_fork);
 	if (!do_fork)
 		return (status);
-	if (status == -1)
+	if (status == FATAL_ERR)
 		perror("minishell");
 	exit(EXIT_FAILURE);
 }
@@ -55,7 +55,7 @@ static int	execute_simplecom_internal(t_minishell *shell,
 	t_wordlist	*wordlist;
 
 	if (expand_wordlist(shell, simplecom->wordlist, &wordlist))
-		return (-1);
+		return (FATAL_ERR);
 	if (!wordlist)
 		status = execute_null_command(shell, (t_execute_simple){NULL,
 				simplecom->redirect, vars, already_fork});

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 16:29:01 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 18:14:36 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 19:37:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
 static int	execute_disk_command_internal(t_minishell *shell,
 				t_execute_simple *vars);
@@ -34,13 +35,13 @@ int	execute_disk_command(t_minishell *shell, t_execute_simple vars)
 	if (!vars.already_fork)
 	{
 		pid = make_child(shell);
-		if (pid == -1)
-			return (-1);
+		if (pid < 0)
+			return (pid);
 		else if (pid)
 			return (wait_for(shell, pid));
 	}
 	status = execute_disk_command_internal(shell, &vars);
-	if (status == -1)
+	if (status == FATAL_ERR)
 		perror("minishell");
 	exit(EXIT_FAILURE);
 }
@@ -57,14 +58,12 @@ static int	execute_disk_command_internal(
 	if (!ret)
 		ret = do_redirect(shell, vars->redirect);
 	close_fds(vars->vars->fds_to_close_size, vars->vars->fds_to_close);
-	if (!ret)
-		ret = execve(args.pathname, args.argv, args.envp);
-	if (ret == -1)
+	if (!ret && execve(args.pathname, args.argv, args.envp))
 		ret = do_err(args.pathname);
 	free(args.pathname);
 	free(args.argv);
 	ft_2darraydel(args.envp);
-	if (ret != -1)
+	if (0 <= ret)
 		exit(ret);
 	return (ret);
 }
@@ -75,11 +74,11 @@ static int	init_execve_args(t_minishell *shell,
 	ft_bzero(args, sizeof(t_execve_args));
 	args->argv = wordlist2strarray(vars->wordlist);
 	if (!args->argv)
-		return (-1);
+		return (FATAL_ERR);
 	if (!ft_strchr(args->argv[0], '/'))
 	{
 		if (search_for_command(shell, args->argv[0], &args->pathname))
-			return (-1);
+			return (FATAL_ERR);
 		if (!args->pathname)
 		{
 			ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
@@ -90,11 +89,11 @@ static int	init_execve_args(t_minishell *shell,
 	else
 		args->pathname = ft_strdup(args->argv[0]);
 	if (!args->pathname)
-		return (-1);
+		return (FATAL_ERR);
 	args->envp = get_envp(shell);
 	if (!args->envp)
-		return (-1);
-	return (0);
+		return (FATAL_ERR);
+	return (NOERR);
 }
 
 static int	do_err(char *pathname)
@@ -102,7 +101,10 @@ static int	do_err(char *pathname)
 	int	status;
 
 	if (errno == ENOEXEC)
-		return (-1);
+	{
+		perror("minishell: execve");
+		return (SYSTEM_ERR);
+	}
 	status = (int []){127, 126}[!(errno == ENOENT)];
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(strerror(errno), STDERR_FILENO);

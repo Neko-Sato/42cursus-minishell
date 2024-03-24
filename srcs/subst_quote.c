@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 23:01:14 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/20 00:49:36 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,10 @@ static int	string_extract_double_quoted_internal(
 			(void)(!temp || ft_strgenstr(strgen, temp));
 			free(temp);
 			if (!temp)
-				return (-1);
+				return (FATAL_ERR);
 		}
 		else if (ft_strgenchr(strgen, c))
-			return (-1);
+			return (FATAL_ERR);
 	}
 	if (c)
 		(*sindex)++;

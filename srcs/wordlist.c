@@ -6,10 +6,11 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:58:31 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:21:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "shell.h"
 #include "command.h"
 #include <stdlib.h>
 
@@ -57,12 +58,12 @@ int	strarray2wordlist(char **array, t_wordlist **result)
 				*result = (*result)->next;
 				free(temp);
 			}
-			return (-1);
+			return (FATAL_ERR);
 		}
 		temp->next = NULL;
 		temp->word = *array++;
 		*result_last = temp;
 		result_last = &temp->next;
 	}
-	return (0);
+	return (NOERR);
 }

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:52 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:55:23 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	glob_expand_wordlist(t_minishell *shell,
 	t_wordlist	**result_last;
 	t_wordlist	*temp;
 
-	ret = 0;
+	ret = NOERR;
 	*result = NULL;
 	result_last = result;
 	while (wordlist)
@@ -54,7 +54,7 @@ int	glob_expand_word(t_minishell *shell, char *string, t_wordlist **result)
 	(void)shell;
 	arry = glob_expand_word_internal(string);
 	if (!arry)
-		return (-1);
+		return (FATAL_ERR);
 	ft_sortstrarry(arry);
 	ret = strarray2wordlist(arry, result);
 	if (ret)

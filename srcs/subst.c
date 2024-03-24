@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:19:13 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 02:07:48 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*string_quote_removal(char *string)
 	char		*result;
 	t_strgen	*strgen;
 
-	ret = 0;
+	ret = NOERR;
 	strgen = ft_strgennew(STRGEN_BUUFERSIZE);
 	if (!strgen)
 		return (NULL);
@@ -42,7 +42,7 @@ char	*string_quote_removal(char *string)
 		if (ft_strnchr("'\"", *string, 2))
 			;
 		else if (ft_strgenchr(strgen, *string))
-			ret = -1;
+			ret = FATAL_ERR;
 		string++;
 	}
 	result = NULL;
@@ -71,21 +71,21 @@ static int	ansic_quote_internal(t_strgen *strgen, char *str)
 {
 	if (!*str)
 		if (ft_strgenstr(strgen, "''"))
-			return (-1);
+			return (FATAL_ERR);
 	while (*str)
 	{
 		if (*str == '\'')
 			if (str++ && ft_strgenstr(strgen, "\"'\""))
-				return (-1);
+				return (FATAL_ERR);
 		if (!*str)
 			break ;
 		if (ft_strgenchr(strgen, '\''))
-			return (-1);
+			return (FATAL_ERR);
 		while (*str && *str != '\'')
 			if (ft_strgenchr(strgen, *str++))
-				return (-1);
+				return (FATAL_ERR);
 		if (ft_strgenchr(strgen, '\''))
-			return (-1);
+			return (FATAL_ERR);
 	}
-	return (0);
+	return (NOERR);
 }

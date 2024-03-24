@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 08:17:33 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:16:51 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ int	read_command(t_minishell *shell)
 
 	ret = parse_command(shell);
 	temp = NULL;
-	if (shell->string && !(ret == SYSTEM_ERR || ret == INTERRUPT))
+	if (shell->string && ret != FATAL_ERR && ret != INTERRUPT)
 	{
 		if (shell->string[shell->sindex])
 		{
 			shell->sindex++;
 			temp = ft_strdup(&shell->string[shell->sindex]);
 			if (!temp)
-				return (SYSTEM_ERR);
+				return (FATAL_ERR);
 			shell->string[shell->sindex] = '\0';
 		}
 		if (shell->isinteractive && *shell->string)

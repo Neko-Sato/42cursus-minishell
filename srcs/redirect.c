@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 21:00:54 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:02:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,66 +20,69 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static int	do_redirect_input(t_minishell *shell, t_redirect *redirect);
+static int	do_redirect_internal(t_minishell *shell, t_redirect *redirect);
+static int	do_redirect_file(t_minishell *shell, t_redirect *redirect);
 static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect);
 
 int	do_redirect(t_minishell *shell, t_redirect *redirect)
 {
 	int	ret;
 
-	ret = 0;
+	ret = NOERR;
 	while (!ret && redirect)
 	{
-		if (redirect->type == RT_INPUT || redirect->type == RT_HEREDOC)
-			ret = do_redirect_in(shell, redirect);
-		else if (redirect->type == RT_OVERWRITE || redirect->type == RT_APPEND)
-			ret = do_redirect_out(shell, redirect);
+		ret = do_redirect_internal(shell, redirect);
 		redirect = redirect->next;
 	}
 	return (ret);
 }
 
-int	do_redirect_in(t_minishell *shell, t_redirect *redirect)
+static int	do_redirect_internal(t_minishell *shell, t_redirect *redirect)
 {
 	int	fd;
 
-	if (!redirect)
-		return (0);
-	if (redirect->type == RT_INPUT)
-		fd = do_redirect_input(shell, redirect);
+	if (redirect->type == RT_INPUT || redirect->type == RT_OVERWRITE
+		|| redirect->type == RT_APPEND)
+		fd = do_redirect_file(shell, redirect);
 	else if (redirect->type == RT_HEREDOC)
 		fd = do_redirect_heredoc(shell, redirect);
-	else
-		return (0);
-	if (fd == -1)
-		return (-1);
-	if (fd == -2)
-		return (1);
-	return (-(dup2(fd, STDIN_FILENO) == -1));
+	if (fd < 0)
+		return (fd);
+	if (redirect->type == RT_INPUT || redirect->type == RT_HEREDOC)
+		fd = dup2(fd, STDIN_FILENO);
+	else if (redirect->type == RT_OVERWRITE || redirect->type == RT_APPEND)
+		fd = dup2(fd, STDOUT_FILENO);
+	if (fd != -1)
+		return (NOERR);
+	perror("minishell: dup2");
+	return (SYSTEM_ERR);
 }
 
-static int	do_redirect_input(t_minishell *shell, t_redirect *redirect)
+static int	do_redirect_file(t_minishell *shell, t_redirect *redirect)
 {
 	int			fd;
 	t_wordlist	*word;
 
 	if (shell_expand_word(shell, redirect->value.filename, &word))
-		return (-1);
+		return (FATAL_ERR);
 	if (!word || word->next)
 	{
 		ft_putstr_fd("minishell: ambiguous redirect: ", STDERR_FILENO);
 		ft_putendl_fd(redirect->value.filename, STDERR_FILENO);
 		dispose_wordlist(word);
-		return (-2);
+		return (SYSTEM_ERR);
 	}
-	fd = open(word->word, O_RDONLY);
+	if (redirect->type == RT_INPUT)
+		fd = open(word->word, O_RDONLY);
+	else if (redirect->type == RT_OVERWRITE)
+		fd = open(word->word, O_WRONLY | O_CREAT | O_TRUNC, 420);
+	else if (redirect->type == RT_APPEND)
+		fd = open(word->word, O_WRONLY | O_CREAT | O_APPEND, 420);
 	dispose_wordlist(word);
-	if (fd == -1)
-	{
-		perror("minishell");
-		return (-2);
-	}
-	return (fd);
+	if (fd != -1)
+		return (fd);
+	perror("minishell");
+	return (SYSTEM_ERR);
 }
 
 static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect)
@@ -91,7 +94,10 @@ static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect)
 	ft_strcpy(filename, "/tmp/shtmp.XXXXXX");
 	fd = ft_mkstemp(filename);
 	if (fd == -1)
-		return (-1);
+	{
+		perror("minishell: ft_mksdtemp");
+		return (SYSTEM_ERR);
+	}
 	docment = redirect->value.document->document;
 	if (!redirect->value.document->quoted)
 		docment = shell_expand_string(shell, docment, 1);
@@ -101,36 +107,8 @@ static int	do_redirect_heredoc(t_minishell *shell, t_redirect *redirect)
 	close(fd);
 	fd = open(filename, O_RDONLY);
 	unlink(filename);
-	if (fd == -1)
-		return (-2);
-	return (fd);
-}
-
-int	do_redirect_out(t_minishell *shell, t_redirect *redirect)
-{
-	int			fd;
-	t_wordlist	*word;
-
-	if (!redirect)
-		return (0);
-	if (shell_expand_word(shell, redirect->value.filename, &word))
-		return (-1);
-	if (!word || word->next)
-	{
-		ft_putstr_fd("minishell: ambiguous redirect: ", STDERR_FILENO);
-		ft_putendl_fd(redirect->value.filename, STDERR_FILENO);
-		dispose_wordlist(word);
-		return (1);
-	}
-	if (redirect->type == RT_OVERWRITE)
-		fd = open(word->word, O_WRONLY | O_CREAT | O_TRUNC, 420);
-	else
-		fd = open(word->word, O_WRONLY | O_CREAT | O_APPEND, 420);
-	dispose_wordlist(word);
-	if (fd == -1)
-	{
-		perror("minishell");
-		return (1);
-	}
-	return (-(dup2(fd, STDOUT_FILENO) == -1));
+	if (fd != -1)
+		return (fd);
+	perror("minishell: open");
+	return (SYSTEM_ERR);
 }

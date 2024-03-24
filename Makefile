@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/22 10:30:03 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/24 16:22:13 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ SRCS			:= \
 		subst_wordlist_split.c \
 		subst_glob.c \
 		subst.c \
-		jobs.c \
+		jobs_fork.c \
+		jobs_wait.c \
 		findcmd.c \
 		piping.c \
 		redirect.c \

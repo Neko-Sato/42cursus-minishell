@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 23:43:26 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 18:01:33 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@
 # define PS2 "> "
 
 # define NOERR 0
-# define SYSTEM_ERR -1
-# define SYNTAX_ERR 1
-# define INTERRUPT 2
+# define FATAL_ERR -1
+# define SYSTEM_ERR -2
+# define SYNTAX_ERR -3
+# define INTERRUPT -4
 
 typedef struct s_minishell
 {
+	char		*cwd;
 	pid_t		pid;
 	char		*string;
 	size_t		sindex;
@@ -57,5 +59,6 @@ int				reader_loop(t_minishell *shell);
 char			*minishell_readline(t_minishell *shell);
 int				put_prompt(t_minishell *shell);
 int				set_signal(void);
+int				set_execve_signal(void);
 
 #endif

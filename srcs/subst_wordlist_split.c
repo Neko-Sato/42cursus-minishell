@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 01:20:02 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 20:14:47 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,18 @@ static int	wordlist_split_internal(char *string, t_wordlist **wordlist_last)
 			break ;
 		word = ft_substr(&string[start], 0, index - start);
 		if (!word)
-			return (-1);
+			return (FATAL_ERR);
 		*wordlist_last = malloc(sizeof(t_wordlist));
 		if (!*wordlist_last)
 		{
 			free(word);
-			return (-1);
+			return (FATAL_ERR);
 		}
 		(*wordlist_last)->word = word;
 		(*wordlist_last)->next = NULL;
 		wordlist_last = &(*wordlist_last)->next;
 	}
-	return (0);
+	return (NOERR);
 }
 
 static int	next_word(char *string, size_t *start, size_t *index)

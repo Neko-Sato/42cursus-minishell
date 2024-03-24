@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/05 07:38:13 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 15:08:23 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	take_simplecom(t_minishell *shell)
 	int			ret;
 	t_element	element;
 
-	ret = take_element(shell, &element);
-	if (ret == SYSTEM_ERR || ret == INTERRUPT)
-		return (ret);
 	shell->command = NULL;
+	ret = take_element(shell, &element);
+	if (ret == FATAL_ERR || ret == INTERRUPT)
+		return (ret);
 	if (element.wordlist || element.redirect)
 	{
 		shell->command = make_simplecom(&element);
@@ -33,7 +33,7 @@ int	take_simplecom(t_minishell *shell)
 		{
 			dispose_wordlist(element.wordlist);
 			dispose_redirect(element.redirect);
-			return (SYSTEM_ERR);
+			return (FATAL_ERR);
 		}
 	}
 	return (ret);
@@ -54,7 +54,7 @@ int	take_groupcom(t_minishell *shell)
 	if (!shell->command)
 	{
 		dispose_command(temp);
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	}
 	if (shell->token.type != TK_CLOSE_PAREN)
 		return (SYNTAX_ERR);
@@ -76,7 +76,7 @@ int	take_concom(t_minishell *shell)
 	if (ret)
 		return (ret);
 	ret = take_subcom(shell, type == CCT_PIPE, &next);
-	if (ret)
+	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
 	if (!next)
 		return (SYNTAX_ERR);
@@ -84,10 +84,10 @@ int	take_concom(t_minishell *shell)
 	if (!temp)
 	{
 		dispose_command(next);
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	}
 	shell->command = temp;
-	return (NOERR);
+	return (ret);
 }
 
 static int	take_subcom(t_minishell *shell, int block, t_command **subcom)

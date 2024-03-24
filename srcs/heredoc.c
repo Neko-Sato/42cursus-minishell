@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 01:48:25 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/07 18:08:32 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	read_heredoc(t_minishell *shell, t_document *document,
 	{
 		temp = string_quote_removal(document->eof);
 		if (!temp)
-			return (SYSTEM_ERR);
+			return (FATAL_ERR);
 		free(document->eof);
 		document->eof = temp;
 	}
@@ -90,7 +90,7 @@ static int	read_document(t_minishell *shell, t_document *document,
 	document->document = ft_substr(&shell->string[var[RD_START]], 0,
 			var[RD_LEN]);
 	if (!document->document)
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	return (NOERR);
 }
 

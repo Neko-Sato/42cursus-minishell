@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/19 22:33:40 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:48:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	builtin_echo(t_minishell *shell, t_wordlist *wordlist)
 	pretreatment(&wordlist, &flag);
 	if (just_echo(&wordlist, &flag))
 	{
-		perror("minishell: echo:");
+		perror("minishell: echo");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -68,15 +68,15 @@ static int	just_echo(t_wordlist **wordlist, int *flag)
 	{
 		if (write(STDOUT_FILENO, (*wordlist)->word,
 				ft_strlen((*wordlist)->word)) == -1)
-			return (-1);
+			return (SYSTEM_ERR);
 		*wordlist = (*wordlist)->next;
 		if (!*wordlist)
 			break ;
 		if (write(STDOUT_FILENO, SPACER, 1) == -1)
-			return (-1);
+			return (SYSTEM_ERR);
 	}
 	if (!(*flag & DISPLAY_RETURN))
 		if (write(STDOUT_FILENO, END, 1) == -1)
-			return (-1);
-	return (0);
+			return (SYSTEM_ERR);
+	return (NOERR);
 }

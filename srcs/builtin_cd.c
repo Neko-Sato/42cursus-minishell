@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 08:01:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 16:56:22 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 17:48:51 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 static char	*getpath(t_minishell *shell, t_wordlist *wordlist, int *flag);
 static int	printpath(char *path);
-static int	set_environment(t_minishell *shell);
+static int	set_environment(t_minishell *shell, char *path);
 
 int	builtin_cd(t_minishell *shell, t_wordlist *wordlist)
 {
@@ -44,7 +44,7 @@ int	builtin_cd(t_minishell *shell, t_wordlist *wordlist)
 	}
 	if ((flag & PRINTPATH) && printpath(path))
 		return (EXIT_FAILURE);
-	if (set_environment(shell))
+	if (set_environment(shell, path))
 		return (-1);
 	return (EXIT_SUCCESS);
 }
@@ -86,20 +86,30 @@ static int	printpath(char *path)
 	return (err);
 }
 
-static int	set_environment(t_minishell *shell)
+static int	set_environment(t_minishell *shell, char *path)
 {
 	char	*pwd;
 
 	if (!bind_variable(shell, "OLDPWD", get_string_value(shell, "PWD"), 0))
-		return (-1);
+		return (FATAL_ERR);
 	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (-1);
-	if (!bind_variable(shell, "PWD", pwd, 0))
+	if (!pwd && errno == ENOENT)
 	{
-		free(pwd);
-		return (-1);
+		if (shell->cwd)
+			pwd = ft_joinpath(shell->cwd, path);
+		else
+			pwd = ft_strdup(path);
 	}
-	free(pwd);
-	return (0);
+	if (!pwd && errno == ENOMEM)
+		return (FATAL_ERR);
+	else if (!pwd)
+	{
+		perror("minishell: cd: getcwd");
+		return (SYSTEM_ERR);
+	}
+	free(shell->cwd);
+	shell->cwd = pwd;
+	if (!bind_variable(shell, "PWD", pwd, 0))
+		return (FATAL_ERR);
+	return (NOERR);
 }

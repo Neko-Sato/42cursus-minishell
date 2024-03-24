@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 17:44:40 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/23 16:24:01 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 13:23:08 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	do_assignment(t_minishell *shell, char *word)
 	flag = 0;
 	key_len = ft_strcspn(word, "=");
 	if (word[key_len] != '=')
-		return (0);
+		return (NOERR);
 	temp = ft_strdup(word);
 	if (!temp)
-		return (-1);
+		return (FATAL_ERR);
 	append = temp[key_len - 1] == '+';
 	temp[key_len - append] = '\0';
 	if (append)
@@ -60,10 +60,10 @@ int	do_assignment(t_minishell *shell, char *word)
 	if (!bind_variable(shell, temp, &temp[key_len + 1], flag))
 	{
 		free(temp);
-		return (-1);
+		return (FATAL_ERR);
 	}
 	free(temp);
-	return (0);
+	return (NOERR);
 }
 
 int	legal_identifier(char *name)
@@ -87,10 +87,10 @@ int	set_var_attribute(t_minishell *shell, char *name, int attr, int undo)
 	if (!var)
 		var = bind_variable(shell, name, NULL, 0);
 	if (!var)
-		return (-1);
+		return (FATAL_ERR);
 	if (undo)
 		var->attr &= ~attr;
 	else
 		var->attr |= attr;
-	return (0);
+	return (NOERR);
 }

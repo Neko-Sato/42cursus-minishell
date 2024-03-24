@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 00:18:54 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:05:44 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void	set_last_status(t_minishell *shell, t_wordlist *wordlist);
+static int	get_last_status(t_wordlist *wordlist);
 
 int	builtin_exit(t_minishell *shell, t_wordlist *wordlist)
 {
 	if (shell->isinteractive)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	set_last_status(shell, wordlist);
-	exit(shell->last_status);
-	return (EXIT_FAILURE);
+	shell->isinteractive = 0;
+	shell->eof_reached = 1;
+	return (get_last_status(wordlist));
 }
 
-static void	set_last_status(t_minishell *shell, t_wordlist *wordlist)
+static int	get_last_status(t_wordlist *wordlist)
 {
 	if (wordlist)
 	{
@@ -36,17 +36,18 @@ static void	set_last_status(t_minishell *shell, t_wordlist *wordlist)
 			{
 				ft_putstr_fd("minishell: exit: too many arguments\n",
 					STDERR_FILENO);
-				shell->last_status = EXIT_FAILURE;
+				return (EXIT_FAILURE);
 			}
 			else
-				shell->last_status = ft_atoi(wordlist->word);
+				return (ft_atoi(wordlist->word));
 		}
 		else
 		{
 			ft_putstr_fd("minishell: exit: numeric argument required: ",
 				STDERR_FILENO);
 			ft_putendl_fd(wordlist->word, STDERR_FILENO);
-			shell->last_status = 2;
+			return (2);
 		}
 	}
+	return (EXIT_SUCCESS);
 }

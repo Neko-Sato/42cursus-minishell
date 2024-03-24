@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 00:25:38 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 00:20:38 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:42:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "shell.h"
 #include <libft.h>
+#include <errno.h>
 #include <stdio.h>
 #include <readline.h>
 #include <stdlib.h>
@@ -25,12 +26,12 @@ int	reader_loop(t_minishell *shell)
 {
 	int	status;
 
-	status = 0;
+	status = NOERR;
 	if (shell->isinteractive && set_signal())
-		status = -1;
+		status = FATAL_ERR;
 	if (!status)
 		status = reader_loop_internal(shell);
-	if (status < 0)
+	if (status == FATAL_ERR)
 	{
 		perror("minishell");
 		return (EXIT_FAILURE);
@@ -47,16 +48,17 @@ static int	reader_loop_internal(t_minishell *shell)
 	while (!shell->eof_reached)
 	{
 		ret = read_command(shell);
-		if (ret == NOERR)
-			if (execute_command(shell, shell->command) < 0)
-				ret = SYSTEM_ERR;
+		if (!ret)
+			ret = execute_command(shell, shell->command);
 		dispose_command(shell->command);
 		shell->command = NULL;
 		dispose_heredoc(shell->heredoc);
 		shell->heredoc = NULL;
 		cleanup_dead_jobs(shell);
-		if (ret == SYSTEM_ERR)
-			return (-1);
+		if (ret == FATAL_ERR)
+			return (FATAL_ERR);
+		else if (ret == SYSTEM_ERR)
+			shell->last_status = EXIT_FAILURE;
 		else if (!shell->isinteractive && ret == SYNTAX_ERR)
 			break ;
 	}
@@ -66,16 +68,22 @@ static int	reader_loop_internal(t_minishell *shell)
 int	shell_init(t_minishell *shell, char *envp[])
 {
 	ft_bzero(shell, sizeof(t_minishell));
+	shell->cwd = getcwd(NULL, 0);
+	if (!shell->cwd && errno != ENOENT)
+		return (FATAL_ERR);
 	shell->vars = ft_vector(sizeof(t_var *), NULL, 0);
 	if (!shell->vars || init_variable(shell, envp))
-		return (-1);
+	{
+		shell_deinit(shell);
+		return (FATAL_ERR);
+	}
 	shell->isinteractive = isatty(STDIN_FILENO) && isatty(STDERR_FILENO);
 	ft_memset(shell->save_stdio, -1, sizeof(shell->save_stdio));
 	if (shell->isinteractive)
 		rl_event_hook = (void *)ft_noop;
 	rl_instream = stdin;
 	rl_outstream = stderr;
-	return (0);
+	return (NOERR);
 }
 
 void	shell_deinit(t_minishell *shell)
@@ -83,6 +91,7 @@ void	shell_deinit(t_minishell *shell)
 	size_t	i;
 	t_proc	*temp;
 
+	free(shell->cwd);
 	while (shell->pidlist)
 	{
 		temp = shell->pidlist;
@@ -106,19 +115,20 @@ int	init_variable(t_minishell *shell, char *envp[])
 	while (envp[i])
 	{
 		key_len = ft_strcspn(envp[i], "=");
-		if (envp[i][key_len] == '=')
+		if (envp[i++][key_len] == '=')
 		{
-			temp = ft_strdup(envp[i]);
+			temp = ft_strdup(envp[i - 1]);
 			if (!temp)
-				return (-1);
+				return (FATAL_ERR);
 			temp[key_len] = '\0';
 			var = bind_variable(shell, temp, &temp[key_len + 1], 0);
 			free(temp);
 			if (!var)
-				return (-1);
+				return (FATAL_ERR);
 			var->attr |= V_EXPORTED;
 		}
-		i++;
 	}
-	return (set_var_attribute(shell, "OLDPWD", V_EXPORTED, 0));
+	if (set_var_attribute(shell, "OLDPWD", V_EXPORTED, 0))
+		return (FATAL_ERR);
+	return (NOERR);
 }

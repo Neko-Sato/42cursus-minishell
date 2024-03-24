@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 21:34:12 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/22 10:16:59 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int	case_singlequote(t_minishell *shell, t_strgen *strgen, char *string,
 
 	temp = string_extract_single_quoted(shell, string, sindex);
 	if (!temp)
-		return (-1);
+		return (FATAL_ERR);
 	temp1 = quote_string(temp);
 	free(temp);
 	if (!temp1)
-		return (-1);
+		return (FATAL_ERR);
 	ret = ft_strgenstr(strgen, temp1);
 	free(temp1);
 	return (ret);
@@ -44,11 +44,11 @@ int	case_doublequote(t_minishell *shell, t_strgen *strgen, char *string,
 
 	temp = string_extract_double_quoted(shell, string, sindex);
 	if (!temp)
-		return (-1);
+		return (FATAL_ERR);
 	temp1 = quote_string(temp);
 	free(temp);
 	if (!temp1)
-		return (-1);
+		return (FATAL_ERR);
 	ret = ft_strgenstr(strgen, temp1);
 	free(temp1);
 	return (ret);
@@ -67,7 +67,7 @@ int	case_tilde(t_minishell *shell, t_strgen *strgen, char *string,
 		temp = "";
 	temp = quote_string(temp);
 	if (!temp)
-		return (-1);
+		return (FATAL_ERR);
 	ret = ft_strgenstr(strgen, temp);
 	free(temp);
 	return (ret);
@@ -81,7 +81,7 @@ int	case_dollar(t_minishell *shell, t_strgen *strgen, char *string,
 
 	temp = param_expand(shell, string, sindex);
 	if (!temp)
-		return (SYSTEM_ERR);
+		return (FATAL_ERR);
 	ret = ft_strgenstr(strgen, temp);
 	free(temp);
 	return (ret);

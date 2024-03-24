@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/15 16:52:41 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 16:13:06 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	parser(t_minishell *shell)
 	ret = lexer(shell);
 	if (!ret)
 		ret = take_command(shell);
-	if (ret == SYSTEM_ERR || ret == INTERRUPT)
+	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
 	syntaxerr = (ret == SYNTAX_ERR);
-	while (!ft_strchr("\n", shell->string[shell->sindex]))
+	while (shell->string && !ft_strchr("\n", shell->string[shell->sindex]))
 		shell->sindex++;
 	ret = gather_heredoc(shell);
 	if (!ret && syntaxerr)
