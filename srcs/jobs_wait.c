@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 20:40:51 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 21:19:38 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	cleanup_dead_jobs(t_minishell *shell)
 
 static char	*str_signal(int signal)
 {
-	if (65 < signal || signal < 1)
+	if (65 < signal || signal < 1 || signal == 32 || signal == 33)
 		return ("");
 	return ((char *[]){
 		NULL, "Hangup", "Interrupt", "Quit", "Illegal instruction",
@@ -112,7 +112,7 @@ static char	*str_signal(int signal)
 		"CPU time limit exceeded", "File size limit exceeded",
 		"Virtual timer expired", "Profiling timer expired",
 		"Window changed", "I/O possible", "Power failure",
-		"Bad system call", "", "",
+		"Bad system call", NULL, NULL,
 		"Real-time signal 0", "Real-time signal 1", "Real-time signal 2",
 		"Real-time signal 3", "Real-time signal 4", "Real-time signal 5",
 		"Real-time signal 6", "Real-time signal 7", "Real-time signal 8",
