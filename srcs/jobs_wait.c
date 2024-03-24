@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 21:19:38 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 21:46:27 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ void	cleanup_dead_jobs(t_minishell *shell)
 	}
 }
 
-static char	*str_signal(int signal)
+static char	*str_signal(int n)
 {
-	if (65 < signal || signal < 1 || signal == 32 || signal == 33)
+	if (65 < n || n < 1 || n == 32 || n == 33 || n == SIGINT)
 		return ("");
 	return ((char *[]){
 		NULL, "Hangup", "Interrupt", "Quit", "Illegal instruction",
@@ -112,16 +112,16 @@ static char	*str_signal(int signal)
 		"CPU time limit exceeded", "File size limit exceeded",
 		"Virtual timer expired", "Profiling timer expired",
 		"Window changed", "I/O possible", "Power failure",
-		"Bad system call", NULL, NULL,
-		"Real-time signal 0", "Real-time signal 1", "Real-time signal 2",
-		"Real-time signal 3", "Real-time signal 4", "Real-time signal 5",
-		"Real-time signal 6", "Real-time signal 7", "Real-time signal 8",
-		"Real-time signal 9", "Real-time signal 10", "Real-time signal 11",
-		"Real-time signal 12", "Real-time signal 13", "Real-time signal 14",
-		"Real-time signal 15", "Real-time signal 16", "Real-time signal 17",
-		"Real-time signal 18", "Real-time signal 19", "Real-time signal 20",
-		"Real-time signal 21", "Real-time signal 22", "Real-time signal 23",
-		"Real-time signal 24", "Real-time signal 25", "Real-time signal 26",
-		"Real-time signal 27", "Real-time signal 28", "Real-time signal 29",
-		"Real-time signal 30"}[signal]);
+		"Bad system call", NULL, NULL, "Real-time signal 0",
+		"Real-time signal 1", "Real-time signal 2", "Real-time signal 3",
+		"Real-time signal 4", "Real-time signal 5", "Real-time signal 6",
+		"Real-time signal 7", "Real-time signal 8", "Real-time signal 9",
+		"Real-time signal 10", "Real-time signal 11", "Real-time signal 12",
+		"Real-time signal 13", "Real-time signal 14", "Real-time signal 15",
+		"Real-time signal 16", "Real-time signal 17", "Real-time signal 18",
+		"Real-time signal 19", "Real-time signal 20", "Real-time signal 21",
+		"Real-time signal 22", "Real-time signal 23", "Real-time signal 24",
+		"Real-time signal 25", "Real-time signal 26", "Real-time signal 27",
+		"Real-time signal 28", "Real-time signal 29",
+		"Real-time signal 30"}[n]);
 }
