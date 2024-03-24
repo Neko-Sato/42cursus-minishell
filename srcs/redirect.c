@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 18:20:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 21:06:24 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/24 21:09:17 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ static int	do_redirect_file(t_minishell *shell, t_redirect *redirect)
 		dispose_wordlist(word);
 		return (SYSTEM_ERR);
 	}
+	fd = -1;
 	if (redirect->type == RT_INPUT)
 		fd = open(word->word, O_RDONLY);
 	else if (redirect->type == RT_OVERWRITE)
