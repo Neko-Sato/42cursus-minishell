@@ -6,19 +6,19 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/25 17:30:26 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/25 17:51:50 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			:= minishell
+NAME				:= minishell
 
-DIR				:= .
-FT				:= $(DIR)/libft
-INCS_DIR		:= $(DIR)/incs
-SRCS_DIR		:= $(DIR)/srcs
-OUT_DIR			:= $(DIR)/out
+DIR					:= .
+FT					:= $(DIR)/libft
+INCS_DIR			:= $(DIR)/incs
+SRCS_DIR			:= $(DIR)/srcs
+OUT_DIR				:= $(DIR)/out
 
-SRCS			:= \
+SRCS				:= \
 	$(addprefix $(SRCS_DIR)/, \
 		main.c \
 		shell.c \
@@ -67,21 +67,24 @@ SRCS			:= \
 		variable_envp.c \
 	) \
 
-OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
-DEPS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
+OBJS				:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
+DEPS				:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
 
-CFLAGS			:= -Wall -Wextra -Werror
-IDFLAGS			:= -I$(INCS_DIR)
-LDFLAGS			:=
+CFLAGS				:= -Wall -Wextra -Werror
+IDFLAGS				:= -I$(INCS_DIR)
+LDFLAGS				:=
 
-IDFLAGS			+= -I$(FT)
-LDFLAGS			+= -L$(FT)
-LIBS			+= -lft
+IDFLAGS				+= -I$(FT)
+LDFLAGS				+= -L$(FT)
+LIBS				+= -lft
 
 ifeq ($(shell uname -s), Darwin)
-	LIBS 		+= -lreadline.8.0
+	READLINE_PREFIX	=	$(call brew --prefix readline)
+	IDFLAGS			+= -I$(READLINE_PREFIX)/include
+	LDFLAGS			+= -L$(READLINE_PREFIX)/lib
+	LIBS 			+= -lreadline.8.0
 else
-	LIBS		+= -l:libreadline.so.8.0
+	LIBS			+= -l:libreadline.so.8.0
 endif
 
 .PHONY: all clean fclean re bonus
