@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 03:32:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/26 03:56:27 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,14 @@ int	take_concom(t_minishell *shell)
 	ret = take_subcom(shell, type == CCT_PIPE, &next);
 	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
-	if (!next)
-		return (SYNTAX_ERR);
 	temp = make_conncom(type, shell->command, next);
 	if (!temp)
 	{
 		dispose_command(next);
 		return (FATAL_ERR);
 	}
+	if (!next)
+		return (SYNTAX_ERR);
 	shell->command = temp;
 	return (ret);
 }
