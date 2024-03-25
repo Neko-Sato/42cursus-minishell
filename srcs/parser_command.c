@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 15:08:23 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/26 03:32:45 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static int	take_subcom(t_minishell *shell, int block, t_command **subcom)
 	t_command	*temp;
 
 	temp = shell->command;
+	shell->command = NULL;
 	if (block)
 		ret = take_blockcom(shell);
 	else
