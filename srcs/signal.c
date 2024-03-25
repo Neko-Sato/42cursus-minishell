@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 17:49:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 18:23:28 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:22:19 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,7 @@ int	set_signal(void)
 		perror("minishell: sigaction");
 		return (SYSTEM_ERR);
 	}
-	act.sa_handler = SIG_IGN;
-	act.sa_flags = 0;
-	sigemptyset(&act.sa_mask);
-	if (sigaction(SIGQUIT, &act, NULL))
-	{
-		perror("minishell: sigaction");
-		return (SYSTEM_ERR);
-	}
+	signal(SIGQUIT, SIG_IGN);
 	return (NOERR);
 }
 
@@ -52,20 +45,3 @@ static void	signal_handler(int signal)
 		rl_done = 1;
 	}
 }
-
-// static void	execve_signal_handler(int signal);
-
-// int	set_execve_signal(void)
-// {
-// 	struct sigaction	act;
-
-// 	act.sa_handler = execve_signal_handler;
-// 	act.sa_flags = 0;
-// 	sigemptyset(&act.sa_mask);
-// 	if (sigaction(SIGQUIT, &act, NULL))
-// 	{
-// 		perror("minishell: sigaction");
-// 		return (SYSTEM_ERR);
-// 	}
-// 	return (NOERR);
-// }
