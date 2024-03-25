@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/25 18:01:37 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/26 02:51:17 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ OUT_DIR				:= $(DIR)/out
 SRCS				:= \
 	$(addprefix $(SRCS_DIR)/, \
 		main.c \
+		init.c \
 		shell.c \
 		signal.c \
 		readline.c \
@@ -109,10 +110,6 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
-
-.PHONY: test
-test: test.c $(OBJS)
-	$(CC) -g -fsanitize=address $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
 
 .PHONY: norm
 norm: $(SRCS) $(INCS_DIR)

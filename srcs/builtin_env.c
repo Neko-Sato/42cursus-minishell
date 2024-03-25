@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:32 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 15:43:18 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/26 02:20:24 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	builtin_env(t_minishell *shell, t_wordlist *wordlist)
 	char	**envp;
 
 	(void)wordlist;
+	err = 0;
 	i = 0;
 	envp = get_envp(shell);
 	if (!envp)
