@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 03:56:27 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/26 04:05:20 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int	take_concom(t_minishell *shell)
 		dispose_command(next);
 		return (FATAL_ERR);
 	}
+	shell->command = temp;
 	if (!next)
 		return (SYNTAX_ERR);
-	shell->command = temp;
 	return (ret);
 }
 
