@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 04:05:20 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/26 04:10:12 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,15 @@ int	take_groupcom(t_minishell *shell)
 
 	shell->brackets_level++;
 	ret = take_subcom(shell, 0, &temp);
-	if (ret)
+	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
-	if (!temp)
-		return (SYNTAX_ERR);
 	shell->command = make_groupcom(temp);
 	if (!shell->command)
 	{
 		dispose_command(temp);
 		return (FATAL_ERR);
 	}
-	if (shell->token.type != TK_CLOSE_PAREN)
+	if (!temp || shell->token.type != TK_CLOSE_PAREN)
 		return (SYNTAX_ERR);
 	shell->brackets_level--;
 	return (lexer(shell));
