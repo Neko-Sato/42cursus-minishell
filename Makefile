@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/25 18:00:07 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/25 18:01:37 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,9 +82,9 @@ ifeq ($(shell uname -s), Darwin)
 	READLINE_PREFIX	:= $(shell brew --prefix readline)
 	IDFLAGS			+= -I$(READLINE_PREFIX)/include
 	LDFLAGS			+= -L$(READLINE_PREFIX)/lib
-	LIBS 			+= -lreadline.8.0
+	LIBS 			+= -lreadline.8
 else
-	LIBS			+= -l:libreadline.so.8.0
+	LIBS			+= -l:libreadline.so.8
 endif
 
 .PHONY: all clean fclean re bonus
