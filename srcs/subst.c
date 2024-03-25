@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:19:13 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 12:58:42 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:52:58 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "subst.h"
 
 int	expand_wordlist(t_minishell *shell,
-	t_wordlist *wordlist, t_wordlist **result)
+					t_wordlist *wordlist,
+					t_wordlist **result)
 {
 	int			ret;
 	t_wordlist	*temp;
@@ -69,23 +70,28 @@ char	*ansic_quote(char *str)
 
 static int	ansic_quote_internal(t_strgen *strgen, char *str)
 {
+	int	ret;
+
+	ret = 0;
 	if (!*str)
-		if (ft_strgenstr(strgen, "''"))
-			return (FATAL_ERR);
-	while (*str)
+		ret = ft_strgenstr(strgen, "''");
+	while (!ret && *str)
 	{
 		if (*str == '\'')
-			if (str++ && ft_strgenstr(strgen, "\"'\""))
-				return (FATAL_ERR);
-		if (!*str)
+		{
+			ret = ft_strgenchr(strgen, '"');
+			while (!ret && *str++ == '\'')
+				ret = ft_strgenchr(strgen, '\'');
+			ret = ret || ft_strgenchr(strgen, '"');
+		}
+		if (ret || !*str)
 			break ;
-		if (ft_strgenchr(strgen, '\''))
-			return (FATAL_ERR);
-		while (*str && *str != '\'')
-			if (ft_strgenchr(strgen, *str++))
-				return (FATAL_ERR);
-		if (ft_strgenchr(strgen, '\''))
-			return (FATAL_ERR);
+		ret = ft_strgenchr(strgen, '\'');
+		while (!ret && *str && *str != '\'')
+			ret = ft_strgenchr(strgen, *str++);
+		ret = ret || ft_strgenchr(strgen, '\'');
 	}
+	if (ret)
+		return (FATAL_ERR);
 	return (NOERR);
 }
