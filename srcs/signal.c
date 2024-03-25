@@ -6,15 +6,15 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 17:49:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/25 16:22:19 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:22:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include <libft.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <stdio.h>
-#include <readline.h>
 #include <unistd.h>
 
 int			g_interrupt_state = 0;

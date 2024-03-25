@@ -6,15 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 16:16:51 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/25 16:11:07 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "shell.h"
-#include <stdio.h>
-#include <history.h>
 #include <libft.h>
+#include <readline/history.h>
 #include <stdlib.h>
 #include <unistd.h>
 

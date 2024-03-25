@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/24 16:22:13 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/25 17:30:26 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ NAME			:= minishell
 
 DIR				:= .
 FT				:= $(DIR)/libft
-READLINE		:= $(DIR)/readline
 INCS_DIR		:= $(DIR)/incs
 SRCS_DIR		:= $(DIR)/srcs
 OUT_DIR			:= $(DIR)/out
@@ -71,15 +70,23 @@ SRCS			:= \
 OBJS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.o))
 DEPS			:= $(addprefix $(OUT_DIR)/, $(SRCS:.c=.d))
 
-CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=address
-LDFLAGS			:= -L$(FT) -L$(READLINE)
-IDFLAGS			:= -I$(FT) -I$(READLINE) -D READLINE_LIBRARY
-LIBS			:= -lft -lreadline -ltermcap
-IDFLAGS			+= -I$(INCS_DIR)
+CFLAGS			:= -Wall -Wextra -Werror
+IDFLAGS			:= -I$(INCS_DIR)
+LDFLAGS			:=
+
+IDFLAGS			+= -I$(FT)
+LDFLAGS			+= -L$(FT)
+LIBS			+= -lft
+
+ifeq ($(shell uname -s), Darwin)
+	LIBS 		+= -lreadline.8.0
+else
+	LIBS		+= -l:libreadline.so.8.0
+endif
 
 .PHONY: all clean fclean re bonus
 
-all: $(FT) $(READLINE) $(NAME)
+all: $(FT) $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(IDFLAGS) $^ -o $@ $(LIBS)
@@ -93,7 +100,6 @@ $(OUT_DIR)/%.o: %.c
 clean:
 	$(RM) -r $(OUT_DIR)
 	@make -C $(FT) clean
-	@make -C $(READLINE) clean
 
 fclean: clean
 	@make -C $(FT) fclean
@@ -113,13 +119,6 @@ norm: $(SRCS) $(INCS_DIR)
 .PHONY: $(FT)
 $(FT):
 	@git submodule update --init $@
-	@$(MAKE) -C $@
-
-.PHONY: $(READLINE)
-$(READLINE):
-	@git config http.sslVerify false
-	@git submodule update --init $@
-	@(cd $@; [ -f Makefile ] || ./configure CFLAGS=-w;)
 	@$(MAKE) -C $@
 
 .PHONY: bash
