@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 21:48:45 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/28 20:37:30 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-static void	set_pid_status(t_minishell *shell, pid_t pid, int status);
-static void	reap_zombie_children(t_minishell *shell);
-static char	*str_signal(int signal);
+static void			set_pid_status(t_minishell *shell, pid_t pid, int status);
+static void			reap_zombie_children(t_minishell *shell);
+static const char	*str_signal(int n);
 
 int	wait_for(t_minishell *shell, pid_t pid)
 {
@@ -39,7 +39,7 @@ int	wait_for(t_minishell *shell, pid_t pid)
 	}
 	reap_zombie_children(shell);
 	if (WIFSIGNALED(status))
-		ft_putendl_fd(str_signal(WTERMSIG(status)), STDERR_FILENO);
+		ft_putendl_fd((char *)str_signal(WTERMSIG(status)), STDERR_FILENO);
 	if (WIFEXITED(status))
 		status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
@@ -97,31 +97,9 @@ void	cleanup_dead_jobs(t_minishell *shell)
 	}
 }
 
-static char	*str_signal(int n)
+static const char	*str_signal(int n)
 {
 	if (65 < n || n < 1 || n == 2 || n == 32 || n == 33)
 		return ("");
-	return ((char *[]){
-		NULL, "Hangup", NULL, "Quit", "Illegal instruction",
-		"Trace/breakpoint trap", "Aborted", "Bus error",
-		"Floating point exception", "Killed", "User defined signal 1",
-		"Segmentation fault", "User defined signal 2", "Broken pipe",
-		"Alarm clock", "Terminated", "Stack fault", "Child exited",
-		"Continued", "Stopped (signal)", "Stopped", "Stopped (tty input)",
-		"Stopped (tty output)", "Urgent I/O condition",
-		"CPU time limit exceeded", "File size limit exceeded",
-		"Virtual timer expired", "Profiling timer expired",
-		"Window changed", "I/O possible", "Power failure",
-		"Bad system call", NULL, NULL, "Real-time signal 0",
-		"Real-time signal 1", "Real-time signal 2", "Real-time signal 3",
-		"Real-time signal 4", "Real-time signal 5", "Real-time signal 6",
-		"Real-time signal 7", "Real-time signal 8", "Real-time signal 9",
-		"Real-time signal 10", "Real-time signal 11", "Real-time signal 12",
-		"Real-time signal 13", "Real-time signal 14", "Real-time signal 15",
-		"Real-time signal 16", "Real-time signal 17", "Real-time signal 18",
-		"Real-time signal 19", "Real-time signal 20", "Real-time signal 21",
-		"Real-time signal 22", "Real-time signal 23", "Real-time signal 24",
-		"Real-time signal 25", "Real-time signal 26", "Real-time signal 27",
-		"Real-time signal 28", "Real-time signal 29",
-		"Real-time signal 30"}[n]);
+	return ((char *)sys_siglist[n]);
 }
