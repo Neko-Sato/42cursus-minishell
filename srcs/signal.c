@@ -6,14 +6,14 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 17:49:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/25 17:59:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/28 22:24:09 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include <libft.h>
 #include <stdio.h>
-#include <readline/readline.h>
+#include <readline.h>
 #include <signal.h>
 #include <unistd.h>
 

@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/28 22:15:28 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/28 22:24:21 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ IDFLAGS				+= -I$(FT)
 LDFLAGS				+= -L$(FT)
 LIBS				+= -lft
 
-IDFLAGS				+= -I$(READLINE)
+IDFLAGS				+= -I$(READLINE) -D READLINE_LIBRARY
 LDFLAGS				+= -L$(READLINE)
 LIBS 				+= -lreadline -ltermcap
 
