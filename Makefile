@@ -6,7 +6,7 @@
 #    By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/20 00:51:30 by hshimizu          #+#    #+#              #
-#    Updated: 2024/03/28 21:50:17 by hshimizu         ###   ########.fr        #
+#    Updated: 2024/03/28 22:15:28 by hshimizu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,7 @@ LIBS				+= -lft
 
 IDFLAGS				+= -I$(READLINE)
 LDFLAGS				+= -L$(READLINE)
-LIBS 				+= -lreadline
+LIBS 				+= -lreadline -ltermcap
 
 .PHONY: all clean fclean re bonus
 
@@ -124,6 +124,7 @@ $(FT):
 .PHONY: $(READLINE)
 $(READLINE):
 	@git config http.sslVerify false
+	@git submodule update --init $@
 	@(cd $@; [ -f Makefile ] || ./configure CFLAGS=-w;)
 	@$(MAKE) -C $@
 
