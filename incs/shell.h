@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 18:01:33 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/28 20:50:55 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include "variable.h"
 # include <stddef.h>
 # include <sys/types.h>
+
+# define DEFAULT_PATH \
+	"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # define PS1 "minishell> "
 # define PS2 "> "
