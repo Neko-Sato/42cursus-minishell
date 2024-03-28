@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:56 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/24 16:13:06 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/29 02:22:51 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	parser(t_minishell *shell)
 	shell->brackets_level = 0;
 	ret = lexer(shell);
 	if (!ret)
-		ret = take_command(shell);
+		ret = take_top_command(shell);
 	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
 	syntaxerr = (ret == SYNTAX_ERR);
@@ -42,7 +42,7 @@ int	parser(t_minishell *shell)
 	return (ret);
 }
 
-int	take_command(t_minishell *shell)
+int	take_top_command(t_minishell *shell)
 {
 	int	ret;
 
@@ -57,12 +57,32 @@ int	take_command(t_minishell *shell)
 		ret = take_blockcom(shell);
 	if (ret)
 		return (ret);
-	if (shell->token.type == TK_EOL)
-		return (NOERR);
-	if (shell->token.type == TK_AND || shell->token.type == TK_OR)
+	while (shell->token.type == TK_AND || shell->token.type == TK_OR)
+	{
 		ret = take_concom(shell);
-	else if (!shell->brackets_level || shell->token.type != TK_CLOSE_PAREN)
-		ret = SYNTAX_ERR;
+		if (ret)
+			return (ret);
+	}
+	if (shell->brackets_level && shell->token.type != TK_CLOSE_PAREN)
+		return (SYSTEM_ERR);
+	else if (!shell->brackets_level && shell->token.type != TK_EOL)
+		return (SYSTEM_ERR);
+	return (NOERR);
+}
+
+int	take_command(t_minishell *shell)
+{
+	int	ret;
+
+	if (shell->token.type == TK_OPEN_PAREN)
+	{
+		ret = lexer(shell);
+		if (ret)
+			return (ret);
+		ret = take_groupcom(shell);
+	}
+	else
+		ret = take_blockcom(shell);
 	return (ret);
 }
 
@@ -73,8 +93,6 @@ int	take_blockcom(t_minishell *shell)
 	ret = take_simplecom(shell);
 	if (ret)
 		return (ret);
-	if (shell->token.type == TK_EOL)
-		return (NOERR);
 	if (shell->token.type == TK_PIPE)
 		ret = take_concom(shell);
 	return (ret);

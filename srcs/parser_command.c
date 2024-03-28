@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 04:10:12 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/29 02:24:32 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,30 @@
 #include "shell.h"
 #include "token.h"
 
-static int	take_subcom(t_minishell *shell, int block, t_command **subcom);
+static int	take_subcom(t_minishell *shell, int level, t_command **subcom);
+
+int	take_groupcom(t_minishell *shell)
+{
+	int			ret;
+	t_command	*temp;
+
+	shell->brackets_level++;
+	ret = take_subcom(shell, 0, &temp);
+	if (ret == FATAL_ERR || ret == INTERRUPT)
+		return (ret);
+	shell->command = make_groupcom(temp);
+	if (!shell->command)
+	{
+		dispose_command(temp);
+		return (FATAL_ERR);
+	}
+	if (!temp)
+		return (SYNTAX_ERR);
+	if (ret)
+		return (ret);
+	shell->brackets_level--;
+	return (lexer(shell));
+}
 
 int	take_simplecom(t_minishell *shell)
 {
@@ -39,27 +62,6 @@ int	take_simplecom(t_minishell *shell)
 	return (ret);
 }
 
-int	take_groupcom(t_minishell *shell)
-{
-	int			ret;
-	t_command	*temp;
-
-	shell->brackets_level++;
-	ret = take_subcom(shell, 0, &temp);
-	if (ret == FATAL_ERR || ret == INTERRUPT)
-		return (ret);
-	shell->command = make_groupcom(temp);
-	if (!shell->command)
-	{
-		dispose_command(temp);
-		return (FATAL_ERR);
-	}
-	if (!temp || shell->token.type != TK_CLOSE_PAREN)
-		return (SYNTAX_ERR);
-	shell->brackets_level--;
-	return (lexer(shell));
-}
-
 int	take_concom(t_minishell *shell)
 {
 	int				ret;
@@ -73,7 +75,7 @@ int	take_concom(t_minishell *shell)
 	ret = lexer(shell);
 	if (ret)
 		return (ret);
-	ret = take_subcom(shell, type == CCT_PIPE, &next);
+	ret = take_subcom(shell, (type == CCT_PIPE) + 1, &next);
 	if (ret == FATAL_ERR || ret == INTERRUPT)
 		return (ret);
 	temp = make_conncom(type, shell->command, next);
@@ -88,17 +90,19 @@ int	take_concom(t_minishell *shell)
 	return (ret);
 }
 
-static int	take_subcom(t_minishell *shell, int block, t_command **subcom)
+static int	take_subcom(t_minishell *shell, int level, t_command **subcom)
 {
 	int			ret;
 	t_command	*temp;
 
 	temp = shell->command;
 	shell->command = NULL;
-	if (block)
-		ret = take_blockcom(shell);
-	else
+	if (level == 0)
+		ret = take_top_command(shell);
+	else if (level == 1)
 		ret = take_command(shell);
+	else
+		ret = take_blockcom(shell);
 	*subcom = shell->command;
 	shell->command = temp;
 	return (ret);
