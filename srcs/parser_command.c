@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 00:28:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/29 02:24:32 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/30 02:41:11 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ static int	take_subcom(t_minishell *shell, int level, t_command **subcom)
 	temp = shell->command;
 	shell->command = NULL;
 	if (level == 0)
-		ret = take_top_command(shell);
-	else if (level == 1)
 		ret = take_command(shell);
+	else if (level == 1)
+		ret = take_basiccom(shell);
 	else
 		ret = take_blockcom(shell);
 	*subcom = shell->command;
