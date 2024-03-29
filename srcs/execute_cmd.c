@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 12:10:11 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/28 23:13:09 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:24:54 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	execute_conncom(t_minishell *shell,
 	{
 		status = execute_command_internal(
 				shell, conncom->command1, vars);
-		if (0 <= status && !shell->last_status)
+		if (0 <= status && !shell->exit_immediately && !shell->last_status)
 			status = execute_command_internal(
 					shell, conncom->command2, vars);
 	}
@@ -71,7 +71,7 @@ static int	execute_conncom(t_minishell *shell,
 	{
 		status = execute_command_internal(
 				shell, conncom->command1, vars);
-		if (0 <= status && shell->last_status)
+		if (0 <= status && !shell->exit_immediately && shell->last_status)
 			status = execute_command_internal(
 					shell, conncom->command2, vars);
 	}

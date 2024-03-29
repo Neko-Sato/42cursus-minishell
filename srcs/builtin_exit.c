@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 18:02:24 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 02:52:24 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:26:49 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	builtin_exit(t_minishell *shell, t_wordlist *wordlist)
 	if (set_last_status(shell, wordlist))
 		return (EXIT_FAILURE);
 	shell->isinteractive = 0;
-	shell->eof_reached = 1;
+	shell->exit_immediately = 1;
 	return (shell->last_status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 02:25:37 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/26 02:35:17 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:27:26 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	reader_loop_internal(t_minishell *shell)
 {
 	int	ret;
 
-	while (!shell->eof_reached)
+	while (!shell->eof_reached && !shell->exit_immediately)
 	{
 		ret = read_command(shell);
 		if (!ret)

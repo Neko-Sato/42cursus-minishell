@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/28 20:50:55 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/03/30 03:23:04 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_minishell
 	int			last_status;
 	int			isinteractive;
 	int			eof_reached;
+	int			exit_immediately;
 }				t_minishell;
 
 extern int		g_interrupt_state;
