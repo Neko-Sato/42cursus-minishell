@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/30 03:23:04 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/04/12 04:48:20 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # define DEFAULT_PATH \
 	"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# define PS1 "minishell> "
-# define PS2 "> "
+# define PS1 "\033[32mminishell> \033[0m"
+# define PS2 "\033[32m> \033[0m"
 
 # define NOERR 0
 # define FATAL_ERR -1
@@ -63,6 +63,5 @@ int				reader_loop(t_minishell *shell);
 char			*minishell_readline(t_minishell *shell);
 int				put_prompt(t_minishell *shell);
 int				set_signal(void);
-int				set_execve_signal(void);
 
 #endif
