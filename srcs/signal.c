@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 17:49:30 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/28 22:24:09 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/04/12 04:28:22 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ static void	signal_handler(int signal)
 	{
 		g_interrupt_state = 1;
 		rl_done = 1;
+		rl_on_new_line();
 	}
 }
