@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 22:50:10 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/03/28 22:23:03 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/04/14 03:14:44 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,33 @@ static const char	*str_signal(int n)
 {
 	if (65 < n || n < 1 || n == 2 || n == 32 || n == 33)
 		return ("");
-	return ((char *)sys_siglist[n]);
+	return ((char *[]){
+		NULL, "Hangup", "Interrupt", "Quit", "Illegal instruction",
+		"Trace/breakpoint trap", "Aborted", "Bus error",
+		"Floating point exception", "Killed", "User defined signal 1",
+		"Segmentation fault", "User defined signal 2", "Broken pipe",
+		"Alarm clock", "Terminated", "Stack fault", "Child exited",
+		"Continued", "Stopped (signal)", "Stopped", "Stopped (tty input)",
+		"Stopped (tty output)", "Urgent I/O condition",
+		"CPU time limit exceeded", "File size limit exceeded",
+		"Virtual timer expired", "Profiling timer expired",
+		"Window changed", "I/O possible", "Power failure",
+		"Bad system call", NULL, NULL,
+		"Real-time signal 0", "Real-time signal 1", "Real-time signal 2",
+		"Real-time signal 3", "Real-time signal 4", "Real-time signal 5",
+		"Real-time signal 6", "Real-time signal 7", "Real-time signal 8",
+		"Real-time signal 9", "Real-time signal 10", "Real-time signal 11",
+		"Real-time signal 12", "Real-time signal 13", "Real-time signal 14",
+		"Real-time signal 15", "Real-time signal 16", "Real-time signal 17",
+		"Real-time signal 18", "Real-time signal 19", "Real-time signal 20",
+		"Real-time signal 21", "Real-time signal 22", "Real-time signal 23",
+		"Real-time signal 24", "Real-time signal 25", "Real-time signal 26",
+		"Real-time signal 27", "Real-time signal 28", "Real-time signal 29",
+		"Real-time signal 30"}[n]);
 }
+// static const char	*str_signal(int n)
+// {
+// 	if (65 < n || n < 1 || n == 2 || n == 32 || n == 33)
+// 		return ("");
+// 	return ((char *)sys_siglist[n]);
+// }
