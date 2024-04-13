@@ -6,7 +6,7 @@
 /*   By: hshimizu <hshimizu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 19:49:22 by hshimizu          #+#    #+#             */
-/*   Updated: 2024/04/12 04:48:20 by hshimizu         ###   ########.fr       */
+/*   Updated: 2024/04/12 05:29:47 by hshimizu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # define DEFAULT_PATH \
 	"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# define PS1 "\033[32mminishell> \033[0m"
-# define PS2 "\033[32m> \033[0m"
+# define PS1 "\1\033[32m\2minishell> \1\033[0m\2"
+# define PS2 "\1\033[32m\2> \033\1[0m\2"
 
 # define NOERR 0
 # define FATAL_ERR -1
